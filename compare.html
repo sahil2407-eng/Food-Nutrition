@@ -1,0 +1,838 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Compare Food Products — NutriGuard</title>
+  <meta name="description" content="Compare nutrition facts of two food products side by side, per 100g and per serving. Find the healthier option with NutriGuard.">
+  <meta property="og:title" content="Compare Food Products — NutriGuard">
+  <meta property="og:description" content="Compare nutrition facts of two food products side by side, per 100g and per serving. Find the healthier option with NutriGuard.">
+  <meta property="og:type" content="website">
+  <meta name="theme-color" content="#2e7d32">
+  <link rel="icon" href="favicon.svg" type="image/svg+xml">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Poppins:wght@700;800&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="css/style.css">
+  <style>
+    /* ── Page-specific styles ─────────────────────────────── */
+
+    /* Selector panel */
+    .compare-selector-panel {
+      background: var(--clr-bg);
+      border-radius: var(--r-xl);
+      box-shadow: var(--neu-shadow-out);
+      padding: var(--sp-8);
+      margin-bottom: var(--sp-8);
+    }
+    .selector-grid {
+      display: grid;
+      grid-template-columns: 1fr;
+      gap: var(--sp-5);
+      align-items: end;
+    }
+    @media (min-width: 640px) {
+      .selector-grid { grid-template-columns: 1fr auto 1fr; }
+    }
+    .vs-divider {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-family: var(--font-display);
+      font-size: 1.4rem;
+      font-weight: 800;
+      color: var(--clr-primary);
+      padding-bottom: 0.3rem;
+    }
+
+    /* Basis toggle */
+    .basis-toggle {
+      display: inline-flex;
+      background: var(--clr-surface-alt);
+      border-radius: var(--r-full);
+      padding: 3px;
+      border: 1px solid var(--clr-border);
+      box-shadow: var(--neu-shadow-in);
+      gap: 3px;
+    }
+    .basis-btn {
+      padding: 0.45rem 1.1rem;
+      border-radius: var(--r-full);
+      font-size: 0.82rem;
+      font-weight: 600;
+      color: var(--clr-text-muted);
+      background: transparent;
+      border: none;
+      cursor: pointer;
+      transition: all var(--transition);
+    }
+    .basis-btn.active {
+      background: var(--clr-primary);
+      color: #fff;
+      box-shadow: 0 2px 8px rgba(46,125,50,0.35);
+    }
+
+    /* Action row */
+    .action-row {
+      display: flex;
+      flex-wrap: wrap;
+      align-items: center;
+      gap: var(--sp-4);
+      margin-top: var(--sp-6);
+    }
+
+    /* Error banner */
+    .compare-error {
+      display: none;
+      background: #ffebee;
+      border-left: 4px solid #e53935;
+      color: #6a1515;
+      padding: var(--sp-3) var(--sp-4);
+      border-radius: var(--r-md);
+      font-size: 0.9rem;
+      font-weight: 500;
+      margin-top: var(--sp-4);
+    }
+    [data-theme="dark"] .compare-error { background: rgba(229,57,53,0.12); color: #ef9a9a; }
+    .compare-error.show { display: flex; gap: var(--sp-2); align-items: center; }
+
+    /* Empty state */
+    .compare-empty {
+      text-align: center;
+      padding: var(--sp-16) var(--sp-4);
+      color: var(--clr-text-muted);
+    }
+    .compare-empty .empty-icon {
+      font-size: 4rem;
+      margin-bottom: var(--sp-4);
+      opacity: 0.4;
+    }
+    .compare-empty h3 {
+      font-size: 1.2rem;
+      color: var(--clr-text-muted);
+      font-weight: 600;
+      margin-bottom: var(--sp-2);
+    }
+
+    /* Winner badge */
+    .winner-badge {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      background: linear-gradient(135deg, var(--clr-primary), var(--clr-accent));
+      color: #fff;
+      font-size: 0.78rem;
+      font-weight: 700;
+      letter-spacing: 0.06em;
+      text-transform: uppercase;
+      padding: 4px 14px;
+      border-radius: var(--r-full);
+      box-shadow: 0 3px 10px rgba(46,125,50,0.35);
+      margin-top: var(--sp-2);
+    }
+    .winner-badge svg { flex-shrink: 0; }
+
+    /* Card header */
+    .compare-card-header {
+      margin-bottom: var(--sp-4);
+      padding-bottom: var(--sp-4);
+      border-bottom: 2px solid var(--clr-divider);
+    }
+    .compare-card-header h3 {
+      font-size: 1.1rem;
+      color: var(--clr-text);
+      margin-bottom: var(--sp-1);
+    }
+    .compare-card-meta {
+      font-size: 0.8rem;
+      color: var(--clr-text-muted);
+      display: flex;
+      flex-wrap: wrap;
+      gap: var(--sp-3);
+      margin-top: var(--sp-2);
+    }
+    .compare-card-meta span {
+      display: inline-flex;
+      align-items: center;
+      gap: 4px;
+    }
+
+    /* Nutrient rows */
+    .compare-row-label {
+      color: var(--clr-text-muted);
+      font-size: 0.82rem;
+      font-weight: 500;
+    }
+    .compare-val {
+      font-size: 0.88rem;
+      font-weight: 600;
+      text-align: right;
+    }
+    .compare-val.better {
+      color: var(--clr-primary);
+      font-weight: 700;
+    }
+    .compare-val.worse {
+      color: var(--clr-error);
+      font-weight: 500;
+    }
+    .compare-val.neutral {
+      color: var(--clr-text-muted);
+    }
+    .compare-val.na {
+      color: var(--clr-text-muted);
+      font-style: italic;
+      font-weight: 400;
+    }
+
+    /* Section divider inside card */
+    .compare-section-label {
+      font-size: 0.72rem;
+      font-weight: 700;
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+      color: var(--clr-primary);
+      padding: var(--sp-3) 0 var(--sp-1);
+      border-bottom: 1px solid var(--clr-divider);
+      margin-bottom: var(--sp-1);
+    }
+
+    /* Summary panel */
+    .compare-summary {
+      background: var(--clr-bg);
+      border-radius: var(--r-lg);
+      box-shadow: var(--neu-shadow-card);
+      padding: var(--sp-6) var(--sp-8);
+      display: flex;
+      flex-wrap: wrap;
+      gap: var(--sp-4);
+      align-items: center;
+      justify-content: space-between;
+      margin-bottom: var(--sp-6);
+    }
+    .summary-stat {
+      text-align: center;
+      min-width: 100px;
+    }
+    .summary-stat-num {
+      font-size: 2.4rem;
+      font-weight: 800;
+      font-family: var(--font-display);
+      color: var(--clr-primary);
+      line-height: 1;
+    }
+    .summary-stat-label {
+      font-size: 0.78rem;
+      color: var(--clr-text-muted);
+      margin-top: var(--sp-1);
+      font-weight: 500;
+    }
+    .summary-divider {
+      height: 48px;
+      width: 1px;
+      background: var(--clr-divider);
+      flex-shrink: 0;
+    }
+    @media (max-width: 580px) { .summary-divider { display: none; } }
+
+    /* Allergen diff */
+    .allergen-diff {
+      background: var(--clr-surface);
+      border-radius: var(--r-lg);
+      border: 1px solid var(--clr-divider);
+      padding: var(--sp-5) var(--sp-6);
+      margin-bottom: var(--sp-6);
+    }
+    .allergen-diff h4 {
+      font-size: 1rem;
+      margin-bottom: var(--sp-4);
+      display: flex;
+      align-items: center;
+      gap: var(--sp-2);
+    }
+    .allergen-diff-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: var(--sp-4);
+    }
+    @media (max-width: 480px) { .allergen-diff-grid { grid-template-columns: 1fr; } }
+    .allergen-col h5 {
+      font-size: 0.82rem;
+      font-weight: 700;
+      color: var(--clr-text-muted);
+      text-transform: uppercase;
+      letter-spacing: 0.05em;
+      margin-bottom: var(--sp-2);
+    }
+    .allergen-tag {
+      display: inline-flex;
+      align-items: center;
+      gap: 4px;
+      font-size: 0.8rem;
+      font-weight: 600;
+      padding: 3px 10px;
+      border-radius: var(--r-full);
+      margin: 2px 3px 2px 0;
+      background: #fff3e0;
+      color: #e65100;
+      border: 1px solid #ffcc80;
+    }
+    [data-theme="dark"] .allergen-tag { background: rgba(230,81,0,0.15); color: #ffb74d; border-color: rgba(230,81,0,0.3); }
+    .allergen-none {
+      font-size: 0.85rem;
+      color: var(--clr-text-muted);
+      font-style: italic;
+    }
+
+    /* Data note */
+    .data-note {
+      background: var(--clr-surface-alt);
+      border-left: 3px solid var(--clr-primary-light);
+      border-radius: 0 var(--r-md) var(--r-md) 0;
+      padding: var(--sp-3) var(--sp-4);
+      font-size: 0.82rem;
+      color: var(--clr-text-muted);
+      margin-bottom: var(--sp-6);
+      display: flex;
+      gap: var(--sp-2);
+      align-items: flex-start;
+    }
+
+    /* Results wrapper */
+    #compare-results {
+      animation: fadeIn 0.35s ease both;
+    }
+
+    /* Select styling */
+    .compare-select {
+      width: 100%;
+      padding: 0.75rem 1rem;
+      border-radius: var(--r-md);
+      border: 2px solid var(--clr-border);
+      background: var(--clr-surface);
+      color: var(--clr-text);
+      font-size: 0.95rem;
+      font-family: inherit;
+      box-shadow: var(--neu-shadow-in);
+      cursor: pointer;
+      transition: border-color var(--transition), box-shadow var(--transition);
+      outline: none;
+    }
+    .compare-select:focus {
+      border-color: var(--clr-primary-light);
+      box-shadow: 0 0 0 3px rgba(76,175,80,0.18);
+    }
+    .compare-select.is-invalid {
+      border-color: var(--clr-error);
+    }
+  </style>
+</head>
+<body>
+
+<main id="main-content">
+
+  <!-- ── Page Hero ──────────────────────────────────────── -->
+  <section class="page-hero" aria-label="Page header">
+    <div class="container">
+      <p class="hero-eyebrow" style="justify-content:center;margin-bottom:var(--sp-3);">
+        ⚖️ Side-by-Side Analysis
+      </p>
+      <h1>Product Nutrition Comparison</h1>
+      <p>Select any two foods from our database and instantly compare their nutritional profiles — per 100 g or per serving — to make smarter, healthier choices.</p>
+    </div>
+  </section>
+
+  <!-- ── Breadcrumb ─────────────────────────────────────── -->
+  <div class="container">
+    <nav class="breadcrumb" aria-label="Breadcrumb">
+      <a href="index.html">🏠 Home</a>
+      <span aria-hidden="true">›</span>
+      <span aria-current="page">Compare Products</span>
+    </nav>
+  </div>
+
+  <!-- ── Selector Panel ─────────────────────────────────── -->
+  <section class="section-sm" aria-label="Product selector">
+    <div class="container">
+      <div class="compare-selector-panel">
+
+        <!-- Dropdowns -->
+        <div class="selector-grid" role="group" aria-label="Select two products to compare">
+          <div>
+            <label for="product-a">Product A</label>
+            <select id="product-a" class="compare-select" aria-label="Select first product">
+              <option value="">— Choose a product —</option>
+            </select>
+          </div>
+
+          <div class="vs-divider" aria-hidden="true">VS</div>
+
+          <div>
+            <label for="product-b">Product B</label>
+            <select id="product-b" class="compare-select" aria-label="Select second product">
+              <option value="">— Choose a product —</option>
+            </select>
+          </div>
+        </div>
+
+        <!-- Basis toggle + action buttons -->
+        <div class="action-row">
+          <div>
+            <label style="display:block;margin-bottom:var(--sp-2);">Compare basis</label>
+            <div class="basis-toggle" role="group" aria-label="Comparison basis">
+              <button class="basis-btn active" data-basis="per100g" id="btn-100g">Per 100 g</button>
+              <button class="basis-btn" data-basis="perServing" id="btn-serving">Per Serving</button>
+            </div>
+          </div>
+
+          <div style="display:flex;gap:var(--sp-3);flex-wrap:wrap;margin-left:auto;">
+            <button class="btn btn-ghost" id="reset-btn" aria-label="Clear comparison">
+              ✕ Reset
+            </button>
+            <button class="btn btn-primary btn-lg" id="compare-btn" aria-label="Run comparison">
+              ⚖️ Compare Now
+            </button>
+          </div>
+        </div>
+
+        <!-- Validation error -->
+        <div id="compare-error" class="compare-error" role="alert" aria-live="polite"></div>
+
+      </div><!-- /selector panel -->
+
+      <!-- ── Empty State ─────────────────────────────────── -->
+      <div id="compare-empty" class="compare-empty" aria-live="polite">
+        <div class="empty-icon" aria-hidden="true">🥦🆚🍗</div>
+        <h3>No comparison yet</h3>
+        <p>Select two different products above and click <strong>Compare Now</strong> to see a side-by-side nutrition breakdown.</p>
+      </div>
+
+      <!-- ── Results ─────────────────────────────────────── -->
+      <div id="compare-results" class="hidden" aria-live="polite">
+
+        <!-- Summary -->
+        <div class="compare-summary" id="compare-summary" role="region" aria-label="Comparison summary"></div>
+
+        <!-- Allergen diff -->
+        <div class="allergen-diff" id="allergen-diff" role="region" aria-label="Allergen differences"></div>
+
+        <!-- Side-by-side cards -->
+        <div class="compare-grid" id="compare-grid" role="region" aria-label="Nutrition comparison cards"></div>
+
+        <!-- Data note -->
+        <div class="data-note" role="note">
+          <span aria-hidden="true">ℹ️</span>
+          <span><strong>Data note:</strong> Data is curated demo data. Always check actual product labels for precise values. For detailed single-product info, visit the <a href="nutrition-checker.html">Nutrition Checker</a>.</span>
+        </div>
+
+      </div><!-- /compare-results -->
+
+    </div><!-- /container -->
+  </section>
+
+</main><!-- /main -->
+
+<script src="js/nutrition-data.js"></script>
+<script src="js/components.js"></script>
+<script>
+/* ======================================================
+   compare.html — Page Script
+   ====================================================== */
+
+(function () {
+  'use strict';
+
+  /* ── Nutrient config ─────────────────────────────────
+     higherIsBetter: true  → more = green
+     higherIsBetter: false → less = green                */
+  const NUTRIENT_CONFIG = [
+    { key: 'calories',     label: 'Calories',              unit: 'kcal', higherIsBetter: false, section: 'Macronutrients' },
+    { key: 'protein',      label: 'Protein',               unit: 'g',    higherIsBetter: true,  section: 'Macronutrients' },
+    { key: 'carbs',        label: 'Total Carbohydrates',   unit: 'g',    higherIsBetter: null,  section: 'Macronutrients' },
+    { key: 'fat',          label: 'Total Fat',             unit: 'g',    higherIsBetter: null,  section: 'Macronutrients' },
+    { key: 'saturatedFat', label: 'Saturated Fat',         unit: 'g',    higherIsBetter: false, section: 'Macronutrients' },
+    { key: 'sugar',        label: 'Total Sugars',          unit: 'g',    higherIsBetter: false, section: 'Macronutrients' },
+    { key: 'fibre',        label: 'Dietary Fibre',         unit: 'g',    higherIsBetter: true,  section: 'Macronutrients' },
+    { key: 'sodium',       label: 'Sodium',                unit: 'mg',   higherIsBetter: false, section: 'Minerals' },
+    { key: 'potassium',    label: 'Potassium',             unit: 'mg',   higherIsBetter: true,  section: 'Minerals' },
+    { key: 'calcium',      label: 'Calcium',               unit: 'mg',   higherIsBetter: true,  section: 'Minerals' },
+    { key: 'iron',         label: 'Iron',                  unit: 'mg',   higherIsBetter: true,  section: 'Minerals' },
+    { key: 'magnesium',    label: 'Magnesium',             unit: 'mg',   higherIsBetter: true,  section: 'Minerals' },
+    { key: 'zinc',         label: 'Zinc',                  unit: 'mg',   higherIsBetter: true,  section: 'Minerals' },
+    { key: 'phosphorus',   label: 'Phosphorus',            unit: 'mg',   higherIsBetter: true,  section: 'Minerals' },
+    { key: 'selenium',     label: 'Selenium',              unit: 'µg',   higherIsBetter: true,  section: 'Minerals' },
+    { key: 'manganese',    label: 'Manganese',             unit: 'mg',   higherIsBetter: true,  section: 'Minerals' },
+    { key: 'vitaminA',     label: 'Vitamin A',             unit: 'µg',   higherIsBetter: true,  section: 'Vitamins' },
+    { key: 'vitaminC',     label: 'Vitamin C',             unit: 'mg',   higherIsBetter: true,  section: 'Vitamins' },
+    { key: 'vitaminD',     label: 'Vitamin D',             unit: 'µg',   higherIsBetter: true,  section: 'Vitamins' },
+    { key: 'vitaminE',     label: 'Vitamin E',             unit: 'mg',   higherIsBetter: true,  section: 'Vitamins' },
+    { key: 'vitaminK',     label: 'Vitamin K',             unit: 'µg',   higherIsBetter: true,  section: 'Vitamins' },
+    { key: 'vitaminB1',    label: 'Vitamin B1 (Thiamine)', unit: 'mg',   higherIsBetter: true,  section: 'Vitamins' },
+    { key: 'vitaminB3',    label: 'Vitamin B3 (Niacin)',   unit: 'mg',   higherIsBetter: true,  section: 'Vitamins' },
+    { key: 'vitaminB6',    label: 'Vitamin B6',            unit: 'mg',   higherIsBetter: true,  section: 'Vitamins' },
+    { key: 'vitaminB12',   label: 'Vitamin B12',           unit: 'µg',   higherIsBetter: true,  section: 'Vitamins' },
+    { key: 'folate',       label: 'Folate',                unit: 'µg',   higherIsBetter: true,  section: 'Vitamins' },
+    { key: 'choline',      label: 'Choline',               unit: 'mg',   higherIsBetter: true,  section: 'Vitamins' },
+    { key: 'riboflavin',   label: 'Riboflavin (B2)',       unit: 'mg',   higherIsBetter: true,  section: 'Vitamins' },
+    { key: 'vitaminB5',    label: 'Pantothenic Acid (B5)', unit: 'mg',   higherIsBetter: true,  section: 'Vitamins' },
+  ];
+
+  /* ── State ──────────────────────────────────────────── */
+  let currentBasis = 'per100g';
+
+  /* ── DOM references ──────────────────────────────────── */
+  const selA      = document.getElementById('product-a');
+  const selB      = document.getElementById('product-b');
+  const compareBtn = document.getElementById('compare-btn');
+  const resetBtn  = document.getElementById('reset-btn');
+  const errorBox  = document.getElementById('compare-error');
+  const emptyEl   = document.getElementById('compare-empty');
+  const resultsEl = document.getElementById('compare-results');
+  const summaryEl = document.getElementById('compare-summary');
+  const allergenEl = document.getElementById('allergen-diff');
+  const gridEl    = document.getElementById('compare-grid');
+
+  /* ── Populate dropdowns ──────────────────────────────── */
+  function populateSelects () {
+    const db = window.NUTRITION_DB || [];
+    // Group by category for <optgroup>
+    const categories = {};
+    db.forEach(item => {
+      if (!categories[item.category]) categories[item.category] = [];
+      categories[item.category].push(item);
+    });
+
+    [selA, selB].forEach(sel => {
+      Object.keys(categories).sort().forEach(cat => {
+        const grp = document.createElement('optgroup');
+        grp.label = cat;
+        categories[cat].forEach(item => {
+          const opt = document.createElement('option');
+          opt.value = item.id;
+          opt.textContent = item.name;
+          grp.appendChild(opt);
+        });
+        sel.appendChild(grp);
+      });
+    });
+  }
+
+  /* ── Basis toggle ────────────────────────────────────── */
+  document.querySelectorAll('.basis-btn').forEach(btn => {
+    btn.addEventListener('click', () => {
+      currentBasis = btn.dataset.basis;
+      document.querySelectorAll('.basis-btn').forEach(b => b.classList.toggle('active', b === btn));
+      // Re-run comparison if results are visible
+      if (!resultsEl.classList.contains('hidden')) {
+        runComparison();
+      }
+    });
+  });
+
+  /* ── Validation ──────────────────────────────────────── */
+  function showError (msg) {
+    errorBox.innerHTML = '<span aria-hidden="true">⚠️</span><span>' + msg + '</span>';
+    errorBox.classList.add('show');
+    selA.classList.toggle('is-invalid', !selA.value);
+    selB.classList.toggle('is-invalid', !selB.value);
+  }
+  function clearError () {
+    errorBox.classList.remove('show');
+    selA.classList.remove('is-invalid');
+    selB.classList.remove('is-invalid');
+  }
+
+  /* ── Get values for chosen basis ─────────────────────── */
+  function getNutrients (item) {
+    if (currentBasis === 'per100g') return item.per100g;
+    // per serving
+    const s = item.servingSize;
+    const result = {};
+    Object.entries(item.per100g).forEach(([k, v]) => {
+      result[k] = parseFloat(((v * s) / 100).toFixed(2));
+    });
+    return result;
+  }
+
+  /* ── Determine which nutrients to show ───────────────── */
+  function getActiveNutrients (nutsA, nutsB) {
+    const keysA = new Set(Object.keys(nutsA));
+    const keysB = new Set(Object.keys(nutsB));
+    const union = new Set([...keysA, ...keysB]);
+    // Use NUTRIENT_CONFIG order; only include keys present in at least one product
+    return NUTRIENT_CONFIG.filter(cfg => union.has(cfg.key));
+  }
+
+  /* ── Format number ───────────────────────────────────── */
+  function fmt (val) {
+    if (val === undefined || val === null) return null;
+    if (val === 0) return '0';
+    if (val < 0.1) return val.toFixed(3);
+    if (val < 1) return val.toFixed(2);
+    if (val < 10) return val.toFixed(1);
+    return Math.round(val).toString();
+  }
+
+  /* ── Determine classes ───────────────────────────────── */
+  function getClasses (valA, valB, higherIsBetter) {
+    if (higherIsBetter === null) return ['neutral', 'neutral'];
+    if (valA === null && valB === null) return ['na', 'na'];
+    if (valA === null) return ['na', 'better'];
+    if (valB === null) return ['better', 'na'];
+    if (valA === valB) return ['neutral', 'neutral'];
+    if (higherIsBetter) {
+      return valA > valB ? ['better', 'worse'] : ['worse', 'better'];
+    } else {
+      return valA < valB ? ['better', 'worse'] : ['worse', 'better'];
+    }
+  }
+
+  /* ── Build a single compare-card ─────────────────────── */
+  function buildCard (item, nutsOther, isWinner, label, activeNutrients, nutsThis) {
+    const card = document.createElement('div');
+    card.className = 'compare-card card-neu' + (isWinner ? ' winner' : '');
+    card.setAttribute('aria-label', label + ': ' + item.name);
+
+    const basisLabel = currentBasis === 'per100g'
+      ? 'per 100 g'
+      : `per serving (${item.servingSize}${item.servingUnit.replace(/[^a-z%µA-Z]/g, ' ').trim()})`;
+
+    /* Header */
+    card.innerHTML = `
+      <div class="compare-card-header">
+        <span class="section-tag">${item.category}</span>
+        <h3>${item.name}</h3>
+        ${isWinner ? `<div class="winner-badge"><svg width="13" height="13" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/></svg> Overall Winner</div>` : ''}
+        <div class="compare-card-meta">
+          <span>🍽️ Serving: ${item.servingSize} ${item.servingUnit}</span>
+          <span>📊 Basis: ${basisLabel}</span>
+        </div>
+      </div>
+    `;
+
+    /* Nutrient rows — grouped by section */
+    const sections = [...new Set(activeNutrients.map(n => n.section))];
+    sections.forEach(sec => {
+      const secNuts = activeNutrients.filter(n => n.section === sec);
+      const secLabel = document.createElement('div');
+      secLabel.className = 'compare-section-label';
+      secLabel.textContent = sec;
+      card.appendChild(secLabel);
+
+      secNuts.forEach(cfg => {
+        const valThis  = nutsThis[cfg.key]  !== undefined ? nutsThis[cfg.key]  : null;
+        const valOther = nutsOther[cfg.key] !== undefined ? nutsOther[cfg.key] : null;
+
+        // This card always maps to "A" or "B" consistently via the caller
+        const row = document.createElement('div');
+        row.className = 'compare-row';
+
+        const labelEl = document.createElement('span');
+        labelEl.className = 'compare-row-label';
+        labelEl.textContent = cfg.label;
+
+        const valEl = document.createElement('span');
+        valEl.className = 'compare-val';
+
+        if (valThis === null) {
+          valEl.classList.add('na');
+          valEl.textContent = 'N/A';
+        } else {
+          const [clsThis] = getClasses(valThis, valOther, cfg.higherIsBetter);
+          valEl.classList.add(clsThis);
+          valEl.textContent = `${fmt(valThis)} ${cfg.unit}`;
+        }
+
+        row.appendChild(labelEl);
+        row.appendChild(valEl);
+        card.appendChild(row);
+      });
+    });
+
+    /* Allergens */
+    if (item.allergens && item.allergens.length > 0) {
+      const aLabel = document.createElement('div');
+      aLabel.className = 'compare-section-label';
+      aLabel.textContent = 'Allergens';
+      card.appendChild(aLabel);
+
+      const aRow = document.createElement('div');
+      aRow.style.cssText = 'padding:var(--sp-2) 0;display:flex;flex-wrap:wrap;gap:4px;';
+      item.allergens.forEach(a => {
+        const tag = document.createElement('span');
+        tag.className = 'allergen-tag';
+        tag.textContent = '⚠️ ' + a;
+        aRow.appendChild(tag);
+      });
+      card.appendChild(aRow);
+    }
+
+    return card;
+  }
+
+  /* ── Count wins ──────────────────────────────────────── */
+  function countWins (nutsA, nutsB, activeNutrients) {
+    let winsA = 0, winsB = 0;
+    activeNutrients.forEach(cfg => {
+      if (cfg.higherIsBetter === null) return;
+      const vA = nutsA[cfg.key] !== undefined ? nutsA[cfg.key] : null;
+      const vB = nutsB[cfg.key] !== undefined ? nutsB[cfg.key] : null;
+      if (vA === null || vB === null || vA === vB) return;
+      const [clsA] = getClasses(vA, vB, cfg.higherIsBetter);
+      if (clsA === 'better') winsA++;
+      else winsB++;
+    });
+    return { winsA, winsB };
+  }
+
+  /* ── Render allergen diff ─────────────────────────────── */
+  function renderAllergenDiff (itemA, itemB) {
+    const alA = new Set(itemA.allergens || []);
+    const alB = new Set(itemB.allergens || []);
+    const onlyA = [...alA].filter(a => !alB.has(a));
+    const onlyB = [...alB].filter(a => !alA.has(a));
+    const inBoth = [...alA].filter(a => alB.has(a));
+
+    const makeTagsHTML = (tags) => tags.length
+      ? tags.map(t => `<span class="allergen-tag">⚠️ ${t}</span>`).join('')
+      : '<span class="allergen-none">None specific to this product</span>';
+
+    allergenEl.innerHTML = `
+      <h4>⚠️ Allergen Differences</h4>
+      <div class="allergen-diff-grid">
+        <div class="allergen-col">
+          <h5>Only in ${itemA.name}</h5>
+          <div>${makeTagsHTML(onlyA)}</div>
+        </div>
+        <div class="allergen-col">
+          <h5>Only in ${itemB.name}</h5>
+          <div>${makeTagsHTML(onlyB)}</div>
+        </div>
+      </div>
+      ${inBoth.length ? `
+        <div style="margin-top:var(--sp-3);padding-top:var(--sp-3);border-top:1px solid var(--clr-divider);">
+          <h5 style="font-size:0.82rem;font-weight:700;color:var(--clr-text-muted);text-transform:uppercase;letter-spacing:0.05em;margin-bottom:var(--sp-2);">Common to both products</h5>
+          <div>${makeTagsHTML(inBoth)}</div>
+        </div>` : ''}
+    `;
+  }
+
+  /* ── Main comparison renderer ─────────────────────────── */
+  function runComparison () {
+    clearError();
+
+    const idA = selA.value;
+    const idB = selB.value;
+
+    /* Validate */
+    if (!idA && !idB) {
+      showError('Please select both products before comparing.');
+      return;
+    }
+    if (!idA) {
+      showError('Please select Product A.');
+      return;
+    }
+    if (!idB) {
+      showError('Please select Product B.');
+      return;
+    }
+    if (idA === idB) {
+      showError('Please select two <em>different</em> products to compare.');
+      selA.classList.add('is-invalid');
+      selB.classList.add('is-invalid');
+      return;
+    }
+
+    const db = window.NUTRITION_DB || [];
+    const itemA = db.find(i => i.id === idA);
+    const itemB = db.find(i => i.id === idB);
+    if (!itemA || !itemB) { showError('Could not find product data. Please try again.'); return; }
+
+    const nutsA = getNutrients(itemA);
+    const nutsB = getNutrients(itemB);
+    const activeNutrients = getActiveNutrients(nutsA, nutsB);
+    const { winsA, winsB } = countWins(nutsA, nutsB, activeNutrients);
+    const totalDecisive = winsA + winsB;
+    const winnerA = winsA > winsB;
+    const winnerB = winsB > winsA;
+    const tied    = winsA === winsB;
+
+    /* Summary */
+    summaryEl.innerHTML = `
+      <div class="summary-stat">
+        <div class="summary-stat-num">${winsA}</div>
+        <div class="summary-stat-label">${itemA.name.length > 20 ? itemA.name.substring(0,20)+'…' : itemA.name} wins in</div>
+      </div>
+      <div class="summary-divider" aria-hidden="true"></div>
+      <div class="summary-stat" style="text-align:center;flex:1;">
+        <div style="font-size:1rem;font-weight:700;color:var(--clr-text);margin-bottom:4px;">
+          ${tied ? '🤝 It\'s a Tie!' : (winnerA ? '🏆 ' + (itemA.name.length > 22 ? itemA.name.substring(0,22)+'…' : itemA.name) + ' Wins' : '🏆 ' + (itemB.name.length > 22 ? itemB.name.substring(0,22)+'…' : itemB.name) + ' Wins')}
+        </div>
+        <div style="font-size:0.82rem;color:var(--clr-text-muted);">${totalDecisive} decisive nutrients compared</div>
+      </div>
+      <div class="summary-divider" aria-hidden="true"></div>
+      <div class="summary-stat">
+        <div class="summary-stat-num">${winsB}</div>
+        <div class="summary-stat-label">${itemB.name.length > 20 ? itemB.name.substring(0,20)+'…' : itemB.name} wins in</div>
+      </div>
+    `;
+
+    /* Allergen diff */
+    renderAllergenDiff(itemA, itemB);
+
+    /* Cards */
+    gridEl.innerHTML = '';
+    const cardA = buildCard(itemA, nutsB, winnerA && !tied, 'Product A', activeNutrients, nutsA);
+    const cardB = buildCard(itemB, nutsA, winnerB && !tied, 'Product B', activeNutrients, nutsB);
+    gridEl.appendChild(cardA);
+    gridEl.appendChild(cardB);
+
+    /* Show results */
+    emptyEl.classList.add('hidden');
+    resultsEl.classList.remove('hidden');
+    resultsEl.scrollIntoView({ behavior: 'smooth', block: 'start' });
+  }
+
+  /* ── Reset ───────────────────────────────────────────── */
+  function resetComparison () {
+    selA.value = '';
+    selB.value = '';
+    clearError();
+    resultsEl.classList.add('hidden');
+    emptyEl.classList.remove('hidden');
+    summaryEl.innerHTML = '';
+    allergenEl.innerHTML = '';
+    gridEl.innerHTML = '';
+    selA.focus();
+  }
+
+  /* ── Event listeners ─────────────────────────────────── */
+  compareBtn.addEventListener('click', runComparison);
+  resetBtn.addEventListener('click', resetComparison);
+
+  /* Keyboard shortcut: Enter in either select triggers comparison */
+  [selA, selB].forEach(sel => {
+    sel.addEventListener('change', clearError);
+    sel.addEventListener('keydown', e => {
+      if (e.key === 'Enter') runComparison();
+    });
+  });
+
+  /* ── Init ────────────────────────────────────────────── */
+  document.addEventListener('DOMContentLoaded', function () {
+    populateSelects();
+
+    // Pre-fill from URL query params e.g. ?a=banana&b=spinach
+    const params = new URLSearchParams(window.location.search);
+    const pA = params.get('a');
+    const pB = params.get('b');
+    if (pA) selA.value = pA;
+    if (pB) selB.value = pB;
+    if (pA && pB && pA !== pB) runComparison();
+  });
+
+})();
+</script>
+</body>
+</html>

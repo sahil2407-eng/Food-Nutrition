@@ -1,0 +1,1106 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Budget Indian Meal Ideas — NutriGuard</title>
+  <meta name="description" content="Affordable, nutritious Indian meal ideas under ₹100 with full nutrition facts. Eat healthy on a budget with NutriGuard.">
+  <meta property="og:title" content="Budget Indian Meal Ideas — NutriGuard">
+  <meta property="og:description" content="Affordable, nutritious Indian meal ideas under ₹100 with full nutrition facts. Eat healthy on a budget with NutriGuard.">
+  <meta property="og:type" content="website">
+  <meta name="theme-color" content="#2e7d32">
+  <link rel="icon" href="favicon.svg" type="image/svg+xml">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Poppins:wght@700;800&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="css/style.css">
+  <style>
+    /* ── Page hero ── */
+    .meal-hero {
+      background: linear-gradient(135deg, #1b5e20 0%, #2e7d32 50%, #388e3c 100%);
+      color: #fff;
+      padding: 4rem 1.5rem 3rem;
+      text-align: center;
+      position: relative;
+      overflow: hidden;
+    }
+    .meal-hero::before {
+      content: '';
+      position: absolute;
+      inset: 0;
+      background: url("data:image/svg+xml,%3Csvg width='60' height='60' viewBox='0 0 60 60' xmlns='http://www.w3.org/2000/svg'%3E%3Cg fill='none' fill-rule='evenodd'%3E%3Cg fill='%23ffffff' fill-opacity='0.04'%3E%3Cpath d='M36 34v-4h-2v4h-4v2h4v4h2v-4h4v-2h-4zm0-30V0h-2v4h-4v2h4v4h2V6h4V4h-4zM6 34v-4H4v4H0v2h4v4h2v-4h4v-2H6zM6 4V0H4v4H0v2h4v4h2V6h4V4H6z'/%3E%3C/g%3E%3C/g%3E%3C/svg%3E");
+    }
+    .meal-hero h1 {
+      font-family: 'Poppins', sans-serif;
+      font-size: clamp(1.8rem, 5vw, 3rem);
+      font-weight: 800;
+      margin: 0 0 0.75rem;
+      position: relative;
+    }
+    .meal-hero p {
+      font-size: clamp(1rem, 2.5vw, 1.2rem);
+      opacity: 0.9;
+      max-width: 560px;
+      margin: 0 auto;
+      position: relative;
+    }
+
+    /* ── Breadcrumb ── */
+    .breadcrumb {
+      background: #f5f5f0;
+      padding: 0.75rem 1.5rem;
+      border-bottom: 1px solid #e0e0e0;
+    }
+    .breadcrumb ol {
+      list-style: none;
+      display: flex;
+      gap: 0.5rem;
+      align-items: center;
+      flex-wrap: wrap;
+      margin: 0;
+      padding: 0;
+      max-width: 1200px;
+      margin: 0 auto;
+      font-size: 0.875rem;
+    }
+    .breadcrumb li + li::before {
+      content: '›';
+      color: #757575;
+      margin-right: 0.5rem;
+    }
+    .breadcrumb a {
+      color: #2e7d32;
+      text-decoration: none;
+      font-weight: 500;
+    }
+    .breadcrumb a:hover { text-decoration: underline; }
+    .breadcrumb li:last-child { color: #212121; font-weight: 600; }
+
+    /* ── Page wrapper ── */
+    .page-section {
+      max-width: 1200px;
+      margin: 0 auto;
+      padding: 2.5rem 1.5rem;
+    }
+
+    /* ── Filter bar ── */
+    .filter-bar {
+      display: flex;
+      gap: 0.625rem;
+      flex-wrap: wrap;
+      margin-bottom: 2rem;
+      align-items: center;
+    }
+    .filter-label {
+      font-size: 0.875rem;
+      font-weight: 600;
+      color: #424242;
+      margin-right: 0.25rem;
+    }
+    .filter-btn {
+      padding: 0.45rem 1.1rem;
+      border-radius: 999px;
+      border: 2px solid #4caf50;
+      background: #fff;
+      color: #2e7d32;
+      font-size: 0.85rem;
+      font-weight: 600;
+      cursor: pointer;
+      transition: background 0.2s, color 0.2s, box-shadow 0.2s;
+      font-family: 'Inter', sans-serif;
+    }
+    .filter-btn:hover {
+      background: #e8f5e9;
+    }
+    .filter-btn.active {
+      background: #2e7d32;
+      color: #fff;
+      border-color: #2e7d32;
+      box-shadow: 0 2px 8px rgba(46,125,50,0.25);
+    }
+    .filter-btn:focus-visible {
+      outline: 3px solid #8bc34a;
+      outline-offset: 2px;
+    }
+
+    /* ── Meals grid ── */
+    .meals-grid {
+      display: grid;
+      grid-template-columns: 1fr;
+      gap: 1.75rem;
+    }
+    @media (min-width: 640px) {
+      .meals-grid { grid-template-columns: repeat(2, 1fr); }
+    }
+    @media (min-width: 1024px) {
+      .meals-grid { grid-template-columns: repeat(3, 1fr); }
+    }
+
+    /* ── Meal card ── */
+    .meal-card {
+      background: #fff;
+      border-radius: 16px;
+      overflow: hidden;
+      box-shadow: 6px 6px 14px #d1d9d1, -4px -4px 10px #ffffff;
+      transition: transform 0.25s, box-shadow 0.25s;
+      display: flex;
+      flex-direction: column;
+    }
+    .meal-card:hover {
+      transform: translateY(-4px);
+      box-shadow: 8px 10px 20px #c5cec5, -4px -4px 12px #ffffff;
+    }
+    .meal-card.hidden {
+      display: none;
+    }
+    .meal-card__img-wrap {
+      position: relative;
+      overflow: hidden;
+      height: 200px;
+    }
+    .meal-card__img-wrap img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      transition: transform 0.4s ease;
+      display: block;
+    }
+    .meal-card:hover .meal-card__img-wrap img {
+      transform: scale(1.05);
+    }
+    .meal-price {
+      position: absolute;
+      top: 0.75rem;
+      right: 0.75rem;
+      background: #2e7d32;
+      color: #fff;
+      font-size: 0.8rem;
+      font-weight: 700;
+      padding: 0.3rem 0.7rem;
+      border-radius: 999px;
+      letter-spacing: 0.03em;
+      box-shadow: 0 2px 6px rgba(0,0,0,0.2);
+    }
+    .meal-card__body {
+      padding: 1.1rem 1.25rem 0.75rem;
+      display: flex;
+      flex-direction: column;
+      gap: 0.5rem;
+      flex: 1;
+    }
+    .meal-card__title {
+      font-family: 'Poppins', sans-serif;
+      font-size: 1.05rem;
+      font-weight: 700;
+      color: #1b5e20;
+      margin: 0;
+      line-height: 1.3;
+    }
+    .meal-serves {
+      font-size: 0.78rem;
+      color: #757575;
+      font-weight: 500;
+    }
+    .meal-nut-tags {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 0.4rem;
+      margin-top: 0.25rem;
+    }
+    .meal-nut-tag {
+      background: #e8f5e9;
+      color: #2e7d32;
+      border-radius: 999px;
+      font-size: 0.72rem;
+      font-weight: 600;
+      padding: 0.2rem 0.55rem;
+      white-space: nowrap;
+    }
+    .meal-nut-tag.tag-protein { background: #e3f2fd; color: #1565c0; }
+    .meal-nut-tag.tag-carbs  { background: #fff8e1; color: #f57f17; }
+    .meal-nut-tag.tag-fibre  { background: #f3e5f5; color: #6a1b9a; }
+    .meal-nut-tag.tag-cal    { background: #fce4ec; color: #c62828; }
+
+    /* Tips expand */
+    .tips-toggle {
+      background: none;
+      border: none;
+      color: #2e7d32;
+      font-size: 0.8rem;
+      font-weight: 600;
+      cursor: pointer;
+      padding: 0.3rem 0;
+      display: flex;
+      align-items: center;
+      gap: 0.35rem;
+      font-family: 'Inter', sans-serif;
+      margin-top: 0.25rem;
+    }
+    .tips-toggle:focus-visible { outline: 2px solid #8bc34a; border-radius: 4px; }
+    .tips-toggle svg { transition: transform 0.25s; flex-shrink: 0; }
+    .tips-toggle[aria-expanded="true"] svg { transform: rotate(180deg); }
+    .tips-panel {
+      display: none;
+      background: #f1f8e9;
+      border-radius: 10px;
+      padding: 0.7rem 0.85rem;
+      font-size: 0.78rem;
+      color: #33691e;
+      line-height: 1.6;
+      margin-top: 0.25rem;
+    }
+    .tips-panel.open { display: block; }
+    .tips-panel ul {
+      margin: 0;
+      padding-left: 1.1rem;
+    }
+    .tips-panel ul li { margin-bottom: 0.2rem; }
+
+    .meal-card__footer {
+      padding: 0.75rem 1.25rem 1.1rem;
+      border-top: 1px solid #f0f0f0;
+      display: flex;
+      gap: 0.5rem;
+      flex-wrap: wrap;
+    }
+    .btn-sm {
+      font-size: 0.78rem;
+      font-weight: 600;
+      padding: 0.38rem 0.85rem;
+      border-radius: 999px;
+      border: none;
+      cursor: pointer;
+      font-family: 'Inter', sans-serif;
+      text-decoration: none;
+      display: inline-flex;
+      align-items: center;
+      gap: 0.3rem;
+      transition: background 0.2s, transform 0.15s;
+    }
+    .btn-sm:active { transform: scale(0.97); }
+    .btn-sm-green  { background: #2e7d32; color: #fff; }
+    .btn-sm-green:hover  { background: #1b5e20; }
+    .btn-sm-outline { background: transparent; color: #2e7d32; border: 1.5px solid #4caf50; }
+    .btn-sm-outline:hover { background: #e8f5e9; }
+
+    /* ── No results ── */
+    .no-results {
+      display: none;
+      grid-column: 1 / -1;
+      text-align: center;
+      padding: 3rem 1rem;
+      color: #757575;
+    }
+    .no-results.visible { display: block; }
+    .no-results svg { margin-bottom: 1rem; opacity: 0.4; }
+
+    /* ── Section headings ── */
+    .section-heading {
+      font-family: 'Poppins', sans-serif;
+      font-size: 1.5rem;
+      font-weight: 800;
+      color: #1b5e20;
+      margin: 0 0 0.4rem;
+    }
+    .section-sub {
+      color: #555;
+      font-size: 0.925rem;
+      margin: 0 0 1.5rem;
+    }
+    .divider {
+      border: none;
+      border-top: 2px solid #e8f5e9;
+      margin: 0 0 2rem;
+    }
+
+    /* ── Comparison table ── */
+    .table-wrap {
+      overflow-x: auto;
+      border-radius: 14px;
+      box-shadow: 4px 4px 12px #d1d9d1, -3px -3px 8px #fff;
+    }
+    .compare-table {
+      width: 100%;
+      border-collapse: collapse;
+      min-width: 620px;
+      background: #fff;
+      font-size: 0.875rem;
+    }
+    .compare-table thead {
+      background: linear-gradient(90deg, #2e7d32, #4caf50);
+      color: #fff;
+    }
+    .compare-table thead th {
+      padding: 0.85rem 1rem;
+      text-align: left;
+      font-weight: 700;
+      font-size: 0.82rem;
+      letter-spacing: 0.04em;
+      text-transform: uppercase;
+      white-space: nowrap;
+    }
+    .compare-table tbody tr:nth-child(even) { background: #f9fbe7; }
+    .compare-table tbody tr:hover { background: #e8f5e9; }
+    .compare-table td {
+      padding: 0.75rem 1rem;
+      border-bottom: 1px solid #f0f0f0;
+      color: #212121;
+      vertical-align: middle;
+    }
+    .compare-table td:first-child { font-weight: 600; color: #1b5e20; }
+    .td-price { font-weight: 700; color: #2e7d32; }
+    .td-best {
+      background: #c8e6c9 !important;
+      font-weight: 700;
+    }
+
+    /* ── Disclaimer note ── */
+    .disclaimer {
+      background: #fffde7;
+      border-left: 4px solid #fbc02d;
+      border-radius: 0 10px 10px 0;
+      padding: 1rem 1.25rem;
+      font-size: 0.85rem;
+      color: #5d4037;
+      margin: 2rem 0 0;
+      display: flex;
+      gap: 0.75rem;
+      align-items: flex-start;
+    }
+    .disclaimer svg { flex-shrink: 0; margin-top: 2px; }
+
+    /* ── CTA strip ── */
+    .cta-strip {
+      background: linear-gradient(135deg, #e8f5e9, #f1f8e9);
+      border-radius: 16px;
+      padding: 2rem 1.5rem;
+      text-align: center;
+      margin-top: 2.5rem;
+      box-shadow: 4px 4px 12px #d1d9d1, -3px -3px 8px #fff;
+    }
+    .cta-strip h2 {
+      font-family: 'Poppins', sans-serif;
+      font-size: 1.3rem;
+      font-weight: 800;
+      color: #1b5e20;
+      margin: 0 0 0.5rem;
+    }
+    .cta-strip p {
+      color: #555;
+      font-size: 0.9rem;
+      margin: 0 0 1.25rem;
+    }
+    .cta-strip .cta-btns {
+      display: flex;
+      gap: 0.75rem;
+      justify-content: center;
+      flex-wrap: wrap;
+    }
+    .cta-btn {
+      display: inline-flex;
+      align-items: center;
+      gap: 0.4rem;
+      padding: 0.7rem 1.5rem;
+      border-radius: 999px;
+      font-size: 0.9rem;
+      font-weight: 700;
+      text-decoration: none;
+      transition: transform 0.15s, box-shadow 0.2s;
+      font-family: 'Inter', sans-serif;
+    }
+    .cta-btn:hover { transform: translateY(-2px); box-shadow: 0 6px 16px rgba(46,125,50,0.25); }
+    .cta-btn-primary   { background: #2e7d32; color: #fff; }
+    .cta-btn-secondary { background: #fff; color: #2e7d32; border: 2px solid #4caf50; }
+
+    /* ── Stats bar ── */
+    .stats-bar {
+      display: flex;
+      gap: 1rem;
+      flex-wrap: wrap;
+      justify-content: center;
+      margin: 1.5rem 0 0;
+    }
+    .stat-chip {
+      background: rgba(255,255,255,0.85);
+      border-radius: 12px;
+      padding: 0.65rem 1.25rem;
+      text-align: center;
+      box-shadow: 0 2px 8px rgba(0,0,0,0.08);
+      min-width: 120px;
+    }
+    .stat-chip strong {
+      display: block;
+      font-family: 'Poppins', sans-serif;
+      font-size: 1.35rem;
+      font-weight: 800;
+      color: #1b5e20;
+    }
+    .stat-chip span {
+      font-size: 0.75rem;
+      color: #555;
+      font-weight: 500;
+    }
+  </style>
+</head>
+<body>
+  <main id="main-content">
+
+    <!-- Hero -->
+    <section class="meal-hero" aria-labelledby="hero-title">
+      <h1 id="hero-title">Budget-Friendly Indian Meal Ideas</h1>
+      <p>Nutritious, delicious, and affordable — full nutrition info for every meal.</p>
+      <div class="stats-bar" role="list" aria-label="Quick stats">
+        <div class="stat-chip" role="listitem">
+          <strong>9</strong>
+          <span>Meal Ideas</span>
+        </div>
+        <div class="stat-chip" role="listitem">
+          <strong>₹20–₹45</strong>
+          <span>Price Range</span>
+        </div>
+        <div class="stat-chip" role="listitem">
+          <strong>220–450</strong>
+          <span>Calories / Plate</span>
+        </div>
+        <div class="stat-chip" role="listitem">
+          <strong>100%</strong>
+          <span>Under ₹100</span>
+        </div>
+      </div>
+    </section>
+
+    <!-- Breadcrumb -->
+    <nav aria-label="Breadcrumb" class="breadcrumb">
+      <ol>
+        <li><a href="index.html">Home</a></li>
+        <li aria-current="page">Meal Ideas</li>
+      </ol>
+    </nav>
+
+    <!-- Meal Cards Section -->
+    <section class="page-section" aria-labelledby="meals-heading">
+      <h2 class="section-heading" id="meals-heading">🍛 All Meal Ideas</h2>
+      <p class="section-sub">Click a filter to narrow down meals by price or nutrition goal.</p>
+
+      <!-- Filter bar -->
+      <div class="filter-bar" role="group" aria-label="Filter meals">
+        <span class="filter-label" id="filter-label">Filter:</span>
+        <button class="filter-btn active" data-filter="all" aria-pressed="true" aria-describedby="filter-label">All</button>
+        <button class="filter-btn" data-filter="under25" aria-pressed="false">Under ₹25</button>
+        <button class="filter-btn" data-filter="under50" aria-pressed="false">Under ₹50</button>
+        <button class="filter-btn" data-filter="high-protein" aria-pressed="false">High Protein</button>
+        <button class="filter-btn" data-filter="high-fibre" aria-pressed="false">High Fibre</button>
+      </div>
+
+      <!-- Meals grid -->
+      <div class="meals-grid" id="meals-grid" role="list" aria-live="polite" aria-label="Meal cards">
+
+        <!-- 1. Dal Chawal -->
+        <article class="meal-card card-neu"
+          data-price="30" data-protein="13" data-fibre="8"
+          data-tags="under50"
+          role="listitem"
+          aria-label="Dal Chawal">
+          <div class="meal-card__img-wrap">
+            <img src="https://images.unsplash.com/photo-1546833999-b9f581a1996d?auto=format&fit=crop&w=600&q=75"
+              alt="Dal chawal in a steel plate" loading="lazy" width="600" height="400">
+            <span class="meal-price" aria-label="Price approximately 30 rupees">~₹30</span>
+          </div>
+          <div class="meal-card__body">
+            <h3 class="meal-card__title">Dal Chawal</h3>
+            <p class="meal-serves">🍽 Moong Dal + Rice · Serves 1</p>
+            <div class="meal-nut-tags" aria-label="Nutrition highlights">
+              <span class="meal-nut-tag tag-cal">320 kcal</span>
+              <span class="meal-nut-tag tag-protein">Protein 13g</span>
+              <span class="meal-nut-tag tag-carbs">Carbs 58g</span>
+              <span class="meal-nut-tag tag-fibre">Fibre 8g</span>
+              <span class="meal-nut-tag">Fat 3g</span>
+              <span class="meal-nut-tag">Iron 2.8mg</span>
+            </div>
+            <button class="tips-toggle" aria-expanded="false" aria-controls="tips-1">
+              <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" aria-hidden="true"><polyline points="6 9 12 15 18 9"/></svg>
+              Nutrition Tips
+            </button>
+            <div class="tips-panel" id="tips-1" role="region" aria-label="Nutrition tips for Dal Chawal">
+              <ul>
+                <li>Add a <strong>ghee tadka</strong> for fat-soluble Vitamin A absorption</li>
+                <li>Serve with <strong>raw onion</strong> for quercetin antioxidants</li>
+                <li>Squeeze <strong>lemon juice</strong> to boost iron absorption (Vitamin C)</li>
+              </ul>
+            </div>
+          </div>
+          <div class="meal-card__footer">
+            <a href="nutrition-checker.html" class="btn-sm btn-sm-green" aria-label="Check nutrition of Dal Chawal">
+              <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" aria-hidden="true"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg>
+              Nutrition Check
+            </a>
+            <a href="compare.html" class="btn-sm btn-sm-outline" aria-label="Compare Dal Chawal with other meals">Compare</a>
+          </div>
+        </article>
+
+        <!-- 2. Egg Bhurji + Roti -->
+        <article class="meal-card card-neu"
+          data-price="35" data-protein="22" data-fibre="4"
+          data-tags="under50 high-protein"
+          role="listitem"
+          aria-label="Egg Bhurji with Roti">
+          <div class="meal-card__img-wrap">
+            <img src="https://images.unsplash.com/photo-1567620905732-2d1ec7ab7445?auto=format&fit=crop&w=600&q=75"
+              alt="Scrambled egg bhurji with rotis" loading="lazy" width="600" height="400">
+            <span class="meal-price" aria-label="Price approximately 35 rupees">~₹35</span>
+          </div>
+          <div class="meal-card__body">
+            <h3 class="meal-card__title">Egg Bhurji + Roti</h3>
+            <p class="meal-serves">🍽 2 Eggs + 2 Whole Wheat Rotis · Serves 1</p>
+            <div class="meal-nut-tags" aria-label="Nutrition highlights">
+              <span class="meal-nut-tag tag-cal">390 kcal</span>
+              <span class="meal-nut-tag tag-protein">Protein 22g</span>
+              <span class="meal-nut-tag tag-carbs">Carbs 40g</span>
+              <span class="meal-nut-tag tag-fibre">Fibre 4g</span>
+              <span class="meal-nut-tag">Fat 16g</span>
+              <span class="meal-nut-tag">Vit B12 0.8µg</span>
+            </div>
+            <button class="tips-toggle" aria-expanded="false" aria-controls="tips-2">
+              <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" aria-hidden="true"><polyline points="6 9 12 15 18 9"/></svg>
+              Nutrition Tips
+            </button>
+            <div class="tips-panel" id="tips-2" role="region" aria-label="Nutrition tips for Egg Bhurji">
+              <ul>
+                <li>Whole eggs provide <strong>complete protein</strong> and all essential amino acids</li>
+                <li>Add <strong>spinach or tomatoes</strong> for extra micronutrients</li>
+                <li>Whole wheat roti adds <strong>dietary fibre</strong> vs refined flour</li>
+              </ul>
+            </div>
+          </div>
+          <div class="meal-card__footer">
+            <a href="nutrition-checker.html" class="btn-sm btn-sm-green">
+              <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" aria-hidden="true"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg>
+              Nutrition Check
+            </a>
+            <a href="compare.html" class="btn-sm btn-sm-outline">Compare</a>
+          </div>
+        </article>
+
+        <!-- 3. Poha -->
+        <article class="meal-card card-neu"
+          data-price="20" data-protein="5" data-fibre="3"
+          data-tags="under25 under50"
+          role="listitem"
+          aria-label="Poha">
+          <div class="meal-card__img-wrap">
+            <img src="https://images.unsplash.com/photo-1585937421612-70a008356fbe?auto=format&fit=crop&w=600&q=75"
+              alt="Colourful poha served in a bowl" loading="lazy" width="600" height="400">
+            <span class="meal-price" aria-label="Price approximately 20 rupees">~₹20</span>
+          </div>
+          <div class="meal-card__body">
+            <h3 class="meal-card__title">Poha</h3>
+            <p class="meal-serves">🍽 Flattened Rice with Vegetables · Serves 1</p>
+            <div class="meal-nut-tags" aria-label="Nutrition highlights">
+              <span class="meal-nut-tag tag-cal">260 kcal</span>
+              <span class="meal-nut-tag tag-protein">Protein 5g</span>
+              <span class="meal-nut-tag tag-carbs">Carbs 52g</span>
+              <span class="meal-nut-tag tag-fibre">Fibre 3g</span>
+              <span class="meal-nut-tag">Fat 4g</span>
+              <span class="meal-nut-tag">Iron 3mg</span>
+            </div>
+            <button class="tips-toggle" aria-expanded="false" aria-controls="tips-3">
+              <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" aria-hidden="true"><polyline points="6 9 12 15 18 9"/></svg>
+              Nutrition Tips
+            </button>
+            <div class="tips-panel" id="tips-3" role="region" aria-label="Nutrition tips for Poha">
+              <ul>
+                <li>Fortified poha is a great <strong>affordable iron source</strong></li>
+                <li>Add <strong>peanuts</strong> for protein and healthy fats</li>
+                <li>Squeeze lemon juice to <strong>enhance iron absorption</strong></li>
+              </ul>
+            </div>
+          </div>
+          <div class="meal-card__footer">
+            <a href="nutrition-checker.html" class="btn-sm btn-sm-green">
+              <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" aria-hidden="true"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg>
+              Nutrition Check
+            </a>
+            <a href="compare.html" class="btn-sm btn-sm-outline">Compare</a>
+          </div>
+        </article>
+
+        <!-- 4. Rajma Chawal -->
+        <article class="meal-card card-neu"
+          data-price="40" data-protein="18" data-fibre="14"
+          data-tags="under50 high-protein high-fibre"
+          role="listitem"
+          aria-label="Rajma Chawal">
+          <div class="meal-card__img-wrap">
+            <img src="https://images.unsplash.com/photo-1545247181-516773cae754?auto=format&fit=crop&w=600&q=75"
+              alt="Rajma chawal with sliced onion" loading="lazy" width="600" height="400">
+            <span class="meal-price" aria-label="Price approximately 40 rupees">~₹40</span>
+          </div>
+          <div class="meal-card__body">
+            <h3 class="meal-card__title">Rajma Chawal</h3>
+            <p class="meal-serves">🍽 Kidney Beans + Rice · Serves 1</p>
+            <div class="meal-nut-tags" aria-label="Nutrition highlights">
+              <span class="meal-nut-tag tag-cal">450 kcal</span>
+              <span class="meal-nut-tag tag-protein">Protein 18g</span>
+              <span class="meal-nut-tag tag-carbs">Carbs 80g</span>
+              <span class="meal-nut-tag tag-fibre">Fibre 14g</span>
+              <span class="meal-nut-tag">Fat 4g</span>
+              <span class="meal-nut-tag">Iron 5mg</span>
+              <span class="meal-nut-tag">Folate 180µg</span>
+            </div>
+            <button class="tips-toggle" aria-expanded="false" aria-controls="tips-4">
+              <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" aria-hidden="true"><polyline points="6 9 12 15 18 9"/></svg>
+              Nutrition Tips
+            </button>
+            <div class="tips-panel" id="tips-4" role="region" aria-label="Nutrition tips for Rajma Chawal">
+              <ul>
+                <li>Rajma is one of the <strong>highest-fibre legumes</strong> — great for gut health</li>
+                <li>High in <strong>folate</strong>, especially important during pregnancy</li>
+                <li>Pair with rice for a <strong>complete amino acid profile</strong></li>
+              </ul>
+            </div>
+          </div>
+          <div class="meal-card__footer">
+            <a href="nutrition-checker.html" class="btn-sm btn-sm-green">
+              <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" aria-hidden="true"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg>
+              Nutrition Check
+            </a>
+            <a href="compare.html" class="btn-sm btn-sm-outline">Compare</a>
+          </div>
+        </article>
+
+        <!-- 5. Sabudana Khichdi -->
+        <article class="meal-card card-neu"
+          data-price="25" data-protein="5" data-fibre="2"
+          data-tags="under25 under50"
+          role="listitem"
+          aria-label="Sabudana Khichdi">
+          <div class="meal-card__img-wrap">
+            <img src="https://images.unsplash.com/photo-1565557623262-b51c2513a641?auto=format&fit=crop&w=600&q=75"
+              alt="Sabudana khichdi garnished with peanuts and coriander" loading="lazy" width="600" height="400">
+            <span class="meal-price" aria-label="Price approximately 25 rupees">~₹25</span>
+          </div>
+          <div class="meal-card__body">
+            <h3 class="meal-card__title">Sabudana Khichdi</h3>
+            <p class="meal-serves">🍽 Tapioca Pearls · Serves 1</p>
+            <div class="meal-nut-tags" aria-label="Nutrition highlights">
+              <span class="meal-nut-tag tag-cal">340 kcal</span>
+              <span class="meal-nut-tag tag-protein">Protein 5g</span>
+              <span class="meal-nut-tag tag-carbs">Carbs 72g</span>
+              <span class="meal-nut-tag tag-fibre">Fibre 2g</span>
+              <span class="meal-nut-tag">Fat 9g</span>
+            </div>
+            <button class="tips-toggle" aria-expanded="false" aria-controls="tips-5">
+              <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" aria-hidden="true"><polyline points="6 9 12 15 18 9"/></svg>
+              Nutrition Tips
+            </button>
+            <div class="tips-panel" id="tips-5" role="region" aria-label="Nutrition tips for Sabudana Khichdi">
+              <ul>
+                <li>Quick <strong>energy boost</strong> — ideal for fasting days or pre-workout</li>
+                <li>Add <strong>roasted peanuts</strong> to increase protein content</li>
+                <li>Best paired with <strong>yogurt</strong> for protein balance</li>
+              </ul>
+            </div>
+          </div>
+          <div class="meal-card__footer">
+            <a href="nutrition-checker.html" class="btn-sm btn-sm-green">
+              <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" aria-hidden="true"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg>
+              Nutrition Check
+            </a>
+            <a href="compare.html" class="btn-sm btn-sm-outline">Compare</a>
+          </div>
+        </article>
+
+        <!-- 6. Masoor Dal + Spinach Sabzi + Roti -->
+        <article class="meal-card card-neu"
+          data-price="45" data-protein="17" data-fibre="12"
+          data-tags="under50 high-protein high-fibre"
+          role="listitem"
+          aria-label="Masoor Dal with Spinach Sabzi and Roti">
+          <div class="meal-card__img-wrap">
+            <img src="https://images.unsplash.com/photo-1512621776951-a57141f2eefd?auto=format&fit=crop&w=600&q=75"
+              alt="Red lentil dal with spinach and Indian bread" loading="lazy" width="600" height="400">
+            <span class="meal-price" aria-label="Price approximately 45 rupees">~₹45</span>
+          </div>
+          <div class="meal-card__body">
+            <h3 class="meal-card__title">Masoor Dal + Spinach Sabzi + Roti</h3>
+            <p class="meal-serves">🍽 Red Lentils + Greens · Serves 1</p>
+            <div class="meal-nut-tags" aria-label="Nutrition highlights">
+              <span class="meal-nut-tag tag-cal">380 kcal</span>
+              <span class="meal-nut-tag tag-protein">Protein 17g</span>
+              <span class="meal-nut-tag tag-carbs">Carbs 60g</span>
+              <span class="meal-nut-tag tag-fibre">Fibre 12g</span>
+              <span class="meal-nut-tag">Fat 5g</span>
+              <span class="meal-nut-tag">Iron 6mg</span>
+              <span class="meal-nut-tag">Vit A 200µg</span>
+              <span class="meal-nut-tag">Folate 220µg</span>
+            </div>
+            <button class="tips-toggle" aria-expanded="false" aria-controls="tips-6">
+              <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" aria-hidden="true"><polyline points="6 9 12 15 18 9"/></svg>
+              Nutrition Tips
+            </button>
+            <div class="tips-panel" id="tips-6" role="region" aria-label="Nutrition tips for Masoor Dal combo">
+              <ul>
+                <li><strong>Highest iron</strong> in this list at 6mg — ideal for anaemia prevention</li>
+                <li>Spinach provides <strong>Vitamin A and folate</strong> for eye health and cell repair</li>
+                <li>Lemon squeeze on spinach <strong>triples iron absorption</strong></li>
+              </ul>
+            </div>
+          </div>
+          <div class="meal-card__footer">
+            <a href="nutrition-checker.html" class="btn-sm btn-sm-green">
+              <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" aria-hidden="true"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg>
+              Nutrition Check
+            </a>
+            <a href="compare.html" class="btn-sm btn-sm-outline">Compare</a>
+          </div>
+        </article>
+
+        <!-- 7. Oats Upma -->
+        <article class="meal-card card-neu"
+          data-price="20" data-protein="8" data-fibre="5"
+          data-tags="under25 under50 high-protein"
+          role="listitem"
+          aria-label="Oats Upma with Vegetables">
+          <div class="meal-card__img-wrap">
+            <img src="https://images.unsplash.com/photo-1504674900247-0877df9cc836?auto=format&fit=crop&w=600&q=75"
+              alt="Oats upma with colourful vegetables" loading="lazy" width="600" height="400">
+            <span class="meal-price" aria-label="Price approximately 20 rupees">~₹20</span>
+          </div>
+          <div class="meal-card__body">
+            <h3 class="meal-card__title">Oats Upma with Vegetables</h3>
+            <p class="meal-serves">🍽 Rolled Oats + Mixed Veggies · Serves 1</p>
+            <div class="meal-nut-tags" aria-label="Nutrition highlights">
+              <span class="meal-nut-tag tag-cal">220 kcal</span>
+              <span class="meal-nut-tag tag-protein">Protein 8g</span>
+              <span class="meal-nut-tag tag-carbs">Carbs 36g</span>
+              <span class="meal-nut-tag tag-fibre">Fibre 5g</span>
+              <span class="meal-nut-tag">Fat 5g</span>
+              <span class="meal-nut-tag">Iron 3mg</span>
+              <span class="meal-nut-tag">Mg 60mg</span>
+            </div>
+            <button class="tips-toggle" aria-expanded="false" aria-controls="tips-7">
+              <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" aria-hidden="true"><polyline points="6 9 12 15 18 9"/></svg>
+              Nutrition Tips
+            </button>
+            <div class="tips-panel" id="tips-7" role="region" aria-label="Nutrition tips for Oats Upma">
+              <ul>
+                <li>Oats are rich in <strong>beta-glucan</strong>, which lowers LDL cholesterol</li>
+                <li><strong>Lowest calorie</strong> meal in this list — ideal for weight management</li>
+                <li>Add a boiled egg alongside for a <strong>protein boost</strong></li>
+              </ul>
+            </div>
+          </div>
+          <div class="meal-card__footer">
+            <a href="nutrition-checker.html" class="btn-sm btn-sm-green">
+              <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" aria-hidden="true"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg>
+              Nutrition Check
+            </a>
+            <a href="compare.html" class="btn-sm btn-sm-outline">Compare</a>
+          </div>
+        </article>
+
+        <!-- 8. Banana + Peanut Butter Roti Roll -->
+        <article class="meal-card card-neu"
+          data-price="25" data-protein="9" data-fibre="5"
+          data-tags="under25 under50 high-protein"
+          role="listitem"
+          aria-label="Banana Peanut Butter Roti Roll">
+          <div class="meal-card__img-wrap">
+            <img src="https://images.unsplash.com/photo-1571091718767-18b5b1457add?auto=format&fit=crop&w=600&q=75"
+              alt="Flatbread wrap with banana and peanut butter" loading="lazy" width="600" height="400">
+            <span class="meal-price" aria-label="Price approximately 25 rupees">~₹25</span>
+          </div>
+          <div class="meal-card__body">
+            <h3 class="meal-card__title">Banana + Peanut Butter Roti Roll</h3>
+            <p class="meal-serves">🍽 Whole Wheat Roti · Serves 1</p>
+            <div class="meal-nut-tags" aria-label="Nutrition highlights">
+              <span class="meal-nut-tag tag-cal">300 kcal</span>
+              <span class="meal-nut-tag tag-protein">Protein 9g</span>
+              <span class="meal-nut-tag tag-carbs">Carbs 48g</span>
+              <span class="meal-nut-tag tag-fibre">Fibre 5g</span>
+              <span class="meal-nut-tag">Fat 10g</span>
+              <span class="meal-nut-tag">K 422mg</span>
+            </div>
+            <button class="tips-toggle" aria-expanded="false" aria-controls="tips-8">
+              <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" aria-hidden="true"><polyline points="6 9 12 15 18 9"/></svg>
+              Nutrition Tips
+            </button>
+            <div class="tips-panel" id="tips-8" role="region" aria-label="Nutrition tips for Banana Peanut Butter Roll">
+              <ul>
+                <li>Banana provides <strong>422mg potassium</strong> — supports heart health</li>
+                <li>Peanut butter adds <strong>healthy monounsaturated fats</strong> and protein</li>
+                <li>Great <strong>pre-workout snack</strong> or quick breakfast</li>
+              </ul>
+            </div>
+          </div>
+          <div class="meal-card__footer">
+            <a href="nutrition-checker.html" class="btn-sm btn-sm-green">
+              <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" aria-hidden="true"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg>
+              Nutrition Check
+            </a>
+            <a href="compare.html" class="btn-sm btn-sm-outline">Compare</a>
+          </div>
+        </article>
+
+        <!-- 9. Curd Rice -->
+        <article class="meal-card card-neu"
+          data-price="20" data-protein="7" data-fibre="1"
+          data-tags="under25 under50"
+          role="listitem"
+          aria-label="Curd Rice">
+          <div class="meal-card__img-wrap">
+            <img src="https://images.unsplash.com/photo-1546069901-ba9599a7e63c?auto=format&fit=crop&w=600&q=75"
+              alt="Curd rice in a steel bowl with mustard seeds tempering" loading="lazy" width="600" height="400">
+            <span class="meal-price" aria-label="Price approximately 20 rupees">~₹20</span>
+          </div>
+          <div class="meal-card__body">
+            <h3 class="meal-card__title">Curd Rice (Dahi Chawal)</h3>
+            <p class="meal-serves">🍽 Rice + Fresh Yogurt · Serves 1</p>
+            <div class="meal-nut-tags" aria-label="Nutrition highlights">
+              <span class="meal-nut-tag tag-cal">240 kcal</span>
+              <span class="meal-nut-tag tag-protein">Protein 7g</span>
+              <span class="meal-nut-tag tag-carbs">Carbs 44g</span>
+              <span class="meal-nut-tag tag-fibre">Fibre 1g</span>
+              <span class="meal-nut-tag">Fat 5g</span>
+              <span class="meal-nut-tag">Ca 180mg</span>
+              <span class="meal-nut-tag">Probiotics ✓</span>
+            </div>
+            <button class="tips-toggle" aria-expanded="false" aria-controls="tips-9">
+              <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" aria-hidden="true"><polyline points="6 9 12 15 18 9"/></svg>
+              Nutrition Tips
+            </button>
+            <div class="tips-panel" id="tips-9" role="region" aria-label="Nutrition tips for Curd Rice">
+              <ul>
+                <li>Live cultures in curd support <strong>gut microbiome health</strong></li>
+                <li><strong>180mg calcium</strong> per serving — great for bone density</li>
+                <li>Cooling effect — ideal in <strong>summer or post-fever recovery</strong></li>
+              </ul>
+            </div>
+          </div>
+          <div class="meal-card__footer">
+            <a href="nutrition-checker.html" class="btn-sm btn-sm-green">
+              <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" aria-hidden="true"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg>
+              Nutrition Check
+            </a>
+            <a href="compare.html" class="btn-sm btn-sm-outline">Compare</a>
+          </div>
+        </article>
+
+        <!-- No results message -->
+        <div class="no-results" id="no-results" role="status" aria-live="polite">
+          <svg width="64" height="64" viewBox="0 0 24 24" fill="none" stroke="#4caf50" stroke-width="1.5" aria-hidden="true">
+            <circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/>
+          </svg>
+          <p>No meals match this filter. Try a different category.</p>
+        </div>
+
+      </div><!-- /meals-grid -->
+    </section>
+
+    <!-- Comparison Table -->
+    <section class="page-section" aria-labelledby="compare-heading" style="padding-top:0;">
+      <hr class="divider">
+      <h2 class="section-heading" id="compare-heading">📊 Side-by-Side Comparison</h2>
+      <p class="section-sub">All 9 meals ranked together — spot the best value at a glance.</p>
+      <div class="table-wrap">
+        <table class="compare-table" aria-label="Meal nutrition comparison table">
+          <thead>
+            <tr>
+              <th scope="col">Meal</th>
+              <th scope="col">Price</th>
+              <th scope="col">Calories</th>
+              <th scope="col">Protein</th>
+              <th scope="col">Fibre</th>
+              <th scope="col">Carbs</th>
+              <th scope="col">Fat</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td>Dal Chawal</td>
+              <td class="td-price">₹30</td>
+              <td>320 kcal</td>
+              <td>13g</td>
+              <td>8g</td>
+              <td>58g</td>
+              <td>3g</td>
+            </tr>
+            <tr>
+              <td>Egg Bhurji + Roti</td>
+              <td class="td-price">₹35</td>
+              <td>390 kcal</td>
+              <td class="td-best" title="Highest protein">22g ★</td>
+              <td>4g</td>
+              <td>40g</td>
+              <td>16g</td>
+            </tr>
+            <tr>
+              <td>Poha</td>
+              <td class="td-price td-best" title="Joint lowest price">₹20 ★</td>
+              <td>260 kcal</td>
+              <td>5g</td>
+              <td>3g</td>
+              <td>52g</td>
+              <td>4g</td>
+            </tr>
+            <tr>
+              <td>Rajma Chawal</td>
+              <td class="td-price">₹40</td>
+              <td class="td-best" title="Highest calories">450 kcal ★</td>
+              <td>18g</td>
+              <td class="td-best" title="Highest fibre">14g ★</td>
+              <td>80g</td>
+              <td>4g</td>
+            </tr>
+            <tr>
+              <td>Sabudana Khichdi</td>
+              <td class="td-price">₹25</td>
+              <td>340 kcal</td>
+              <td>5g</td>
+              <td>2g</td>
+              <td class="td-best" title="Highest carbs">72g ★</td>
+              <td>9g</td>
+            </tr>
+            <tr>
+              <td>Masoor Dal + Spinach + Roti</td>
+              <td class="td-price">₹45</td>
+              <td>380 kcal</td>
+              <td>17g</td>
+              <td>12g</td>
+              <td>60g</td>
+              <td>5g</td>
+            </tr>
+            <tr>
+              <td>Oats Upma</td>
+              <td class="td-price td-best" title="Joint lowest price">₹20 ★</td>
+              <td class="td-best" title="Lowest calories">220 kcal ★</td>
+              <td>8g</td>
+              <td>5g</td>
+              <td>36g</td>
+              <td>5g</td>
+            </tr>
+            <tr>
+              <td>Banana + PB Roti Roll</td>
+              <td class="td-price">₹25</td>
+              <td>300 kcal</td>
+              <td>9g</td>
+              <td>5g</td>
+              <td>48g</td>
+              <td>10g</td>
+            </tr>
+            <tr>
+              <td>Curd Rice</td>
+              <td class="td-price td-best" title="Joint lowest price">₹20 ★</td>
+              <td>240 kcal</td>
+              <td>7g</td>
+              <td>1g</td>
+              <td>44g</td>
+              <td>5g</td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+      <p style="font-size:0.78rem;color:#757575;margin-top:0.6rem;text-align:right;">★ = Best in category</p>
+
+      <!-- Disclaimer -->
+      <div class="disclaimer" role="note" aria-label="Disclaimer about nutrition values">
+        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#f57f17" stroke-width="2" aria-hidden="true">
+          <circle cx="12" cy="12" r="10"/><line x1="12" y1="8" x2="12" y2="12"/><line x1="12" y1="16" x2="12.01" y2="16"/>
+        </svg>
+        <p style="margin:0;">
+          <strong>Note:</strong> Nutrition values are estimated based on standard Indian recipe portions.
+          Actual values vary by ingredient quality and preparation method.
+          Consult a registered dietitian for personalised guidance.
+        </p>
+      </div>
+
+      <!-- CTA Strip -->
+      <div class="cta-strip" aria-label="Explore more NutriGuard tools">
+        <h2>Want to Analyse Your Own Meal?</h2>
+        <p>Use our free Nutrition Checker to get instant facts on any food, or compare two meals head-to-head.</p>
+        <div class="cta-btns">
+          <a href="nutrition-checker.html" class="cta-btn cta-btn-primary" aria-label="Open the Nutrition Checker tool">
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" aria-hidden="true"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg>
+            Nutrition Checker
+          </a>
+          <a href="compare.html" class="cta-btn cta-btn-secondary" aria-label="Open the meal comparison tool">
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" aria-hidden="true"><polyline points="22 12 18 12 15 21 9 3 6 12 2 12"/></svg>
+            Compare Meals
+          </a>
+        </div>
+      </div>
+
+    </section>
+
+  </main>
+
+  <script src="js/components.js"></script>
+  <script>
+    // ── Filter logic ──────────────────────────────────────────────────────────
+    (function () {
+      'use strict';
+
+      const filterBtns = document.querySelectorAll('.filter-btn');
+      const cards      = document.querySelectorAll('.meal-card');
+      const noResults  = document.getElementById('no-results');
+
+      /** Map filter key → test function */
+      const filterTests = {
+        'all':         () => true,
+        'under25':     card => parseInt(card.dataset.price, 10) <= 25,
+        'under50':     card => parseInt(card.dataset.price, 10) <= 50,
+        'high-protein':card => parseInt(card.dataset.protein, 10) >= 15,
+        'high-fibre':  card => parseInt(card.dataset.fibre, 10)   >= 8,
+      };
+
+      function applyFilter(key) {
+        const test = filterTests[key] || filterTests['all'];
+        let visibleCount = 0;
+
+        cards.forEach(card => {
+          const show = test(card);
+          card.classList.toggle('hidden', !show);
+          if (show) visibleCount++;
+        });
+
+        noResults.classList.toggle('visible', visibleCount === 0);
+      }
+
+      filterBtns.forEach(btn => {
+        btn.addEventListener('click', function () {
+          // Update active states
+          filterBtns.forEach(b => {
+            b.classList.remove('active');
+            b.setAttribute('aria-pressed', 'false');
+          });
+          this.classList.add('active');
+          this.setAttribute('aria-pressed', 'true');
+
+          applyFilter(this.dataset.filter);
+        });
+
+        // Keyboard: Enter / Space already fires click; support arrow-key nav
+        btn.addEventListener('keydown', e => {
+          const siblings = [...filterBtns];
+          const idx      = siblings.indexOf(e.currentTarget);
+          if (e.key === 'ArrowRight') { siblings[(idx + 1) % siblings.length].focus(); e.preventDefault(); }
+          if (e.key === 'ArrowLeft')  { siblings[(idx - 1 + siblings.length) % siblings.length].focus(); e.preventDefault(); }
+        });
+      });
+
+      // ── Tips expand/collapse ───────────────────────────────────────────────
+      document.querySelectorAll('.tips-toggle').forEach(btn => {
+        btn.addEventListener('click', function () {
+          const panelId = this.getAttribute('aria-controls');
+          const panel   = document.getElementById(panelId);
+          const isOpen  = this.getAttribute('aria-expanded') === 'true';
+
+          this.setAttribute('aria-expanded', String(!isOpen));
+          panel.classList.toggle('open', !isOpen);
+        });
+      });
+
+    })();
+  </script>
+</body>
+</html>

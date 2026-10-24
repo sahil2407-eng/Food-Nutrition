@@ -1,0 +1,1005 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Packaging Risk Checklist — NutriGuard</title>
+  <meta name="description" content="Use this interactive checklist to identify potential packaging red flags before buying food. Flags concerns — does not confirm adulteration.">
+  <meta property="og:title" content="Packaging Risk Checklist — NutriGuard">
+  <meta property="og:description" content="Use this interactive checklist to identify potential packaging red flags before buying food. Flags concerns — does not confirm adulteration.">
+  <meta property="og:type" content="website">
+  <meta name="theme-color" content="#2e7d32">
+  <link rel="icon" href="favicon.svg" type="image/svg+xml">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Poppins:wght@700;800&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="css/style.css">
+  <style>
+    /* ── Page Hero ─────────────────────────────────────────────────────────── */
+    .pr-hero {
+      background: linear-gradient(135deg, #1b5e20 0%, #2e7d32 55%, #388e3c 100%);
+      padding: 4rem 1.5rem 3rem;
+      text-align: center;
+      color: #fff;
+    }
+    .pr-hero h1 {
+      font-family: 'Poppins', sans-serif;
+      font-size: clamp(1.9rem, 5vw, 3rem);
+      font-weight: 800;
+      margin: 0 0 0.75rem;
+      line-height: 1.15;
+    }
+    .pr-hero p {
+      font-size: clamp(0.95rem, 2.2vw, 1.15rem);
+      max-width: 680px;
+      margin: 0 auto;
+      opacity: 0.9;
+      line-height: 1.6;
+    }
+
+    /* ── Breadcrumb ─────────────────────────────────────────────────────────── */
+    .breadcrumb-bar {
+      background: #f5f5f0;
+      border-bottom: 1px solid #e0e0d8;
+      padding: 0.65rem 1.5rem;
+    }
+    .breadcrumb-bar nav {
+      max-width: 900px;
+      margin: 0 auto;
+    }
+    .breadcrumb-bar ol {
+      list-style: none;
+      padding: 0;
+      margin: 0;
+      display: flex;
+      flex-wrap: wrap;
+      gap: 0.25rem;
+      align-items: center;
+      font-size: 0.88rem;
+    }
+    .breadcrumb-bar li + li::before {
+      content: '›';
+      margin-right: 0.25rem;
+      color: #757575;
+    }
+    .breadcrumb-bar a {
+      color: #2e7d32;
+      text-decoration: none;
+      font-weight: 500;
+    }
+    .breadcrumb-bar a:hover { text-decoration: underline; }
+    .breadcrumb-bar li[aria-current="page"] { color: #212121; font-weight: 600; }
+
+    /* ── Page wrapper ───────────────────────────────────────────────────────── */
+    .pr-page {
+      max-width: 900px;
+      margin: 0 auto;
+      padding: 2.5rem 1.25rem 4rem;
+      display: grid;
+      grid-template-columns: 1fr;
+      gap: 2.25rem;
+    }
+
+    /* ── Disclaimer ─────────────────────────────────────────────────────────── */
+    .disclaimer-alert {
+      background: #fff8e1;
+      border: 1.5px solid #f9a825;
+      border-left: 5px solid #f9a825;
+      border-radius: 10px;
+      padding: 1rem 1.25rem;
+      display: flex;
+      gap: 0.85rem;
+      align-items: flex-start;
+    }
+    .disclaimer-alert .d-icon {
+      font-size: 1.4rem;
+      flex-shrink: 0;
+      line-height: 1;
+      padding-top: 0.05rem;
+    }
+    .disclaimer-alert p {
+      margin: 0;
+      color: #5d4037;
+      font-size: 0.93rem;
+      line-height: 1.6;
+    }
+    .disclaimer-alert strong { color: #e65100; }
+
+    /* ── Layout: checklist + score panel ─────────────────────────────────────── */
+    .pr-layout {
+      display: grid;
+      grid-template-columns: 1fr;
+      gap: 2rem;
+      align-items: start;
+    }
+    @media (min-width: 760px) {
+      .pr-layout {
+        grid-template-columns: 1fr 300px;
+      }
+    }
+
+    /* ── Checklist Groups ───────────────────────────────────────────────────── */
+    .checklist-groups {
+      display: flex;
+      flex-direction: column;
+      gap: 1.75rem;
+    }
+    .checklist-group {
+      background: #fff;
+      border-radius: 14px;
+      overflow: hidden;
+      box-shadow:
+        6px 6px 14px rgba(0,0,0,0.07),
+        -4px -4px 10px rgba(255,255,255,0.85);
+    }
+    .group-header {
+      display: flex;
+      align-items: center;
+      gap: 0.75rem;
+      padding: 0.9rem 1.2rem;
+      background: linear-gradient(90deg, #2e7d32, #4caf50);
+      color: #fff;
+    }
+    .group-header .g-icon {
+      font-size: 1.35rem;
+      line-height: 1;
+    }
+    .group-header h2 {
+      font-size: 0.98rem;
+      font-weight: 700;
+      margin: 0;
+      letter-spacing: 0.01em;
+    }
+    .group-count {
+      margin-left: auto;
+      background: rgba(255,255,255,0.22);
+      border-radius: 20px;
+      padding: 0.15rem 0.6rem;
+      font-size: 0.78rem;
+      font-weight: 600;
+    }
+
+    /* ── Checklist Items ─────────────────────────────────────────────────────── */
+    .checklist-item {
+      display: flex;
+      align-items: flex-start;
+      gap: 0.85rem;
+      padding: 0.85rem 1.2rem;
+      border-bottom: 1px solid #f0f0ec;
+      cursor: pointer;
+      transition: background 0.18s ease;
+      user-select: none;
+      outline: none;
+    }
+    .checklist-item:last-child { border-bottom: none; }
+    .checklist-item:hover { background: #f5faf5; }
+    .checklist-item:focus-visible {
+      background: #e8f5e9;
+      box-shadow: inset 0 0 0 2px #4caf50;
+    }
+    .checklist-item.checked {
+      background: #f1f8f1;
+    }
+    .checklist-item.checked .item-label {
+      color: #1b5e20;
+    }
+
+    /* Custom checkbox */
+    .checklist-cb {
+      appearance: none;
+      -webkit-appearance: none;
+      width: 22px;
+      height: 22px;
+      min-width: 22px;
+      border: 2px solid #9e9e9e;
+      border-radius: 6px;
+      background: #fff;
+      cursor: pointer;
+      transition: border-color 0.18s, background 0.18s;
+      position: relative;
+      margin-top: 1px;
+    }
+    .checklist-cb:checked {
+      background: #2e7d32;
+      border-color: #2e7d32;
+    }
+    .checklist-cb:checked::after {
+      content: '';
+      position: absolute;
+      left: 5px;
+      top: 2px;
+      width: 8px;
+      height: 13px;
+      border: 2.5px solid #fff;
+      border-top: none;
+      border-left: none;
+      transform: rotate(45deg);
+    }
+    .checklist-cb:focus-visible {
+      outline: 2px solid #4caf50;
+      outline-offset: 2px;
+    }
+
+    .item-num {
+      font-size: 0.75rem;
+      font-weight: 700;
+      color: #9e9e9e;
+      min-width: 24px;
+      text-align: right;
+      margin-top: 3px;
+    }
+    .item-label {
+      font-size: 0.93rem;
+      color: #333;
+      line-height: 1.5;
+      flex: 1;
+      transition: color 0.18s;
+    }
+
+    /* ── Risk Score Panel ────────────────────────────────────────────────────── */
+    .risk-score-panel {
+      position: sticky;
+      top: 80px;
+      background: #fff;
+      border-radius: 16px;
+      padding: 1.5rem 1.25rem;
+      box-shadow:
+        8px 8px 18px rgba(0,0,0,0.09),
+        -5px -5px 14px rgba(255,255,255,0.9);
+      display: flex;
+      flex-direction: column;
+      gap: 1.1rem;
+    }
+    .rsp-title {
+      font-family: 'Poppins', sans-serif;
+      font-size: 1.05rem;
+      font-weight: 700;
+      color: #212121;
+      margin: 0;
+      text-align: center;
+    }
+
+    /* Donut-style score ring */
+    .score-ring-wrap {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 0.5rem;
+    }
+    .score-ring {
+      position: relative;
+      width: 110px;
+      height: 110px;
+    }
+    .score-ring svg {
+      width: 110px;
+      height: 110px;
+      transform: rotate(-90deg);
+    }
+    .ring-bg {
+      fill: none;
+      stroke: #e0e0e0;
+      stroke-width: 10;
+    }
+    .ring-fg {
+      fill: none;
+      stroke: #4caf50;
+      stroke-width: 10;
+      stroke-linecap: round;
+      stroke-dasharray: 283;
+      stroke-dashoffset: 283;
+      transition: stroke-dashoffset 0.4s ease, stroke 0.4s ease;
+    }
+    .ring-label {
+      position: absolute;
+      inset: 0;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      gap: 0;
+    }
+    .ring-count {
+      font-family: 'Poppins', sans-serif;
+      font-size: 1.6rem;
+      font-weight: 800;
+      color: #212121;
+      line-height: 1;
+    }
+    .ring-total {
+      font-size: 0.72rem;
+      color: #757575;
+      font-weight: 600;
+    }
+
+    .score-count-text {
+      font-size: 0.82rem;
+      color: #616161;
+      text-align: center;
+      margin: 0;
+    }
+
+    /* Rating badge */
+    .rating-badge {
+      border-radius: 30px;
+      padding: 0.4rem 1rem;
+      font-size: 0.88rem;
+      font-weight: 700;
+      text-align: center;
+      transition: background 0.35s, color 0.35s;
+    }
+    .rating-low    { background: #e8f5e9; color: #1b5e20; }
+    .rating-mod    { background: #fff3e0; color: #e65100; }
+    .rating-high   { background: #ffebee; color: #b71c1c; }
+
+    /* Message area */
+    .rsp-message {
+      font-size: 0.88rem;
+      line-height: 1.55;
+      color: #424242;
+      background: #f5f5f0;
+      border-radius: 10px;
+      padding: 0.75rem 0.9rem;
+      margin: 0;
+    }
+
+    /* Progress bar */
+    .rsp-progress-wrap {
+      display: flex;
+      flex-direction: column;
+      gap: 0.35rem;
+    }
+    .rsp-progress-label {
+      display: flex;
+      justify-content: space-between;
+      font-size: 0.78rem;
+      color: #757575;
+      font-weight: 500;
+    }
+    .rsp-progress-track {
+      height: 8px;
+      background: #e0e0e0;
+      border-radius: 8px;
+      overflow: hidden;
+    }
+    .rsp-progress-bar {
+      height: 100%;
+      width: 0%;
+      border-radius: 8px;
+      background: #4caf50;
+      transition: width 0.4s ease, background 0.4s ease;
+    }
+
+    /* Reset button */
+    .btn-reset {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 0.45rem;
+      background: #fff;
+      border: 2px solid #c8e6c9;
+      color: #2e7d32;
+      font-family: 'Inter', sans-serif;
+      font-size: 0.88rem;
+      font-weight: 600;
+      border-radius: 30px;
+      padding: 0.6rem 1.1rem;
+      cursor: pointer;
+      transition: background 0.2s, border-color 0.2s, color 0.2s;
+      width: 100%;
+    }
+    .btn-reset:hover {
+      background: #e8f5e9;
+      border-color: #4caf50;
+      color: #1b5e20;
+    }
+    .btn-reset:focus-visible {
+      outline: 2px solid #4caf50;
+      outline-offset: 2px;
+    }
+
+    /* ── "What to do next" section ──────────────────────────────────────────── */
+    .next-section {
+      background: linear-gradient(135deg, #f5f5f0 0%, #e8f5e9 100%);
+      border-radius: 16px;
+      padding: 2rem 1.5rem;
+      border: 1.5px solid #c8e6c9;
+      display: flex;
+      flex-direction: column;
+      gap: 1rem;
+    }
+    .next-section h2 {
+      font-family: 'Poppins', sans-serif;
+      font-size: 1.3rem;
+      font-weight: 700;
+      color: #1b5e20;
+      margin: 0;
+    }
+    .next-section p {
+      margin: 0;
+      font-size: 0.95rem;
+      color: #424242;
+      line-height: 1.6;
+    }
+    .next-cards {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+      gap: 1rem;
+      margin-top: 0.25rem;
+    }
+    .next-card {
+      background: #fff;
+      border-radius: 12px;
+      padding: 1.1rem 1rem;
+      border: 1.5px solid #c8e6c9;
+      display: flex;
+      flex-direction: column;
+      gap: 0.5rem;
+      text-decoration: none;
+      color: inherit;
+      transition: box-shadow 0.2s, transform 0.2s, border-color 0.2s;
+    }
+    .next-card:hover {
+      box-shadow: 0 6px 20px rgba(46,125,50,0.12);
+      transform: translateY(-2px);
+      border-color: #4caf50;
+    }
+    .next-card .nc-icon { font-size: 1.75rem; line-height: 1; }
+    .next-card .nc-title {
+      font-weight: 700;
+      font-size: 0.95rem;
+      color: #2e7d32;
+    }
+    .next-card .nc-desc {
+      font-size: 0.82rem;
+      color: #616161;
+      line-height: 1.45;
+    }
+
+    /* ── Mobile: panel below checklist ─────────────────────────────────────── */
+    @media (max-width: 759px) {
+      .risk-score-panel { position: static; }
+    }
+  </style>
+</head>
+<body>
+
+  <!-- ── Hero ──────────────────────────────────────────────────────────────── -->
+  <div class="pr-hero">
+    <h1>Packaging Risk Checklist</h1>
+    <p>Identify packaging concerns before you buy. This checklist highlights potential red flags — it cannot confirm adulteration or guarantee product authenticity.</p>
+  </div>
+
+  <!-- ── Breadcrumb ─────────────────────────────────────────────────────────── -->
+  <div class="breadcrumb-bar">
+    <nav aria-label="Breadcrumb">
+      <ol>
+        <li><a href="index.html">Home</a></li>
+        <li aria-current="page">Packaging Risk Checklist</li>
+      </ol>
+    </nav>
+  </div>
+
+  <!-- ── Main ──────────────────────────────────────────────────────────────── -->
+  <main id="main-content">
+    <div class="pr-page">
+
+      <!-- Disclaimer -->
+      <div class="disclaimer-alert" role="note" aria-label="Disclaimer">
+        <span class="d-icon" aria-hidden="true">⚠️</span>
+        <p>
+          <strong>Important disclaimer:</strong>
+          This checklist is for educational awareness only. Ticking items may indicate concerns but does <strong>NOT</strong> prove a product is counterfeit or adulterated. Always rely on laboratory testing and official channels.
+        </p>
+      </div>
+
+      <!-- Layout: checklist + sticky score panel -->
+      <div class="pr-layout">
+
+        <!-- ── Checklist ────────────────────────────────────────────────────── -->
+        <section class="checklist-groups" aria-label="Packaging risk checklist">
+
+          <!-- GROUP 1 -->
+          <div class="checklist-group" data-group="1">
+            <div class="group-header">
+              <span class="g-icon" aria-hidden="true">🔒</span>
+              <h2>Seal &amp; Packaging Integrity</h2>
+              <span class="group-count" id="gc-1">0 / 5</span>
+            </div>
+            <!-- items 1-5 -->
+            <div class="checklist-item"
+                 tabindex="0"
+                 role="checkbox"
+                 aria-checked="false"
+                 data-group="1"
+                 data-item="1">
+              <input class="checklist-cb" type="checkbox" id="cb-1" aria-hidden="true" tabindex="-1">
+              <span class="item-num">1</span>
+              <label class="item-label" for="cb-1">The outer seal is broken or shows signs of tampering</label>
+            </div>
+            <div class="checklist-item"
+                 tabindex="0"
+                 role="checkbox"
+                 aria-checked="false"
+                 data-group="1"
+                 data-item="2">
+              <input class="checklist-cb" type="checkbox" id="cb-2" aria-hidden="true" tabindex="-1">
+              <span class="item-num">2</span>
+              <label class="item-label" for="cb-2">The packaging has tears, holes, or damage not consistent with normal handling</label>
+            </div>
+            <div class="checklist-item"
+                 tabindex="0"
+                 role="checkbox"
+                 aria-checked="false"
+                 data-group="1"
+                 data-item="3">
+              <input class="checklist-cb" type="checkbox" id="cb-3" aria-hidden="true" tabindex="-1">
+              <span class="item-num">3</span>
+              <label class="item-label" for="cb-3">The lid, cap, or closure does not seal securely</label>
+            </div>
+            <div class="checklist-item"
+                 tabindex="0"
+                 role="checkbox"
+                 aria-checked="false"
+                 data-group="1"
+                 data-item="4">
+              <input class="checklist-cb" type="checkbox" id="cb-4" aria-hidden="true" tabindex="-1">
+              <span class="item-num">4</span>
+              <label class="item-label" for="cb-4">Adhesive or tape has been applied over the original seal</label>
+            </div>
+            <div class="checklist-item"
+                 tabindex="0"
+                 role="checkbox"
+                 aria-checked="false"
+                 data-group="1"
+                 data-item="5">
+              <input class="checklist-cb" type="checkbox" id="cb-5" aria-hidden="true" tabindex="-1">
+              <span class="item-num">5</span>
+              <label class="item-label" for="cb-5">The packaging material quality appears inconsistent with the brand</label>
+            </div>
+          </div>
+
+          <!-- GROUP 2 -->
+          <div class="checklist-group" data-group="2">
+            <div class="group-header">
+              <span class="g-icon" aria-hidden="true">🏷️</span>
+              <h2>Label &amp; Print Quality</h2>
+              <span class="group-count" id="gc-2">0 / 5</span>
+            </div>
+            <div class="checklist-item"
+                 tabindex="0"
+                 role="checkbox"
+                 aria-checked="false"
+                 data-group="2"
+                 data-item="6">
+              <input class="checklist-cb" type="checkbox" id="cb-6" aria-hidden="true" tabindex="-1">
+              <span class="item-num">6</span>
+              <label class="item-label" for="cb-6">The FSSAI licence number is missing or illegible</label>
+            </div>
+            <div class="checklist-item"
+                 tabindex="0"
+                 role="checkbox"
+                 aria-checked="false"
+                 data-group="2"
+                 data-item="7">
+              <input class="checklist-cb" type="checkbox" id="cb-7" aria-hidden="true" tabindex="-1">
+              <span class="item-num">7</span>
+              <label class="item-label" for="cb-7">Brand logo or font appears blurry, inconsistent, or poorly printed</label>
+            </div>
+            <div class="checklist-item"
+                 tabindex="0"
+                 role="checkbox"
+                 aria-checked="false"
+                 data-group="2"
+                 data-item="8">
+              <input class="checklist-cb" type="checkbox" id="cb-8" aria-hidden="true" tabindex="-1">
+              <span class="item-num">8</span>
+              <label class="item-label" for="cb-8">The label is misaligned, crooked, or not fully adhered</label>
+            </div>
+            <div class="checklist-item"
+                 tabindex="0"
+                 role="checkbox"
+                 aria-checked="false"
+                 data-group="2"
+                 data-item="9">
+              <input class="checklist-cb" type="checkbox" id="cb-9" aria-hidden="true" tabindex="-1">
+              <span class="item-num">9</span>
+              <label class="item-label" for="cb-9">There are spelling mistakes or grammatical errors on the label</label>
+            </div>
+            <div class="checklist-item"
+                 tabindex="0"
+                 role="checkbox"
+                 aria-checked="false"
+                 data-group="2"
+                 data-item="10">
+              <input class="checklist-cb" type="checkbox" id="cb-10" aria-hidden="true" tabindex="-1">
+              <span class="item-num">10</span>
+              <label class="item-label" for="cb-10">Ingredient list or nutrition table is missing or incomplete</label>
+            </div>
+          </div>
+
+          <!-- GROUP 3 -->
+          <div class="checklist-group" data-group="3">
+            <div class="group-header">
+              <span class="g-icon" aria-hidden="true">📅</span>
+              <h2>Date &amp; Batch Information</h2>
+              <span class="group-count" id="gc-3">0 / 4</span>
+            </div>
+            <div class="checklist-item"
+                 tabindex="0"
+                 role="checkbox"
+                 aria-checked="false"
+                 data-group="3"
+                 data-item="11">
+              <input class="checklist-cb" type="checkbox" id="cb-11" aria-hidden="true" tabindex="-1">
+              <span class="item-num">11</span>
+              <label class="item-label" for="cb-11">The Manufacturing or Best Before date is missing</label>
+            </div>
+            <div class="checklist-item"
+                 tabindex="0"
+                 role="checkbox"
+                 aria-checked="false"
+                 data-group="3"
+                 data-item="12">
+              <input class="checklist-cb" type="checkbox" id="cb-12" aria-hidden="true" tabindex="-1">
+              <span class="item-num">12</span>
+              <label class="item-label" for="cb-12">The date appears to have been stamped over an earlier date</label>
+            </div>
+            <div class="checklist-item"
+                 tabindex="0"
+                 role="checkbox"
+                 aria-checked="false"
+                 data-group="3"
+                 data-item="13">
+              <input class="checklist-cb" type="checkbox" id="cb-13" aria-hidden="true" tabindex="-1">
+              <span class="item-num">13</span>
+              <label class="item-label" for="cb-13">The date print quality differs from the rest of the label</label>
+            </div>
+            <div class="checklist-item"
+                 tabindex="0"
+                 role="checkbox"
+                 aria-checked="false"
+                 data-group="3"
+                 data-item="14">
+              <input class="checklist-cb" type="checkbox" id="cb-14" aria-hidden="true" tabindex="-1">
+              <span class="item-num">14</span>
+              <label class="item-label" for="cb-14">Batch number or lot code is absent</label>
+            </div>
+          </div>
+
+          <!-- GROUP 4 -->
+          <div class="checklist-group" data-group="4">
+            <div class="group-header">
+              <span class="g-icon" aria-hidden="true">🔬</span>
+              <h2>Product Appearance</h2>
+              <span class="group-count" id="gc-4">0 / 4</span>
+            </div>
+            <div class="checklist-item"
+                 tabindex="0"
+                 role="checkbox"
+                 aria-checked="false"
+                 data-group="4"
+                 data-item="15">
+              <input class="checklist-cb" type="checkbox" id="cb-15" aria-hidden="true" tabindex="-1">
+              <span class="item-num">15</span>
+              <label class="item-label" for="cb-15">The product colour appears unusually bright, dull, or uneven</label>
+            </div>
+            <div class="checklist-item"
+                 tabindex="0"
+                 role="checkbox"
+                 aria-checked="false"
+                 data-group="4"
+                 data-item="16">
+              <input class="checklist-cb" type="checkbox" id="cb-16" aria-hidden="true" tabindex="-1">
+              <span class="item-num">16</span>
+              <label class="item-label" for="cb-16">The product has an unusual or off smell upon opening</label>
+            </div>
+            <div class="checklist-item"
+                 tabindex="0"
+                 role="checkbox"
+                 aria-checked="false"
+                 data-group="4"
+                 data-item="17">
+              <input class="checklist-cb" type="checkbox" id="cb-17" aria-hidden="true" tabindex="-1">
+              <span class="item-num">17</span>
+              <label class="item-label" for="cb-17">The texture or consistency is different from normal</label>
+            </div>
+            <div class="checklist-item"
+                 tabindex="0"
+                 role="checkbox"
+                 aria-checked="false"
+                 data-group="4"
+                 data-item="18">
+              <input class="checklist-cb" type="checkbox" id="cb-18" aria-hidden="true" tabindex="-1">
+              <span class="item-num">18</span>
+              <label class="item-label" for="cb-18">Foreign particles, sediment, or separation is visible</label>
+            </div>
+          </div>
+
+          <!-- GROUP 5 -->
+          <div class="checklist-group" data-group="5">
+            <div class="group-header">
+              <span class="g-icon" aria-hidden="true">🛒</span>
+              <h2>Pricing &amp; Source</h2>
+              <span class="group-count" id="gc-5">0 / 2</span>
+            </div>
+            <div class="checklist-item"
+                 tabindex="0"
+                 role="checkbox"
+                 aria-checked="false"
+                 data-group="5"
+                 data-item="19">
+              <input class="checklist-cb" type="checkbox" id="cb-19" aria-hidden="true" tabindex="-1">
+              <span class="item-num">19</span>
+              <label class="item-label" for="cb-19">The price is significantly lower than market price for no clear reason</label>
+            </div>
+            <div class="checklist-item"
+                 tabindex="0"
+                 role="checkbox"
+                 aria-checked="false"
+                 data-group="5"
+                 data-item="20">
+              <input class="checklist-cb" type="checkbox" id="cb-20" aria-hidden="true" tabindex="-1">
+              <span class="item-num">20</span>
+              <label class="item-label" for="cb-20">The product was purchased from an unlicensed or informal vendor</label>
+            </div>
+          </div>
+
+        </section>
+
+        <!-- ── Risk Score Panel ──────────────────────────────────────────────── -->
+        <aside class="risk-score-panel" aria-live="polite" aria-label="Live risk score">
+          <h2 class="rsp-title">Risk Score</h2>
+
+          <!-- Ring -->
+          <div class="score-ring-wrap">
+            <div class="score-ring" aria-hidden="true">
+              <svg viewBox="0 0 100 100" aria-hidden="true">
+                <circle class="ring-bg" cx="50" cy="50" r="45"/>
+                <circle class="ring-fg" id="ring-fg" cx="50" cy="50" r="45"/>
+              </svg>
+              <div class="ring-label">
+                <span class="ring-count" id="ring-count">0</span>
+                <span class="ring-total">/ 20</span>
+              </div>
+            </div>
+            <p class="score-count-text" id="score-count-text">0 / 20 concerns flagged</p>
+          </div>
+
+          <!-- Rating badge -->
+          <div class="rating-badge rating-low" id="rating-badge" role="status">
+            ✅ Low Concern
+          </div>
+
+          <!-- Message -->
+          <p class="rsp-message" id="rsp-message">
+            No concerns flagged yet. Tick items that apply to the product you are inspecting.
+          </p>
+
+          <!-- Progress bar -->
+          <div class="rsp-progress-wrap">
+            <div class="rsp-progress-label">
+              <span>0%</span>
+              <span id="rsp-pct">0% flagged</span>
+            </div>
+            <div class="rsp-progress-track">
+              <div class="rsp-progress-bar" id="rsp-bar"></div>
+            </div>
+          </div>
+
+          <!-- Reset -->
+          <button class="btn-reset" id="btn-reset" type="button">
+            <span aria-hidden="true">↺</span> Reset Checklist
+          </button>
+        </aside>
+
+      </div><!-- /.pr-layout -->
+
+      <!-- ── What to do next ──────────────────────────────────────────────── -->
+      <section class="next-section" aria-labelledby="next-heading">
+        <h2 id="next-heading">🛡️ What to do next</h2>
+        <p>
+          If you've flagged several concerns, don't panic — but do take action. The steps below can help you protect yourself and others from potentially unsafe products.
+        </p>
+        <div class="next-cards">
+          <a href="food-safety.html" class="next-card" aria-label="Go to Food Safety Guide">
+            <span class="nc-icon">📋</span>
+            <span class="nc-title">Food Safety Guide</span>
+            <span class="nc-desc">Understand your rights, reporting steps, and how to get products tested officially.</span>
+          </a>
+          <a href="nutrition-checker.html" class="next-card" aria-label="Go to Nutrition Checker">
+            <span class="nc-icon">🔍</span>
+            <span class="nc-title">Nutrition Checker</span>
+            <span class="nc-desc">Verify declared nutritional values match your expectations for the product category.</span>
+          </a>
+          <a href="adulterants.html" class="next-card" aria-label="Go to Common Adulterants page">
+            <span class="nc-icon">⚗️</span>
+            <span class="nc-title">Common Adulterants</span>
+            <span class="nc-desc">Learn about frequently used adulterants and at-home preliminary detection methods.</span>
+          </a>
+        </div>
+      </section>
+
+    </div><!-- /.pr-page -->
+  </main>
+
+  <script src="js/components.js"></script>
+  <script>
+    (function () {
+      'use strict';
+
+      /* ── State ────────────────────────────────────────────────────────────── */
+      const TOTAL = 20;
+      // Map: item number → group number
+      const ITEM_GROUP = {
+        1:1,2:1,3:1,4:1,5:1,
+        6:2,7:2,8:2,9:2,10:2,
+        11:3,12:3,13:3,14:3,
+        15:4,16:4,17:4,18:4,
+        19:5,20:5
+      };
+      const GROUP_TOTALS = { 1:5, 2:5, 3:4, 4:4, 5:2 };
+
+      // Checked set
+      const checked = new Set();
+
+      /* ── DOM refs ─────────────────────────────────────────────────────────── */
+      const ringFg        = document.getElementById('ring-fg');
+      const ringCount     = document.getElementById('ring-count');
+      const scoreText     = document.getElementById('score-count-text');
+      const ratingBadge   = document.getElementById('rating-badge');
+      const rspMessage    = document.getElementById('rsp-message');
+      const rspBar        = document.getElementById('rsp-bar');
+      const rspPct        = document.getElementById('rsp-pct');
+      const btnReset      = document.getElementById('btn-reset');
+      const RING_CIRC     = 2 * Math.PI * 45; // ≈ 282.74
+
+      /* ── Rating config ────────────────────────────────────────────────────── */
+      const RATINGS = [
+        {
+          min: 0, max: 3,
+          cls: 'rating-low',
+          badge: '✅ Low Concern',
+          barColor: '#4caf50',
+          strokeColor: '#4caf50',
+          msg: 'Few or no packaging concerns flagged. Continue checking remaining items. If everything looks normal, the product may be fine — but always inspect before consuming.'
+        },
+        {
+          min: 4, max: 8,
+          cls: 'rating-mod',
+          badge: '⚠️ Moderate Concern',
+          barColor: '#ff9800',
+          strokeColor: '#ff9800',
+          msg: 'Several packaging concerns have been flagged. Exercise caution. Consider purchasing from an authorised retailer or contacting the brand\'s customer service to verify authenticity. Do not consume if you notice unusual smell, colour, or texture.'
+        },
+        {
+          min: 9, max: 20,
+          cls: 'rating-high',
+          badge: '🚨 High Concern',
+          barColor: '#f44336',
+          strokeColor: '#f44336',
+          msg: 'Multiple significant packaging concerns detected. It is strongly advisable to avoid consuming this product. Report it to FSSAI or a consumer helpline and request laboratory testing through official channels before drawing any conclusions.'
+        }
+      ];
+
+      function getRating(count) {
+        return RATINGS.find(r => count >= r.min && count <= r.max) || RATINGS[0];
+      }
+
+      /* ── Update UI ────────────────────────────────────────────────────────── */
+      function updatePanel() {
+        const count = checked.size;
+        const pct   = Math.round((count / TOTAL) * 100);
+        const rating = getRating(count);
+
+        // Ring
+        const offset = RING_CIRC - (count / TOTAL) * RING_CIRC;
+        ringFg.style.strokeDashoffset = offset;
+        ringFg.style.stroke = rating.strokeColor;
+
+        // Counts
+        ringCount.textContent = count;
+        scoreText.textContent = `${count} / ${TOTAL} concerns flagged`;
+
+        // Badge
+        ratingBadge.className = `rating-badge ${rating.cls}`;
+        ratingBadge.textContent = rating.badge;
+
+        // Message
+        rspMessage.textContent = rating.msg;
+
+        // Progress bar
+        rspBar.style.width = `${pct}%`;
+        rspBar.style.background = rating.barColor;
+        rspPct.textContent = `${pct}% flagged`;
+
+        // Group counts
+        for (let g = 1; g <= 5; g++) {
+          const groupChecked = [...checked].filter(n => ITEM_GROUP[n] === g).length;
+          const el = document.getElementById(`gc-${g}`);
+          if (el) el.textContent = `${groupChecked} / ${GROUP_TOTALS[g]}`;
+        }
+      }
+
+      /* ── Toggle item ──────────────────────────────────────────────────────── */
+      function toggleItem(el) {
+        const item = parseInt(el.dataset.item, 10);
+        const cb   = el.querySelector('.checklist-cb');
+        const isChecked = checked.has(item);
+
+        if (isChecked) {
+          checked.delete(item);
+          cb.checked = false;
+          el.classList.remove('checked');
+          el.setAttribute('aria-checked', 'false');
+        } else {
+          checked.add(item);
+          cb.checked = true;
+          el.classList.add('checked');
+          el.setAttribute('aria-checked', 'true');
+        }
+
+        updatePanel();
+      }
+
+      /* ── Wire checklist items ─────────────────────────────────────────────── */
+      document.querySelectorAll('.checklist-item').forEach(function (el) {
+        // Click on the row (excluding direct label click which bubbles from checkbox)
+        el.addEventListener('click', function (e) {
+          // Prevent double-fire when clicking the native checkbox (hidden)
+          if (e.target.classList.contains('checklist-cb')) return;
+          toggleItem(el);
+        });
+
+        // Keyboard: Enter or Space
+        el.addEventListener('keydown', function (e) {
+          if (e.key === 'Enter' || e.key === ' ') {
+            e.preventDefault();
+            toggleItem(el);
+          }
+        });
+
+        // Native checkbox change (in case user directly focuses it via AT)
+        const cb = el.querySelector('.checklist-cb');
+        cb.addEventListener('change', function () {
+          const item = parseInt(el.dataset.item, 10);
+          if (cb.checked) {
+            checked.add(item);
+            el.classList.add('checked');
+            el.setAttribute('aria-checked', 'true');
+          } else {
+            checked.delete(item);
+            el.classList.remove('checked');
+            el.setAttribute('aria-checked', 'false');
+          }
+          updatePanel();
+        });
+      });
+
+      /* ── Reset ────────────────────────────────────────────────────────────── */
+      btnReset.addEventListener('click', function () {
+        checked.clear();
+        document.querySelectorAll('.checklist-item').forEach(function (el) {
+          el.classList.remove('checked');
+          el.setAttribute('aria-checked', 'false');
+          el.querySelector('.checklist-cb').checked = false;
+        });
+        updatePanel();
+
+        // Brief visual feedback
+        btnReset.textContent = '✓ Checklist reset';
+        btnReset.style.background = '#e8f5e9';
+        btnReset.style.borderColor = '#4caf50';
+        setTimeout(function () {
+          btnReset.innerHTML = '<span aria-hidden="true">↺</span> Reset Checklist';
+          btnReset.style.background = '';
+          btnReset.style.borderColor = '';
+        }, 1500);
+      });
+
+      /* ── Initial render ───────────────────────────────────────────────────── */
+      updatePanel();
+    })();
+  </script>
+</body>
+</html>

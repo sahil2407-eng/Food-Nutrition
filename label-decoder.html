@@ -1,0 +1,1395 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Food Label Decoder — NutriGuard</title>
+  <meta name="description" content="Learn to read and understand Indian packaged food labels: ingredients, allergens, additives, date codes, FSSAI verification, and health claims.">
+  <meta property="og:title" content="Food Label Decoder — NutriGuard">
+  <meta property="og:description" content="Learn to read and understand Indian packaged food labels: ingredients, allergens, additives, date codes, FSSAI verification, and health claims.">
+  <meta property="og:type" content="website">
+  <meta name="theme-color" content="#2e7d32">
+  <link rel="icon" href="favicon.svg" type="image/svg+xml">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Poppins:wght@700;800&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="css/style.css">
+  <style>
+    /* ── Hero ──────────────────────────────────────── */
+    .ld-hero {
+      background: linear-gradient(135deg, var(--clr-primary-dark) 0%, var(--clr-primary) 60%, #388e3c 100%);
+      color: #fff;
+      padding: 5rem 0 4rem;
+      text-align: center;
+    }
+    .ld-hero h1 {
+      font-family: var(--font-display);
+      font-size: clamp(2rem, 5vw, 3.2rem);
+      font-weight: 800;
+      margin-bottom: 1rem;
+    }
+    .ld-hero p {
+      font-size: 1.1rem;
+      opacity: 0.92;
+      max-width: 700px;
+      margin: 0 auto 1.8rem;
+    }
+    .hero-badges { display: flex; gap: 0.75rem; flex-wrap: wrap; justify-content: center; }
+    .hero-badge {
+      background: rgba(255,255,255,0.18);
+      border: 1px solid rgba(255,255,255,0.35);
+      border-radius: 9999px;
+      padding: 0.3rem 1rem;
+      font-size: 0.82rem;
+      font-weight: 600;
+      letter-spacing: 0.03em;
+    }
+
+    /* ── Section wrapper ───────────────────────────── */
+    .ld-section { padding: 3rem 0; }
+    .ld-section + .ld-section { border-top: 1px solid var(--clr-divider); }
+
+    /* ── Tabs wrapper ──────────────────────────────── */
+    .tabs-card {
+      background: var(--clr-surface);
+      border-radius: var(--r-xl);
+      box-shadow: var(--neu-shadow-card);
+      padding: 2rem 2rem 2.5rem;
+    }
+    @media (max-width: 600px) { .tabs-card { padding: 1.2rem 1rem 1.8rem; } }
+
+    /* ── Tab panel content ─────────────────────────── */
+    .tab-panel h3 { color: var(--clr-primary-dark); margin: 1.2rem 0 0.5rem; font-size: 1.1rem; }
+    .tab-panel p, .tab-panel li { color: var(--clr-text); line-height: 1.7; }
+    .tab-panel ul, .tab-panel ol { padding-left: 1.4rem; margin-bottom: 1rem; }
+    .tab-panel li { margin-bottom: 0.4rem; }
+
+    /* alias pill list */
+    .pill-list { display: flex; flex-wrap: wrap; gap: 0.5rem; margin: 0.6rem 0 1rem; }
+    .pill {
+      background: var(--clr-surface-alt);
+      border: 1px solid var(--clr-border);
+      border-radius: 9999px;
+      padding: 0.2rem 0.8rem;
+      font-size: 0.82rem;
+      font-weight: 500;
+    }
+    .pill.sugar { background: #fff3e0; border-color: #ffcc80; color: #bf360c; }
+    .pill.salt  { background: #e3f2fd; border-color: #90caf9; color: #0d47a1; }
+    .pill.fat   { background: #fce4ec; border-color: #f48fb1; color: #880e4f; }
+    .pill.allergen { background: #ffebee; border-color: #ef9a9a; color: #b71c1c; }
+
+    /* info-box */
+    .info-box {
+      background: var(--clr-surface-alt);
+      border-left: 4px solid var(--clr-primary);
+      border-radius: 0 var(--r-md) var(--r-md) 0;
+      padding: 1rem 1.2rem;
+      margin: 1rem 0;
+      font-size: 0.92rem;
+    }
+    .info-box strong { color: var(--clr-primary-dark); }
+
+    /* date card grid */
+    .date-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 1rem; margin: 1rem 0; }
+    .date-card {
+      border-radius: var(--r-md);
+      padding: 1rem 1.2rem;
+      border: 2px solid;
+    }
+    .date-card.best { border-color: #4caf50; background: #e8f5e9; }
+    .date-card.use  { border-color: #e53935; background: #ffebee; }
+    .date-card.mfg  { border-color: #1976d2; background: #e3f2fd; }
+    [data-theme="dark"] .date-card.best { background: rgba(76,175,80,0.12); }
+    [data-theme="dark"] .date-card.use  { background: rgba(229,57,53,0.12); }
+    [data-theme="dark"] .date-card.mfg  { background: rgba(25,118,210,0.12); }
+    .date-card h4 { margin-bottom: 0.4rem; font-size: 1rem; }
+    .date-card.best h4 { color: #2e7d32; }
+    .date-card.use  h4 { color: #c62828; }
+    .date-card.mfg  h4 { color: #1565c0; }
+    .date-card p { font-size: 0.85rem; line-height: 1.6; }
+
+    /* claim grid */
+    .claim-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(220px, 1fr)); gap: 1rem; margin: 1rem 0; }
+    .claim-card {
+      background: var(--clr-surface-alt);
+      border-radius: var(--r-md);
+      padding: 1rem 1.1rem;
+      border: 1px solid var(--clr-border);
+    }
+    .claim-card .claim-label { font-weight: 700; color: var(--clr-primary-dark); font-size: 0.95rem; margin-bottom: 0.3rem; }
+    .claim-card p { font-size: 0.84rem; line-height: 1.6; color: var(--clr-text-muted); }
+    .claim-status { display: inline-block; font-size: 0.72rem; font-weight: 700; padding: 1px 8px; border-radius: 9999px; margin-bottom: 0.5rem; }
+    .claim-status.regulated { background: #e8f5e9; color: #2e7d32; }
+    .claim-status.unregulated { background: #fff3e0; color: #e65100; }
+
+    /* ── Anatomy Diagram ───────────────────────────── */
+    .anatomy-diagram {
+      background: var(--clr-surface);
+      border-radius: var(--r-xl);
+      box-shadow: var(--neu-shadow-card);
+      padding: 2rem;
+      position: relative;
+    }
+    .label-mock {
+      border: 3px solid var(--clr-primary);
+      border-radius: var(--r-md);
+      max-width: 380px;
+      margin: 0 auto;
+      font-size: 0.82rem;
+      background: #fff;
+      color: #212121;
+      overflow: hidden;
+    }
+    .lm-header {
+      background: var(--clr-primary);
+      color: #fff;
+      text-align: center;
+      padding: 0.8rem 1rem;
+    }
+    .lm-header .lm-brand { font-weight: 800; font-size: 1.1rem; }
+    .lm-header .lm-product { font-size: 0.82rem; opacity: 0.9; }
+    .lm-section {
+      padding: 0.6rem 1rem;
+      border-bottom: 1px solid #ddd;
+      position: relative;
+    }
+    .lm-section:last-child { border-bottom: none; }
+    .lm-label { font-weight: 700; font-size: 0.72rem; text-transform: uppercase; letter-spacing: 0.05em; color: var(--clr-primary-dark); margin-bottom: 0.2rem; }
+    .lm-value { line-height: 1.5; }
+    .lm-fssai { display: flex; align-items: center; gap: 0.5rem; }
+    .fssai-logo-mock {
+      width: 36px; height: 36px; border-radius: 50%;
+      background: var(--clr-primary);
+      color: white; font-weight: 800; font-size: 0.6rem;
+      display: flex; align-items: center; justify-content: center; text-align: center;
+      flex-shrink: 0; line-height: 1.2;
+    }
+
+    /* annotation layer */
+    .anatomy-wrap { display: grid; grid-template-columns: 1fr auto 1fr; gap: 1rem; align-items: start; }
+    @media (max-width: 700px) {
+      .anatomy-wrap { grid-template-columns: 1fr; }
+      .anatomy-notes-left, .anatomy-notes-right { display: grid; grid-template-columns: 1fr 1fr; gap: 0.5rem; }
+    }
+    .anatomy-note {
+      background: var(--clr-surface-alt);
+      border: 1px solid var(--clr-border);
+      border-radius: var(--r-md);
+      padding: 0.6rem 0.8rem;
+      font-size: 0.78rem;
+      margin-bottom: 0.6rem;
+    }
+    .anatomy-note .note-title { font-weight: 700; color: var(--clr-primary-dark); font-size: 0.78rem; }
+    .anatomy-note p { color: var(--clr-text-muted); margin-top: 0.2rem; line-height: 1.4; }
+
+    /* ── Decoder Section ───────────────────────────── */
+    .decoder-card {
+      background: var(--clr-surface);
+      border-radius: var(--r-xl);
+      box-shadow: var(--neu-shadow-card);
+      padding: 2rem 2rem 2.5rem;
+    }
+    @media (max-width: 600px) { .decoder-card { padding: 1.2rem 1rem 1.8rem; } }
+    .decoder-card h2 { font-family: var(--font-display); color: var(--clr-primary-dark); margin-bottom: 0.4rem; }
+    .decoder-textarea {
+      width: 100%;
+      min-height: 150px;
+      border: 2px solid var(--clr-border);
+      border-radius: var(--r-md);
+      padding: 0.9rem 1rem;
+      font-size: 0.92rem;
+      font-family: var(--font-sans);
+      background: var(--clr-bg);
+      color: var(--clr-text);
+      resize: vertical;
+      transition: border-color var(--transition);
+      margin: 1rem 0;
+    }
+    .decoder-textarea:focus {
+      outline: none;
+      border-color: var(--clr-primary);
+      box-shadow: 0 0 0 3px rgba(46,125,50,0.15);
+    }
+    .decoder-actions { display: flex; gap: 0.75rem; flex-wrap: wrap; align-items: center; margin-bottom: 1.5rem; }
+
+    /* result area */
+    #decoder-result { display: none; margin-top: 1.5rem; }
+    .result-output {
+      background: var(--clr-bg);
+      border: 1px solid var(--clr-border);
+      border-radius: var(--r-md);
+      padding: 1.2rem;
+      font-size: 0.9rem;
+      line-height: 2;
+      word-break: break-word;
+      min-height: 80px;
+    }
+    /* highlight spans */
+    .hl-allergen {
+      background: #ffebee;
+      color: #b71c1c;
+      font-weight: 700;
+      border-radius: 3px;
+      padding: 1px 3px;
+    }
+    .hl-sugar {
+      background: #fff3e0;
+      color: #bf360c;
+      font-weight: 600;
+      border-radius: 3px;
+      padding: 1px 3px;
+    }
+    .hl-salt {
+      background: #e3f2fd;
+      color: #0d47a1;
+      font-weight: 600;
+      border-radius: 3px;
+      padding: 1px 3px;
+    }
+    .hl-additive {
+      background: #f3e5f5;
+      color: #4a148c;
+      font-weight: 600;
+      border-radius: 3px;
+      padding: 1px 3px;
+    }
+    .hl-badge {
+      display: inline-block;
+      font-size: 0.65rem;
+      font-weight: 700;
+      padding: 0 5px;
+      border-radius: 9999px;
+      margin-left: 2px;
+      vertical-align: middle;
+      letter-spacing: 0.02em;
+    }
+    .hl-badge.allergen { background: #c62828; color: #fff; }
+    .hl-badge.sugar    { background: #e65100; color: #fff; }
+    .hl-badge.salt     { background: #1565c0; color: #fff; }
+    .hl-badge.additive { background: #6a1de0; color: #fff; }
+
+    /* summary counters */
+    .summary-counters {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(140px, 1fr));
+      gap: 0.8rem;
+      margin: 1.2rem 0 0.5rem;
+    }
+    .summary-counter {
+      text-align: center;
+      background: var(--clr-surface-alt);
+      border-radius: var(--r-md);
+      padding: 0.8rem;
+      border: 1px solid var(--clr-border);
+    }
+    .summary-counter .count { font-size: 2rem; font-weight: 800; line-height: 1; }
+    .summary-counter .count.allergen { color: #c62828; }
+    .summary-counter .count.sugar    { color: #e65100; }
+    .summary-counter .count.salt     { color: #1565c0; }
+    .summary-counter .count.additive { color: #6a1de0; }
+    .summary-counter .count-label { font-size: 0.78rem; color: var(--clr-text-muted); margin-top: 0.3rem; font-weight: 600; }
+
+    /* ── Link row ──────────────────────────────────── */
+    .link-row { display: flex; flex-wrap: wrap; gap: 1rem; align-items: center; margin-top: 1.5rem; }
+    .ext-link {
+      display: inline-flex; align-items: center; gap: 0.4rem;
+      color: var(--clr-primary); font-weight: 600; text-decoration: none; font-size: 0.9rem;
+      border-bottom: 1px dashed var(--clr-primary);
+      transition: opacity var(--transition);
+    }
+    .ext-link:hover { opacity: 0.75; }
+
+    /* ── Worked example box ────────────────────────── */
+    .example-box {
+      background: var(--clr-surface-alt);
+      border: 2px dashed var(--clr-primary-light);
+      border-radius: var(--r-md);
+      padding: 1rem 1.2rem;
+      margin: 1rem 0;
+    }
+    .example-box h4 { color: var(--clr-primary-dark); margin-bottom: 0.5rem; }
+    .example-box p, .example-box li { font-size: 0.88rem; line-height: 1.65; }
+    .example-calc {
+      background: var(--clr-surface);
+      border-radius: var(--r-sm);
+      padding: 0.6rem 0.9rem;
+      margin-top: 0.5rem;
+      font-family: monospace;
+      font-size: 0.88rem;
+      border-left: 3px solid var(--clr-primary);
+    }
+
+    /* ── Safety level indicators for E-numbers ─────── */
+    .safety-generally { color: #2e7d32; font-weight: 600; }
+    .safety-caution   { color: #e65100; font-weight: 600; }
+    .safety-avoid     { color: #c62828; font-weight: 600; }
+
+    /* Table cell wrapping on small screens */
+    @media (max-width: 500px) {
+      .table-responsive table { min-width: 520px; }
+    }
+
+    /* ── Section title ─────────────────────────────── */
+    .section-title {
+      font-family: var(--font-display);
+      font-size: clamp(1.5rem, 3vw, 2rem);
+      font-weight: 800;
+      color: var(--clr-primary-dark);
+      margin-bottom: 0.4rem;
+    }
+    .section-sub { color: var(--clr-text-muted); font-size: 0.95rem; margin-bottom: 1.5rem; }
+
+    /* ── Steps ─────────────────────────────────────── */
+    .steps-list { list-style: none; padding: 0; counter-reset: step-counter; margin: 1rem 0; }
+    .steps-list li {
+      counter-increment: step-counter;
+      display: flex; gap: 1rem; align-items: flex-start;
+      padding: 0.7rem 0;
+      border-bottom: 1px solid var(--clr-divider);
+    }
+    .steps-list li:last-child { border-bottom: none; }
+    .step-num {
+      width: 2rem; height: 2rem; border-radius: 50%;
+      background: var(--clr-primary); color: #fff;
+      font-weight: 800; font-size: 0.85rem;
+      display: flex; align-items: center; justify-content: center;
+      flex-shrink: 0; margin-top: 0.1rem;
+    }
+    .step-body { flex: 1; }
+    .step-body strong { display: block; font-size: 0.95rem; color: var(--clr-text); }
+    .step-body span { font-size: 0.85rem; color: var(--clr-text-muted); line-height: 1.5; }
+  </style>
+</head>
+<body>
+
+<main id="main-content">
+
+  <!-- ════════════════════ HERO ════════════════════ -->
+  <section class="ld-hero" aria-labelledby="page-h1">
+    <div class="container">
+      <div style="font-size:3rem;margin-bottom:0.5rem;" aria-hidden="true">🏷️</div>
+      <h1 id="page-h1">Food Label Decoder</h1>
+      <p>Understand every element of an Indian packaged food label — from ingredient order and allergens to FSSAI licence numbers and misleading health claims.</p>
+      <div class="hero-badges">
+        <span class="hero-badge">🇮🇳 FSSAI Regulations</span>
+        <span class="hero-badge">🥜 14 Major Allergens</span>
+        <span class="hero-badge">🔬 E-Number Guide</span>
+        <span class="hero-badge">📅 Date Code Explained</span>
+        <span class="hero-badge">⚗️ Interactive Decoder</span>
+      </div>
+    </div>
+  </section>
+
+  <!-- ════════════════════ EDUCATIONAL ALERT ════════════════════ -->
+  <section aria-label="Educational disclaimer" style="padding: 1.5rem 0 0;">
+    <div class="container">
+      <div class="alert alert-warning" role="alert">
+        <span class="alert-icon">⚠️</span>
+        <div>
+          <strong>Educational awareness only:</strong> This decoder highlights items for educational awareness only. It cannot verify the accuracy of any food label or detect adulteration. For safety concerns, consult certified food testing laboratories and <a href="https://www.fssai.gov.in/" target="_blank" rel="noopener noreferrer" style="color:inherit;text-decoration:underline;">FSSAI</a> directly.
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ════════════════════ ANATOMY DIAGRAM ════════════════════ -->
+  <section class="ld-section" aria-labelledby="anatomy-heading">
+    <div class="container">
+      <h2 class="section-title" id="anatomy-heading">🔍 Anatomy of a Food Label</h2>
+      <p class="section-sub">A visual guide to every mandatory element on an Indian packaged food label, as required by FSSAI Food Safety and Standards (Labelling and Display) Regulations 2020.</p>
+
+      <div class="anatomy-diagram">
+        <div class="anatomy-wrap">
+
+          <!-- Left notes -->
+          <div class="anatomy-notes-left">
+            <div class="anatomy-note">
+              <div class="note-title">① Brand & Product Name</div>
+              <p>Common name + brand must appear prominently. Size of letters regulated by net weight.</p>
+            </div>
+            <div class="anatomy-note">
+              <div class="note-title">② Net Quantity</div>
+              <p>Declared in weight (g/kg) or volume (ml/l). Mandatory on all pre-packaged foods.</p>
+            </div>
+            <div class="anatomy-note">
+              <div class="note-title">③ Ingredients List</div>
+              <p>Listed in descending order of weight. All additives must include INS/E-numbers.</p>
+            </div>
+            <div class="anatomy-note">
+              <div class="note-title">④ Allergen Declaration</div>
+              <p>"Contains:" statement in bold for any of the 14 regulated allergens.</p>
+            </div>
+          </div>
+
+          <!-- Label mockup -->
+          <div class="label-mock" role="img" aria-label="Annotated food label diagram showing mandatory elements">
+            <div class="lm-header">
+              <div class="lm-brand">🌿 GreenBite</div>
+              <div class="lm-product">Multigrain Crackers — Salted</div>
+            </div>
+
+            <div class="lm-section">
+              <div class="lm-label">② Net Weight</div>
+              <div class="lm-value">200 g (8 × 25 g sachets)</div>
+            </div>
+
+            <div class="lm-section">
+              <div class="lm-label">③ Ingredients</div>
+              <div class="lm-value">Wheat flour (47%), Rice flour, Oat flakes (10%), Edible vegetable oil (palm), Salt, Sugar, Raising agent <em>[INS 500(ii)]</em>, Emulsifier <em>[INS 322(i)]</em>, Antioxidant <em>[INS 307b]</em>.</div>
+            </div>
+
+            <div class="lm-section" style="background:#fff8f8;">
+              <div class="lm-label" style="color:#c62828;">④ Allergens</div>
+              <div class="lm-value" style="font-weight:700;color:#c62828;">Contains: Wheat, Oats. May contain traces of Milk, Peanuts.</div>
+            </div>
+
+            <div class="lm-section">
+              <div class="lm-label">⑤ Nutrition Info (per 25 g)</div>
+              <div class="lm-value">Energy: 108 kcal &nbsp;|&nbsp; Protein: 2.1 g &nbsp;|&nbsp; Fat: 4.2 g &nbsp;|&nbsp; Carbs: 15.8 g &nbsp;|&nbsp; Sodium: 180 mg</div>
+            </div>
+
+            <div class="lm-section">
+              <div class="lm-label">⑥ Best Before</div>
+              <div class="lm-value">Best Before: 12 months from manufacture. See bottom of pack.</div>
+            </div>
+
+            <div class="lm-section">
+              <div class="lm-label">⑦ Manufacturer Info</div>
+              <div class="lm-value">GreenBite Foods Pvt. Ltd., 14-B Industrial Area, Pune 411 019, India. Customer care: 1800-XXX-XXXX</div>
+            </div>
+
+            <div class="lm-section">
+              <div class="lm-label">⑧ FSSAI Licence</div>
+              <div class="lm-fssai">
+                <div class="fssai-logo-mock" aria-hidden="true">FSSAI</div>
+                <span>Lic. No. 10019022001234</span>
+              </div>
+            </div>
+
+            <div class="lm-section" style="text-align:center;padding:0.5rem;">
+              <span style="font-size:0.75rem;color:#888;">🇮🇳 Made in India &nbsp; | &nbsp; ♻️ Recycle packaging</span>
+            </div>
+          </div>
+
+          <!-- Right notes -->
+          <div class="anatomy-notes-right">
+            <div class="anatomy-note">
+              <div class="note-title">⑤ Nutrition Facts</div>
+              <p>Per serving AND per 100 g/ml. Energy in kcal + kJ. Mandatory: protein, fat, carbs, sodium.</p>
+            </div>
+            <div class="anatomy-note">
+              <div class="note-title">⑥ Date Markings</div>
+              <p>'Best Before' for shelf-stable foods. 'Use By' for perishables. Manufacturing date always required.</p>
+            </div>
+            <div class="anatomy-note">
+              <div class="note-title">⑦ Manufacturer Details</div>
+              <p>Name, full address, country of origin. Importer's details mandatory on imported goods.</p>
+            </div>
+            <div class="anatomy-note">
+              <div class="note-title">⑧ FSSAI Licence</div>
+              <p>14-digit licence number mandatory. Verifiable at foscos.fssai.gov.in. Missing = non-compliant.</p>
+            </div>
+          </div>
+
+        </div><!-- /anatomy-wrap -->
+      </div><!-- /anatomy-diagram -->
+    </div>
+  </section>
+
+  <!-- ════════════════════ TABS: DEEP DIVES ════════════════════ -->
+  <section class="ld-section" aria-labelledby="tabs-heading">
+    <div class="container">
+      <h2 class="section-title" id="tabs-heading">📖 Deep Dive: Label Elements</h2>
+      <p class="section-sub">Select a topic to learn everything about that part of a food label.</p>
+
+      <div class="tabs-card">
+
+        <!-- Tab list -->
+        <div class="tab-list" role="tablist" aria-label="Food label topics" data-tab-list>
+          <button class="tab-btn active" role="tab" aria-selected="true"  aria-controls="tab-ingredients" data-tab="tab-ingredients" id="btn-ingredients">🥄 Ingredients</button>
+          <button class="tab-btn"        role="tab" aria-selected="false" aria-controls="tab-allergens"   data-tab="tab-allergens"   id="btn-allergens">🥜 Allergens</button>
+          <button class="tab-btn"        role="tab" aria-selected="false" aria-controls="tab-serving"     data-tab="tab-serving"     id="btn-serving">🍽️ Serving Size</button>
+          <button class="tab-btn"        role="tab" aria-selected="false" aria-controls="tab-additives"   data-tab="tab-additives"   id="btn-additives">🔬 Additives & E-Numbers</button>
+          <button class="tab-btn"        role="tab" aria-selected="false" aria-controls="tab-dates"       data-tab="tab-dates"       id="btn-dates">📅 Date Codes</button>
+          <button class="tab-btn"        role="tab" aria-selected="false" aria-controls="tab-fssai"       data-tab="tab-fssai"       id="btn-fssai">🛡️ FSSAI Verification</button>
+          <button class="tab-btn"        role="tab" aria-selected="false" aria-controls="tab-claims"      data-tab="tab-claims"      id="btn-claims">💬 Health Claims</button>
+          <button class="tab-btn"        role="tab" aria-selected="false" aria-controls="tab-mfr"         data-tab="tab-mfr"         id="btn-mfr">🏭 Manufacturer Info</button>
+        </div>
+
+        <!-- ── TAB: INGREDIENTS ─────────────────── -->
+        <div class="tab-panel active" id="tab-ingredients" role="tabpanel" aria-labelledby="btn-ingredients" aria-hidden="false">
+          <h3>How Ingredient Lists Work</h3>
+          <p>Under FSSAI regulations, ingredients must be listed in <strong>descending order by weight at the time of manufacture</strong>. This means the first ingredient is the most abundant. If sugar appears in the first three slots — even split across multiple aliases — it's a significant component of that product.</p>
+
+          <div class="info-box">
+            <strong>Key rule:</strong> Water counts as an ingredient when it's added intentionally. Compound ingredients (e.g., "chocolate coating") must also break down their own sub-ingredients in parentheses if they constitute more than 2% of the finished product.
+          </div>
+
+          <h3>🍬 Sugar Aliases to Watch</h3>
+          <p>Sugar appears under many names. The more of these you see — especially near the top of the list — the higher the total sugar content:</p>
+          <div class="pill-list">
+            <span class="pill sugar">Sucrose</span><span class="pill sugar">Dextrose</span><span class="pill sugar">Fructose</span>
+            <span class="pill sugar">Maltose</span><span class="pill sugar">Glucose</span><span class="pill sugar">Lactose</span>
+            <span class="pill sugar">Corn syrup</span><span class="pill sugar">High-fructose corn syrup</span>
+            <span class="pill sugar">Cane sugar</span><span class="pill sugar">Invert sugar</span>
+            <span class="pill sugar">Molasses</span><span class="pill sugar">Honey</span><span class="pill sugar">Agave nectar</span>
+            <span class="pill sugar">Maple syrup</span><span class="pill sugar">Jaggery</span><span class="pill sugar">Palm sugar</span>
+            <span class="pill sugar">Treacle</span><span class="pill sugar">Fruit juice concentrate</span>
+            <span class="pill sugar">Rice syrup</span><span class="pill sugar">Barley malt</span>
+          </div>
+
+          <h3>🧂 Salt & Sodium Aliases</h3>
+          <div class="pill-list">
+            <span class="pill salt">Salt</span><span class="pill salt">Sodium chloride</span>
+            <span class="pill salt">Monosodium glutamate (MSG)</span><span class="pill salt">Sodium bicarbonate</span>
+            <span class="pill salt">Sodium nitrite</span><span class="pill salt">Sodium benzoate</span>
+            <span class="pill salt">Disodium phosphate</span><span class="pill salt">Baking soda</span>
+            <span class="pill salt">Sodium caseinate</span>
+          </div>
+
+          <h3>🧈 Hidden Fat Aliases</h3>
+          <div class="pill-list">
+            <span class="pill fat">Edible vegetable oil</span><span class="pill fat">Palm oil</span>
+            <span class="pill fat">Hydrogenated fat</span><span class="pill fat">Partially hydrogenated oil</span>
+            <span class="pill fat">Vanaspati</span><span class="pill fat">Shortening</span>
+            <span class="pill fat">Lard</span><span class="pill fat">Interesterified fat</span>
+            <span class="pill fat">Coconut oil</span>
+          </div>
+
+          <h3>What to Look For</h3>
+          <ul>
+            <li>If <em>whole grain</em> is claimed, it should appear as the <strong>first ingredient</strong>, not a secondary one</li>
+            <li>Watch for "enriched flour" — this is refined flour with a few vitamins added back after stripping</li>
+            <li>"Natural flavour" is a legal term that can cover hundreds of chemical compounds</li>
+            <li>Compounds ending in <em>-ose</em> (maltose, dextrose, galactose) are sugars</li>
+            <li>Multiple small quantities of the same ingredient split under different aliases is a technique to push each one further down the list</li>
+          </ul>
+        </div>
+
+        <!-- ── TAB: ALLERGENS ────────────────────── -->
+        <div class="tab-panel" id="tab-allergens" role="tabpanel" aria-labelledby="btn-allergens" aria-hidden="true">
+          <h3>The 14 Major Allergens Regulated by FSSAI</h3>
+          <p>FSSAI's Food Safety and Standards (Labelling and Display) Regulations 2020 mandate that the following 14 allergens must be declared in bold, contrasting font, and ideally in a separate "Contains:" statement:</p>
+
+          <div class="pill-list" style="margin-top:0.8rem;">
+            <span class="pill allergen">🌾 Gluten-containing cereals (Wheat, Rye, Barley, Oats)</span>
+            <span class="pill allergen">🦐 Crustaceans & shellfish</span>
+            <span class="pill allergen">🥚 Eggs</span>
+            <span class="pill allergen">🐟 Fish</span>
+            <span class="pill allergen">🥜 Peanuts</span>
+            <span class="pill allergen">🫘 Soybeans</span>
+            <span class="pill allergen">🥛 Milk (including lactose)</span>
+            <span class="pill allergen">🌰 Tree nuts (Almonds, Cashews, Walnuts, etc.)</span>
+            <span class="pill allergen">🌱 Celery</span>
+            <span class="pill allergen">🌿 Mustard</span>
+            <span class="pill allergen">🫘 Sesame seeds</span>
+            <span class="pill allergen">🧴 Sulphur dioxide & Sulphites (&gt;10 mg/kg)</span>
+            <span class="pill allergen">🦑 Molluscs</span>
+            <span class="pill allergen">🫐 Lupin</span>
+          </div>
+
+          <h3>How Allergens Appear on Labels</h3>
+          <ul>
+            <li><strong>In the ingredient list:</strong> The allergen source is printed in <strong>bold</strong> each time it appears — e.g., "Wheat flour, <strong>Milk</strong> powder, Soy lecithin <strong>[Soy]</strong>"</li>
+            <li><strong>"Contains" statement:</strong> A dedicated line such as "Contains: Wheat, Milk, Soy" appearing after or near the ingredient list</li>
+            <li><strong>May Contain / Cross-contamination:</strong> Voluntary advisory statements like "May contain traces of Peanuts" — not legally mandated but increasingly common for shared-facility products</li>
+          </ul>
+
+          <div class="alert alert-info" role="note" style="margin-top:1rem;">
+            <span class="alert-icon">ℹ️</span>
+            <div>
+              <strong>"May Contain" is advisory, not guaranteed.</strong> It means the product is manufactured in a facility or on equipment that also processes the named allergen. The risk varies — some factories have excellent cleaning protocols; others do not. Individuals with severe allergies should contact the manufacturer directly.
+            </div>
+          </div>
+
+          <h3>Hidden Allergen Sources</h3>
+          <ul>
+            <li><strong>Milk:</strong> Whey, casein, lactalbumin, lactoglobulin, ghee, butter, cream, curd</li>
+            <li><strong>Wheat/Gluten:</strong> Atta, maida, semolina (suji/rava), starch (if wheat-derived), malt extract</li>
+            <li><strong>Soy:</strong> Soya sauce, textured vegetable protein (TVP), tofu, edamame, miso, lecithin</li>
+            <li><strong>Peanuts:</strong> Groundnut oil (unless highly refined), mixed nuts, some pastes</li>
+            <li><strong>Fish:</strong> Worcestershire sauce, Caesar dressing, some Omega-3 supplements</li>
+            <li><strong>Sulphites:</strong> Dried fruits, wine, vinegar, some jams and pickles</li>
+          </ul>
+
+          <h3>What to Do If an Allergen is Missing from a Label</h3>
+          <p>If you suspect an allergen is present but undeclared, you can report the product to FSSAI via the <a href="https://foscos.fssai.gov.in/" target="_blank" rel="noopener noreferrer" style="color:var(--clr-primary);font-weight:600;">FOSCOS portal</a> or the 1800-112-100 consumer helpline.</p>
+        </div>
+
+        <!-- ── TAB: SERVING SIZE ─────────────────── -->
+        <div class="tab-panel" id="tab-serving" role="tabpanel" aria-labelledby="btn-serving" aria-hidden="true">
+          <h3>Serving Size vs. Package Size</h3>
+          <p>Nutrition information on Indian labels is declared per <strong>100 g (or 100 ml)</strong> AND per <strong>serving</strong>. The serving size is defined by the manufacturer — and it's often much smaller than the amount a person actually eats in one sitting. This is a legal requirement under FSSAI 2020 regulations.</p>
+
+          <div class="info-box">
+            <strong>⚠️ Watch out:</strong> A "serving" of chips might be listed as 30 g, but a typical packet is 150 g. If you eat the whole packet, you've consumed 5 servings — multiply all nutrition values by 5.
+          </div>
+
+          <h3>How to Calculate Your Actual Intake</h3>
+          <ol class="steps-list">
+            <li>
+              <div class="step-num">1</div>
+              <div class="step-body">
+                <strong>Find the serving size</strong>
+                <span>Located near the top of the nutrition table. Usually in grams or millilitres. Sometimes also expressed as "1 biscuit (12 g)" or "2 tablespoons (30 g)".</span>
+              </div>
+            </li>
+            <li>
+              <div class="step-num">2</div>
+              <div class="step-body">
+                <strong>Find servings per package</strong>
+                <span>Also near the top. If it says "Servings: 5" and the pack is 150 g, each serving is 30 g.</span>
+              </div>
+            </li>
+            <li>
+              <div class="step-num">3</div>
+              <div class="step-body">
+                <strong>Weigh or estimate what you actually eat</strong>
+                <span>Use a kitchen scale for accuracy, or estimate based on pieces/volume consumed.</span>
+              </div>
+            </li>
+            <li>
+              <div class="step-num">4</div>
+              <div class="step-body">
+                <strong>Scale the nutrition values</strong>
+                <span>Multiply each value by (amount you ate ÷ serving size). Or use the per-100 g column for easier maths.</span>
+              </div>
+            </li>
+          </ol>
+
+          <div class="example-box">
+            <h4>📐 Worked Example: Instant Noodles</h4>
+            <p><strong>Label says:</strong> Serving size 75 g (½ cake) · Servings per pack: 2 · Sodium per serving: 820 mg</p>
+            <p><strong>You eat:</strong> 1 full cake (150 g = 2 servings)</p>
+            <div class="example-calc">
+              Actual sodium intake = 820 mg × 2 = <strong>1,640 mg</strong><br>
+              FSSAI daily adequate intake = 2,000 mg/day<br>
+              That's <strong>82% of your daily sodium</strong> in one meal!
+            </div>
+            <p style="margin-top:0.5rem;">The label's per-serving figure (820 mg) sounds reasonable until you account for eating the full packet.</p>
+          </div>
+
+          <h3>Tips for Smarter Reading</h3>
+          <ul>
+            <li>Always check the <strong>per 100 g column</strong> for apples-to-apples comparison between products</li>
+            <li>If a product claims "only 80 kcal per serving," verify how large that serving is</li>
+            <li>Snack packs often use very small serving sizes — a single biscuit instead of the 3–4 most people eat</li>
+            <li>For drinks, serving sizes may be 200 ml when a standard bottle is 500 ml</li>
+          </ul>
+        </div>
+
+        <!-- ── TAB: ADDITIVES & E-NUMBERS ─────────── -->
+        <div class="tab-panel" id="tab-additives" role="tabpanel" aria-labelledby="btn-additives" aria-hidden="true">
+          <h3>What are E-Numbers and INS Codes?</h3>
+          <p>Food additives are assigned <strong>E-numbers</strong> in the European system or <strong>INS (International Numbering System)</strong> codes by Codex Alimentarius. In India, FSSAI adopts INS codes — they're identical numbers to E-codes. "E621" and "INS 621" refer to the same substance (MSG). All permitted additives must appear in the ingredient list with their INS number or name.</p>
+
+          <div class="info-box">
+            <strong>Not all additives are harmful.</strong> Many have centuries of safe use (E440 = pectin from fruit peels; E500 = baking soda). The key is understanding what each does and whether you're consuming it in large quantities.
+          </div>
+
+          <h3>Common E-Numbers on Indian Labels</h3>
+          <div class="table-responsive">
+            <table aria-label="Common E-numbers and INS codes table">
+              <thead>
+                <tr>
+                  <th>Code</th>
+                  <th>Name</th>
+                  <th>Function</th>
+                  <th>Safety Notes</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr>
+                  <td><strong>E102 / INS 102</strong></td>
+                  <td>Tartrazine</td>
+                  <td>Yellow food colouring</td>
+                  <td><span class="safety-caution">⚠ Caution</span> — Linked to hyperactivity in sensitive children; banned in some products in EU</td>
+                </tr>
+                <tr>
+                  <td><strong>E110 / INS 110</strong></td>
+                  <td>Sunset Yellow FCF</td>
+                  <td>Orange-yellow colouring</td>
+                  <td><span class="safety-caution">⚠ Caution</span> — Part of the "Southampton Six" azo dyes; EU requires hyperactivity warning label</td>
+                </tr>
+                <tr>
+                  <td><strong>E122 / INS 122</strong></td>
+                  <td>Azorubine (Carmoisine)</td>
+                  <td>Red colouring</td>
+                  <td><span class="safety-caution">⚠ Caution</span> — Azo dye; Southampton Six member; may cause reactions in aspirin-sensitive individuals</td>
+                </tr>
+                <tr>
+                  <td><strong>E124 / INS 124</strong></td>
+                  <td>Ponceau 4R</td>
+                  <td>Red colouring</td>
+                  <td><span class="safety-caution">⚠ Caution</span> — Azo dye; Southampton Six; banned in USA and Norway</td>
+                </tr>
+                <tr>
+                  <td><strong>E129 / INS 129</strong></td>
+                  <td>Allura Red AC</td>
+                  <td>Red colouring (confectionery, drinks)</td>
+                  <td><span class="safety-caution">⚠ Caution</span> — Southampton Six; proposed ban in EU under consideration as of 2023</td>
+                </tr>
+                <tr>
+                  <td><strong>E211 / INS 211</strong></td>
+                  <td>Sodium Benzoate</td>
+                  <td>Preservative</td>
+                  <td><span class="safety-caution">⚠ Caution</span> — Can form benzene (a carcinogen) when combined with ascorbic acid (Vitamin C) in acidic drinks</td>
+                </tr>
+                <tr>
+                  <td><strong>E621 / INS 621</strong></td>
+                  <td>Monosodium Glutamate (MSG)</td>
+                  <td>Flavour enhancer (savoury/umami)</td>
+                  <td><span class="safety-generally">✓ Generally safe</span> — GRAS status by FDA; FSSAI permitted. Adds significant sodium — relevant for hypertension</td>
+                </tr>
+                <tr>
+                  <td><strong>E322 / INS 322</strong></td>
+                  <td>Lecithin</td>
+                  <td>Emulsifier (keeps oil + water mixed)</td>
+                  <td><span class="safety-generally">✓ Generally safe</span> — Derived from soy or sunflower; possible allergen concern for soy-allergic individuals</td>
+                </tr>
+                <tr>
+                  <td><strong>E440 / INS 440</strong></td>
+                  <td>Pectin</td>
+                  <td>Thickener / gelling agent (jams, yoghurt)</td>
+                  <td><span class="safety-generally">✓ Generally safe</span> — Natural polysaccharide from fruit; widely considered safe and even beneficial as dietary fibre</td>
+                </tr>
+                <tr>
+                  <td><strong>E500 / INS 500</strong></td>
+                  <td>Sodium Carbonates (Baking soda)</td>
+                  <td>Raising agent / leavening</td>
+                  <td><span class="safety-generally">✓ Generally safe</span> — Common baking ingredient; watch sodium contribution if on a low-sodium diet</td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+
+          <h3>How to Read Additive Declarations</h3>
+          <ul>
+            <li>Indian labels use the format: <em>Function [INS number]</em> — e.g., "Antioxidant [INS 307b]" or "Colour [INS 102]"</li>
+            <li>Multiple additives of the same function are comma-separated: "Preservatives [INS 211, INS 202]"</li>
+            <li>Natural and nature-identical flavours don't need individual INS codes — they may simply say "Natural flavour" or "Artificial flavour"</li>
+            <li>Additives in compound ingredients (e.g., inside chocolate coating) must be declared if they perform a function in the final product</li>
+          </ul>
+
+          <div class="link-row">
+            <a href="https://www.fssai.gov.in/" target="_blank" rel="noopener noreferrer" class="ext-link">🔗 FSSAI permitted additives list ↗</a>
+            <a href="food-safety.html" class="ext-link">🛡️ Food Safety Hub →</a>
+          </div>
+        </div>
+
+        <!-- ── TAB: DATE CODES ───────────────────── -->
+        <div class="tab-panel" id="tab-dates" role="tabpanel" aria-labelledby="btn-dates" aria-hidden="true">
+          <h3>Three Types of Date Marking</h3>
+          <p>FSSAI mandates date markings on all pre-packaged foods. Understanding the difference between them can prevent both food waste and genuine food safety risks.</p>
+
+          <div class="date-grid">
+            <div class="date-card best">
+              <h4>📦 Best Before (BB)</h4>
+              <p>The product is at its <strong>peak quality</strong> until this date. After it, the food may taste different, lose potency (vitamins), or change texture — but is usually still safe to consume if stored correctly and there's no visible spoilage.</p>
+              <p style="margin-top:0.5rem;font-style:italic;">Examples: Biscuits, chips, packaged spices, canned goods, pasta, cereals</p>
+            </div>
+            <div class="date-card use">
+              <h4>⚠️ Use By (UB)</h4>
+              <p>A <strong>safety date</strong>. Do NOT consume after this date — even if the food looks and smells normal. Dangerous pathogens can grow without visible signs. This is used for highly perishable foods.</p>
+              <p style="margin-top:0.5rem;font-style:italic;">Examples: Fresh milk, yoghurt, paneer, chilled ready meals, raw meat</p>
+            </div>
+            <div class="date-card mfg">
+              <h4>🏭 Manufactured On (MFD)</h4>
+              <p>The date of production. Mandatory alongside BB or UB on most products. Helps you calculate remaining shelf life and compare freshness between batches.</p>
+              <p style="margin-top:0.5rem;font-style:italic;">Always required; used to calculate shelf life from production date</p>
+            </div>
+          </div>
+
+          <h3>How to Read Date Formats</h3>
+          <ul>
+            <li><strong>DD/MM/YYYY</strong> — Standard Indian format: day first, then month, then year</li>
+            <li><strong>MM/YYYY</strong> — Month and year only (common for products with &gt;3 month shelf life)</li>
+            <li><strong>MMM YYYY</strong> — e.g., "JAN 2026" — month abbreviation + year</li>
+            <li><strong>Julian dates</strong> — Some manufacturers use day-of-year codes (e.g., "026" = Jan 26). Look for an explanation key on the pack or outer carton</li>
+            <li><strong>Lot/Batch codes</strong> — e.g., "L24085A" — these are traceability codes, not date codes (though they often encode the production date)</li>
+          </ul>
+
+          <div class="info-box">
+            <strong>🔍 Tip:</strong> Date markings must be printed, embossed or laser-marked directly on the pack — not on a sticker that can be removed and replaced. A product with a peel-off date label is suspect. Report such products to FSSAI.
+          </div>
+
+          <h3>What to Do After Each Date Type</h3>
+          <ul>
+            <li><strong>After Best Before:</strong> Use your senses — smell, look, taste cautiously. Many products are still fine for days or weeks. Exceptions: baby food, infant formula (strict).</li>
+            <li><strong>After Use By:</strong> Discard the product, even if it looks and smells fine. Do not taste-test.</li>
+            <li><strong>Blurred or missing date:</strong> Do not purchase. Report to the retailer and FSSAI if sold openly.</li>
+          </ul>
+        </div>
+
+        <!-- ── TAB: FSSAI VERIFICATION ────────────── -->
+        <div class="tab-panel" id="tab-fssai" role="tabpanel" aria-labelledby="btn-fssai" aria-hidden="true">
+          <h3>What is the FSSAI Licence Number?</h3>
+          <p>The <strong>Food Safety and Standards Authority of India (FSSAI)</strong> is India's food regulatory body. Every food business operator (FBO) — manufacturer, packer, importer, or re-labeller — must be licensed under FSSAI. The licence number is a unique 14-digit number that must appear on every product label, usually alongside the FSSAI logo.</p>
+
+          <div class="info-box">
+            <strong>Format:</strong> The 14-digit number encodes the state code, product category, and registration type.<br>
+            <strong>Example:</strong> <code>10019022001234</code> — The first two digits (10) represent the registration type; digits 3–4 (01) represent the state (Maharastra); remaining digits are sequential identifiers.
+          </div>
+
+          <h3>How to Verify an FSSAI Licence</h3>
+          <ol class="steps-list">
+            <li>
+              <div class="step-num">1</div>
+              <div class="step-body">
+                <strong>Go to FOSCOS</strong>
+                <span>Visit <a href="https://foscos.fssai.gov.in/" target="_blank" rel="noopener noreferrer" style="color:var(--clr-primary);font-weight:600;">foscos.fssai.gov.in ↗</a> — FSSAI's official licensing and compliance portal.</span>
+              </div>
+            </li>
+            <li>
+              <div class="step-num">2</div>
+              <div class="step-body">
+                <strong>Select 'Licence/Registration Search'</strong>
+                <span>Look for the public licence search tool on the FOSCOS homepage.</span>
+              </div>
+            </li>
+            <li>
+              <div class="step-num">3</div>
+              <div class="step-body">
+                <strong>Enter the 14-digit licence number</strong>
+                <span>Type the number exactly as it appears on the product label, including leading zeros.</span>
+              </div>
+            </li>
+            <li>
+              <div class="step-num">4</div>
+              <div class="step-body">
+                <strong>Verify the details match</strong>
+                <span>Check that the business name, state, and product category match what's on the packaging. A mismatch is a red flag.</span>
+              </div>
+            </li>
+            <li>
+              <div class="step-num">5</div>
+              <div class="step-body">
+                <strong>Check licence status and expiry</strong>
+                <span>FSSAI licences must be renewed. An expired or suspended licence means the FBO is currently non-compliant.</span>
+              </div>
+            </li>
+          </ol>
+
+          <h3>What to Do If the Licence is Missing or Fake</h3>
+          <ul>
+            <li><strong>Missing FSSAI number:</strong> The product is non-compliant with FSSAI regulations. Do not purchase. Report to the retailer.</li>
+            <li><strong>Fake or unverifiable number:</strong> Report to FSSAI via the consumer helpline <strong>1800-112-100</strong> (toll-free) or via the <a href="https://www.fssai.gov.in/" target="_blank" rel="noopener noreferrer" style="color:var(--clr-primary);font-weight:600;">FSSAI website</a>.</li>
+            <li><strong>Sticker over original number:</strong> A strong indicator of tampering or relabelling — report immediately.</li>
+            <li><strong>Loose/unpackaged food:</strong> Street vendors and small eateries may operate under a simpler registration system (not a licence) — but they still need FSSAI registration.</li>
+          </ul>
+
+          <div class="alert alert-success" style="margin-top:1.2rem;" role="note">
+            <span class="alert-icon">✅</span>
+            <div>
+              <strong>The FSSAI logo alone isn't enough.</strong> Any food producer can print the FSSAI logo — what matters is the 14-digit number beneath it, which must be verifiable on the FOSCOS portal. A logo without a valid, searchable number is meaningless.
+            </div>
+          </div>
+
+          <div class="link-row" style="margin-top:1rem;">
+            <a href="https://foscos.fssai.gov.in/" target="_blank" rel="noopener noreferrer" class="ext-link">🔗 FOSCOS Licence Search ↗</a>
+            <a href="https://www.fssai.gov.in/" target="_blank" rel="noopener noreferrer" class="ext-link">🏛️ FSSAI Official Website ↗</a>
+            <a href="food-safety.html" class="ext-link">🛡️ Food Safety Hub →</a>
+          </div>
+        </div>
+
+        <!-- ── TAB: HEALTH CLAIMS ────────────────── -->
+        <div class="tab-panel" id="tab-claims" role="tabpanel" aria-labelledby="btn-claims" aria-hidden="true">
+          <h3>Understanding Health Claims on Packaging</h3>
+          <p>Food manufacturers use health claims to attract health-conscious consumers. In India, FSSAI's Food Safety and Standards (Advertising and Claims) Regulations 2018 govern what can and cannot be said on a label or in an advertisement. Not all claims carry equal regulatory weight.</p>
+
+          <h3>Common Claims and What They Actually Mean</h3>
+          <div class="claim-grid">
+            <div class="claim-card">
+              <div class="claim-label">🔴 "Low Fat"</div>
+              <span class="claim-status regulated">Regulated</span>
+              <p>FSSAI allows "low fat" only if the product contains ≤3 g of total fat per 100 g (or ≤1.5 g per 100 ml for liquids). Check the nutrition table — this claim is often used on products high in sugar or sodium.</p>
+            </div>
+            <div class="claim-card">
+              <div class="claim-label">💪 "High Protein"</div>
+              <span class="claim-status regulated">Regulated</span>
+              <p>Requires ≥12 g protein per 100 g (or ≥6 g/100 kcal). Verify the actual protein per serving in the nutrition panel — many protein-branded products barely meet the threshold.</p>
+            </div>
+            <div class="claim-card">
+              <div class="claim-label">🍬 "Sugar Free"</div>
+              <span class="claim-status regulated">Regulated</span>
+              <p>Must contain ≤0.5 g of sugars per 100 g/ml. However, artificial sweeteners (sucralose, aspartame) may still be present. Also check for "no added sugar" — natural sugars from fruit can still be high.</p>
+            </div>
+            <div class="claim-card">
+              <div class="claim-label">🌿 "Natural"</div>
+              <span class="claim-status unregulated">Not well defined</span>
+              <p>No strict FSSAI definition exists. A product can label itself "natural" while containing preservatives and artificial colours. This is a marketing term, not a regulated health claim.</p>
+            </div>
+            <div class="claim-card">
+              <div class="claim-label">🌾 "Multigrain"</div>
+              <span class="claim-status unregulated">Not well defined</span>
+              <p>Simply means more than one grain — refined or whole. A "multigrain" biscuit can be made of 80% refined maida with tiny amounts of oat flour. Check the ingredient list to see how much whole grain is actually present.</p>
+            </div>
+            <div class="claim-card">
+              <div class="claim-label">❤️ "Heart Healthy" / "Good for heart"</div>
+              <span class="claim-status regulated">Regulated (Nutrient Function)</span>
+              <p>Must meet specific nutrient criteria (e.g., low saturated fat, low sodium, no trans fat) AND carry a qualified disclaimer. FSSAI prohibits direct disease-reduction claims without approval.</p>
+            </div>
+            <div class="claim-card">
+              <div class="claim-label">🥗 "Zero Trans Fat"</div>
+              <span class="claim-status regulated">Regulated</span>
+              <p>Allowed only if trans fat ≤0.2 g per 100 g. Since 2022, FSSAI has capped trans fat in all foods at 2% of total fat. Verify using the nutrition facts panel if trans fat is listed separately.</p>
+            </div>
+            <div class="claim-card">
+              <div class="claim-label">🧬 "Fortified" / "Rich in"</div>
+              <span class="claim-status regulated">Regulated</span>
+              <p>"Rich in [nutrient]" requires ≥30% of the Recommended Daily Allowance (RDA) per serving. "Source of" requires ≥15% RDA. These are specific thresholds — check the % Daily Value column in the nutrition table.</p>
+            </div>
+          </div>
+
+          <div class="alert alert-warning" style="margin-top:1.2rem;" role="note">
+            <span class="alert-icon">⚠️</span>
+            <div><strong>Golden rule:</strong> Ignore the front of the pack. Marketing claims are designed to attract attention. Always flip the product over and read the ingredient list and nutrition facts panel — they tell the real story.</div>
+          </div>
+        </div>
+
+        <!-- ── TAB: MANUFACTURER INFO ────────────── -->
+        <div class="tab-panel" id="tab-mfr" role="tabpanel" aria-labelledby="btn-mfr" aria-hidden="true">
+          <h3>What Must Appear on an Indian Food Label by Law</h3>
+          <p>Under FSSAI Food Safety and Standards (Labelling and Display) Regulations 2020, the following manufacturer-related information is <strong>mandatory</strong> on every pre-packaged food product sold in India:</p>
+
+          <ul>
+            <li>
+              <strong>Name and address of the manufacturer/packer:</strong> Full legal name and complete postal address including city, state, and PIN code. A P.O. box alone is insufficient.
+            </li>
+            <li>
+              <strong>Country of origin:</strong> "Made in India" or the relevant country of manufacture. Mandatory for all products. Imported goods repackaged in India must state both the country of manufacture and India as the country of repacking.
+            </li>
+            <li>
+              <strong>Importer's details (for imported foods):</strong> Name and address of the Indian importer/agent must appear on the label or on a sticker affixed before retail sale.
+            </li>
+            <li>
+              <strong>Customer care details:</strong> Since 2022, a consumer helpline number or email is recommended and increasingly required on many product categories.
+            </li>
+            <li>
+              <strong>Packer's information (if different from manufacturer):</strong> If a brand contracts manufacturing to a co-packer, both manufacturer and brand/packer details must appear.
+            </li>
+          </ul>
+
+          <h3>Private Label and Contract Manufacturing</h3>
+          <p>Many products sold under supermarket house brands (private labels) are manufactured by third-party factories. FSSAI requires:</p>
+          <ul>
+            <li>"Manufactured by [Factory Name, Address]" — the actual manufacturer</li>
+            <li>"Marketed by [Brand Owner, Address]" — the company selling it</li>
+            <li>Both FSSAI licence numbers where applicable</li>
+          </ul>
+
+          <div class="info-box">
+            <strong>Tip:</strong> If a label says only "Marketed by" with no manufacturer address, this is a compliance gap. You can look up the FSSAI licence number to trace the actual manufacturer.
+          </div>
+
+          <h3>Red Flags in Manufacturer Information</h3>
+          <ul>
+            <li>No physical address — only a website or phone number</li>
+            <li>Address that resolves to a residential flat or empty plot</li>
+            <li>Imported product with no Indian importer details</li>
+            <li>Foreign-sounding brand name with vague "India Office" address</li>
+            <li>Misspelled city or incorrect PIN code</li>
+          </ul>
+
+          <h3>How to Verify Manufacturer Legitimacy</h3>
+          <ul>
+            <li>Search the FSSAI FOSCOS portal with the licence number</li>
+            <li>Check the Ministry of Corporate Affairs (MCA) portal for company registration</li>
+            <li>For imports: check FSSAI's import clearance records via <a href="https://www.fssai.gov.in/" target="_blank" rel="noopener noreferrer" style="color:var(--clr-primary);font-weight:600;">fssai.gov.in ↗</a></li>
+          </ul>
+
+          <div class="link-row">
+            <a href="food-safety.html" class="ext-link">🛡️ Food Safety Hub →</a>
+            <a href="https://www.fssai.gov.in/" target="_blank" rel="noopener noreferrer" class="ext-link">🏛️ FSSAI Official Website ↗</a>
+          </div>
+        </div>
+
+      </div><!-- /tabs-card -->
+    </div>
+  </section>
+
+  <!-- ════════════════════ INTERACTIVE DECODER ════════════════════ -->
+  <section class="ld-section" aria-labelledby="decoder-heading">
+    <div class="container">
+      <h2 class="section-title" id="decoder-heading">⚗️ Decode My Label</h2>
+      <p class="section-sub">Paste the ingredient list from any packaged food. The decoder will highlight allergens, sugar aliases, sodium sources, and E-numbers for your awareness.</p>
+
+      <div class="decoder-card">
+
+        <div class="alert alert-warning" role="note" style="margin-bottom:1.5rem;">
+          <span class="alert-icon">⚠️</span>
+          <div>This decoder highlights items for <strong>educational awareness only</strong>. It cannot verify the accuracy of any food label or detect adulteration.</div>
+        </div>
+
+        <label for="ingredient-input" style="font-weight:600;display:block;margin-bottom:0.3rem;">Paste ingredient list here:</label>
+        <textarea
+          id="ingredient-input"
+          class="decoder-textarea"
+          placeholder="Example: Wheat flour, Sugar, Edible vegetable oil (palm), Milk solids, Salt, Dextrose, Soya lecithin [INS 322], Raising agents [INS 500(i), INS 503(ii)], Artificial flavour, Colour [INS 102], Preservative [INS 211]."
+          aria-label="Paste ingredient list for decoding"
+          spellcheck="false"
+        ></textarea>
+
+        <div class="decoder-actions">
+          <button class="btn btn-primary" id="decode-btn" aria-label="Decode ingredients">🔍 Decode Ingredients</button>
+          <button class="btn btn-outline" id="clear-btn" aria-label="Clear input and results">✕ Clear</button>
+          <button class="btn btn-outline" id="sample-btn" aria-label="Load sample ingredient list">📋 Load Sample</button>
+        </div>
+
+        <!-- Results -->
+        <div id="decoder-result" aria-live="polite" aria-atomic="false">
+          <h3 style="color:var(--clr-primary-dark);margin-bottom:0.6rem;font-size:1.05rem;">📊 Summary</h3>
+          <div class="summary-counters">
+            <div class="summary-counter">
+              <div class="count allergen" id="count-allergen">0</div>
+              <div class="count-label">🥜 Allergens Found</div>
+            </div>
+            <div class="summary-counter">
+              <div class="count sugar" id="count-sugar">0</div>
+              <div class="count-label">🍬 Sugar Aliases</div>
+            </div>
+            <div class="summary-counter">
+              <div class="count salt" id="count-salt">0</div>
+              <div class="count-label">🧂 Sodium Sources</div>
+            </div>
+            <div class="summary-counter">
+              <div class="count additive" id="count-additive">0</div>
+              <div class="count-label">🔬 Additives / E-Nos.</div>
+            </div>
+          </div>
+
+          <h3 style="color:var(--clr-primary-dark);margin:1.2rem 0 0.5rem;font-size:1.05rem;">🔎 Highlighted Ingredient List</h3>
+          <div class="result-output" id="result-output" aria-label="Highlighted ingredient list"></div>
+
+          <!-- Legend -->
+          <div style="display:flex;flex-wrap:wrap;gap:0.6rem;margin-top:1rem;font-size:0.8rem;">
+            <span><span class="hl-allergen">Text</span> = Potential allergen</span>
+            <span><span class="hl-sugar">Text</span> = Sugar alias</span>
+            <span><span class="hl-salt">Text</span> = Sodium source</span>
+            <span><span class="hl-additive">Text</span> = Additive / E-number</span>
+          </div>
+
+          <!-- Detailed findings list -->
+          <div id="findings-detail" style="margin-top:1.2rem;"></div>
+        </div>
+
+      </div>
+    </div>
+  </section>
+
+  <!-- ════════════════════ QUICK LINKS ════════════════════ -->
+  <section class="ld-section" aria-labelledby="links-heading" style="padding-bottom:4rem;">
+    <div class="container">
+      <h2 class="section-title" id="links-heading">🔗 Useful Resources</h2>
+      <p class="section-sub">Official and trusted sources to go deeper on food label regulations in India.</p>
+      <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(220px,1fr));gap:1rem;">
+        <a href="food-safety.html" class="card-neu" style="display:block;padding:1.2rem 1.4rem;text-decoration:none;border-radius:var(--r-lg);">
+          <div style="font-size:1.8rem;margin-bottom:0.4rem;">🛡️</div>
+          <div style="font-weight:700;color:var(--clr-primary-dark);">Food Safety Hub</div>
+          <div style="font-size:0.84rem;color:var(--clr-text-muted);margin-top:0.3rem;">Learn about adulteration, storage safety, and contamination risks</div>
+        </a>
+        <a href="https://www.fssai.gov.in/" target="_blank" rel="noopener noreferrer" class="card-neu" style="display:block;padding:1.2rem 1.4rem;text-decoration:none;border-radius:var(--r-lg);">
+          <div style="font-size:1.8rem;margin-bottom:0.4rem;">🏛️</div>
+          <div style="font-weight:700;color:var(--clr-primary-dark);">FSSAI Official Website ↗</div>
+          <div style="font-size:0.84rem;color:var(--clr-text-muted);margin-top:0.3rem;">Regulations, circulars, and consumer resources from India's food regulator</div>
+        </a>
+        <a href="https://foscos.fssai.gov.in/" target="_blank" rel="noopener noreferrer" class="card-neu" style="display:block;padding:1.2rem 1.4rem;text-decoration:none;border-radius:var(--r-lg);">
+          <div style="font-size:1.8rem;margin-bottom:0.4rem;">🔍</div>
+          <div style="font-weight:700;color:var(--clr-primary-dark);">FOSCOS Portal ↗</div>
+          <div style="font-size:0.84rem;color:var(--clr-text-muted);margin-top:0.3rem;">Verify any FSSAI licence number and check business compliance status</div>
+        </a>
+        <a href="nutrition-checker.html" class="card-neu" style="display:block;padding:1.2rem 1.4rem;text-decoration:none;border-radius:var(--r-lg);">
+          <div style="font-size:1.8rem;margin-bottom:0.4rem;">🔬</div>
+          <div style="font-weight:700;color:var(--clr-primary-dark);">Nutrition Checker</div>
+          <div style="font-size:0.84rem;color:var(--clr-text-muted);margin-top:0.3rem;">Look up detailed nutrient profiles for hundreds of foods</div>
+        </a>
+      </div>
+    </div>
+  </section>
+
+</main>
+
+<script src="js/components.js"></script>
+<script>
+/* =====================================================
+   NutriGuard — Food Label Decoder Page Script
+   ===================================================== */
+
+(function () {
+  'use strict';
+
+  /* ── Data ─────────────────────────────────────────── */
+
+  const ALLERGENS = [
+    'wheat', 'atta', 'maida', 'semolina', 'suji', 'rava', 'gluten', 'barley', 'rye', 'oat', 'oats',
+    'milk', 'lactose', 'whey', 'casein', 'butter', 'cream', 'ghee', 'curd', 'lactalbumin', 'milk solids',
+    'egg', 'eggs', 'albumin', 'mayonnaise',
+    'peanut', 'peanuts', 'groundnut', 'groundnuts', 'arachis',
+    'soy', 'soya', 'soybean', 'soybeans', 'soy lecithin', 'tofu', 'miso',
+    'fish', 'anchovy', 'sardine', 'tuna', 'salmon', 'cod',
+    'shellfish', 'shrimp', 'prawn', 'crab', 'lobster', 'crustacean',
+    'mollusc', 'oyster', 'clam', 'scallop', 'mussel', 'squid',
+    'almond', 'cashew', 'walnut', 'pecan', 'hazelnut', 'pistachio', 'macadamia', 'brazil nut', 'tree nut', 'tree nuts',
+    'celery', 'celeriac',
+    'mustard', 'mustard seeds',
+    'sesame', 'sesame seeds', 'tahini',
+    'sulphite', 'sulphites', 'sulphur dioxide', 'sodium bisulphite', 'sodium metabisulphite',
+    'lupin', 'lupine',
+  ];
+
+  const SUGAR_ALIASES = [
+    'sucrose', 'dextrose', 'fructose', 'maltose', 'glucose', 'lactose', 'galactose',
+    'corn syrup', 'high-fructose corn syrup', 'hfcs', 'cane sugar', 'invert sugar',
+    'molasses', 'honey', 'agave', 'agave nectar', 'maple syrup', 'jaggery', 'palm sugar',
+    'treacle', 'fruit juice concentrate', 'rice syrup', 'barley malt', 'malt syrup',
+    'brown sugar', 'raw sugar', 'demerara', 'coconut sugar', 'date sugar', 'beet sugar',
+    'confectioner\'s sugar', 'powdered sugar', 'icing sugar',
+  ];
+
+  const SALT_ALIASES = [
+    'salt', 'sodium chloride', 'monosodium glutamate', 'msg', 'sodium bicarbonate',
+    'sodium nitrite', 'sodium benzoate', 'disodium phosphate', 'baking soda',
+    'sodium caseinate', 'sodium', 'soda', 'sodium carbonate', 'sodium sulphate',
+    'sodium stearoyl', 'disodium', 'sodium acetate', 'sodium diacetate',
+  ];
+
+  // Pattern to detect INS/E-number codes and additive function words
+  const INS_PATTERN = /\b(?:ins|e)\s*\d{3,4}[a-z]?(?:\([ivxIVX]+\))?\b/gi;
+  const ADDITIVE_FUNCTION_WORDS = [
+    'colour', 'color', 'preservative', 'antioxidant', 'emulsifier', 'stabiliser',
+    'stabilizer', 'thickener', 'raising agent', 'leavening', 'anticaking',
+    'humectant', 'flavour enhancer', 'flavor enhancer', 'acidity regulator',
+    'sequestrant', 'bulking agent', 'glazing agent',
+  ];
+
+  const SAMPLE_INGREDIENTS = 'Wheat flour (42%), Sugar, Edible vegetable oil (palm, 18%), Milk solids (5%), Salt, Dextrose, Cane sugar, Cocoa solids (2%), Invert sugar syrup, Soya lecithin [INS 322], Raising agents [INS 500(i), INS 503(ii)], Emulsifier [INS 471], Artificial flavour (vanilla), Colour [INS 102, INS 110], Preservative [INS 211]. Contains: Wheat, Milk, Soy. May contain traces of Peanuts, Eggs.';
+
+  /* ── Helpers ──────────────────────────────────────── */
+
+  /**
+   * Escape string for use in RegExp
+   */
+  function escapeRE(str) {
+    return str.replace(/[.*+?^${}()|[\]\\]/g, '\\$&');
+  }
+
+  /**
+   * Sort by descending length so longer phrases match before substrings
+   */
+  function sortByLength(arr) {
+    return [...arr].sort((a, b) => b.length - a.length);
+  }
+
+  /**
+   * Apply highlighting to raw ingredient text.
+   * Returns { html, counts }
+   */
+  function decodeIngredients(raw) {
+    const counts = { allergen: 0, sugar: 0, salt: 0, additive: 0 };
+    const found  = { allergens: new Set(), sugars: new Set(), salts: new Set(), additives: new Set() };
+
+    // We'll build the output character-by-character using a token list
+    // Strategy: collect all match ranges, then render in order
+
+    const matches = []; // { start, end, type, label }
+
+    /* 1. INS / E-number codes */
+    let m;
+    const insRe = new RegExp(INS_PATTERN.source, 'gi');
+    while ((m = insRe.exec(raw)) !== null) {
+      matches.push({ start: m.index, end: m.index + m[0].length, type: 'additive', label: m[0].trim() });
+      found.additives.add(m[0].trim().toLowerCase());
+    }
+
+    /* 2. Additive function words that precede bracket blocks */
+    ADDITIVE_FUNCTION_WORDS.forEach(word => {
+      const re = new RegExp('\\b' + escapeRE(word) + '\\b', 'gi');
+      while ((m = re.exec(raw)) !== null) {
+        if (!overlaps(matches, m.index, m.index + m[0].length)) {
+          matches.push({ start: m.index, end: m.index + m[0].length, type: 'additive', label: word });
+          found.additives.add(word.toLowerCase());
+        }
+      }
+    });
+
+    /* 3. Allergens */
+    sortByLength(ALLERGENS).forEach(allergen => {
+      const re = new RegExp('\\b' + escapeRE(allergen) + 's?\\b', 'gi');
+      while ((m = re.exec(raw)) !== null) {
+        if (!overlaps(matches, m.index, m.index + m[0].length)) {
+          matches.push({ start: m.index, end: m.index + m[0].length, type: 'allergen', label: allergen });
+          found.allergens.add(allergen.toLowerCase());
+        }
+      }
+    });
+
+    /* 4. Sugar aliases */
+    sortByLength(SUGAR_ALIASES).forEach(alias => {
+      const re = new RegExp('\\b' + escapeRE(alias) + '\\b', 'gi');
+      while ((m = re.exec(raw)) !== null) {
+        if (!overlaps(matches, m.index, m.index + m[0].length)) {
+          matches.push({ start: m.index, end: m.index + m[0].length, type: 'sugar', label: alias });
+          found.sugars.add(alias.toLowerCase());
+        }
+      }
+    });
+
+    /* 5. Salt/sodium aliases */
+    sortByLength(SALT_ALIASES).forEach(alias => {
+      const re = new RegExp('\\b' + escapeRE(alias) + '\\b', 'gi');
+      while ((m = re.exec(raw)) !== null) {
+        if (!overlaps(matches, m.index, m.index + m[0].length)) {
+          matches.push({ start: m.index, end: m.index + m[0].length, type: 'salt', label: alias });
+          found.salts.add(alias.toLowerCase());
+        }
+      }
+    });
+
+    /* Sort matches by start position */
+    matches.sort((a, b) => a.start - b.start);
+
+    /* Build HTML */
+    let html = '';
+    let cursor = 0;
+    matches.forEach(match => {
+      if (match.start < cursor) return; // skip overlapping
+      // Plain text before match
+      html += escapeHtml(raw.slice(cursor, match.start));
+      // Highlighted match
+      const text = escapeHtml(raw.slice(match.start, match.end));
+      html += `<span class="hl-${match.type}">${text}<span class="hl-badge ${match.type}" aria-label="${match.type}">${match.type === 'allergen' ? '⚠ ALLERGEN' : match.type === 'sugar' ? '🍬 SUGAR' : match.type === 'salt' ? '🧂 SALT' : '🔬 ADDITIVE'}</span></span>`;
+      cursor = match.end;
+    });
+    html += escapeHtml(raw.slice(cursor));
+
+    counts.allergen = found.allergens.size;
+    counts.sugar    = found.sugars.size;
+    counts.salt     = found.salts.size;
+    counts.additive = found.additives.size;
+
+    return { html, counts, found };
+  }
+
+  function overlaps(matches, start, end) {
+    return matches.some(m => !(end <= m.start || start >= m.end));
+  }
+
+  function escapeHtml(str) {
+    return str
+      .replace(/&/g, '&amp;')
+      .replace(/</g, '&lt;')
+      .replace(/>/g, '&gt;')
+      .replace(/"/g, '&quot;');
+  }
+
+  function buildFindingsList(found) {
+    const sections = [
+      { key: 'allergens', icon: '🥜', label: 'Potential Allergens Detected', colorClass: 'badge-red' },
+      { key: 'sugars',    icon: '🍬', label: 'Sugar Aliases Detected',       colorClass: 'badge-orange' },
+      { key: 'salts',     icon: '🧂', label: 'Sodium Sources Detected',      colorClass: 'badge-blue' },
+      { key: 'additives', icon: '🔬', label: 'Additives / E-Numbers Detected', colorClass: 'badge-gray' },
+    ];
+
+    let html = '';
+    sections.forEach(s => {
+      const items = [...found[s.key]];
+      if (!items.length) return;
+      html += `<div style="margin-bottom:1rem;">
+        <div style="font-weight:700;color:var(--clr-primary-dark);margin-bottom:0.4rem;">${s.icon} ${s.label}</div>
+        <div style="display:flex;flex-wrap:wrap;gap:0.4rem;">
+          ${items.map(i => `<span class="badge ${s.colorClass}">${escapeHtml(i)}</span>`).join('')}
+        </div>
+      </div>`;
+    });
+
+    if (!html) {
+      html = `<div class="alert alert-success" role="note"><span class="alert-icon">✅</span><div>No recognised allergens, sugar aliases, sodium sources, or common additives were detected. This may mean the ingredient list uses uncommon naming, or the product is relatively simple.</div></div>`;
+    }
+
+    return html;
+  }
+
+  /* ── Event Handlers ───────────────────────────────── */
+
+  const inputEl   = document.getElementById('ingredient-input');
+  const decodeBtn = document.getElementById('decode-btn');
+  const clearBtn  = document.getElementById('clear-btn');
+  const sampleBtn = document.getElementById('sample-btn');
+  const resultEl  = document.getElementById('decoder-result');
+  const outputEl  = document.getElementById('result-output');
+  const detailEl  = document.getElementById('findings-detail');
+
+  function runDecode() {
+    const raw = inputEl.value.trim();
+    if (!raw) {
+      inputEl.focus();
+      inputEl.setAttribute('aria-invalid', 'true');
+      return;
+    }
+    inputEl.removeAttribute('aria-invalid');
+
+    const { html, counts, found } = decodeIngredients(raw);
+
+    // Update counters
+    document.getElementById('count-allergen').textContent = counts.allergen;
+    document.getElementById('count-sugar').textContent    = counts.sugar;
+    document.getElementById('count-salt').textContent     = counts.salt;
+    document.getElementById('count-additive').textContent = counts.additive;
+
+    // Highlighted output
+    outputEl.innerHTML = html;
+
+    // Detailed findings
+    detailEl.innerHTML = buildFindingsList(found);
+
+    // Show results
+    resultEl.style.display = 'block';
+    resultEl.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
+
+    // Announce to screen reader
+    if (window.announce) {
+      const total = counts.allergen + counts.sugar + counts.salt + counts.additive;
+      window.announce(`Decoding complete. Found ${counts.allergen} allergen(s), ${counts.sugar} sugar alias(es), ${counts.salt} sodium source(s), and ${counts.additive} additive(s).`);
+    }
+  }
+
+  decodeBtn.addEventListener('click', runDecode);
+
+  clearBtn.addEventListener('click', () => {
+    inputEl.value = '';
+    inputEl.removeAttribute('aria-invalid');
+    resultEl.style.display = 'none';
+    outputEl.innerHTML = '';
+    detailEl.innerHTML = '';
+    inputEl.focus();
+  });
+
+  sampleBtn.addEventListener('click', () => {
+    inputEl.value = SAMPLE_INGREDIENTS;
+    inputEl.focus();
+  });
+
+  // Allow Ctrl+Enter to decode
+  inputEl.addEventListener('keydown', (e) => {
+    if (e.key === 'Enter' && (e.ctrlKey || e.metaKey)) {
+      runDecode();
+    }
+  });
+
+  /* ── Init Tabs (called after components.js DOMContentLoaded) ── */
+  // components.js already calls initTabs() globally on DOMContentLoaded,
+  // but we call it again here in case this script runs after the event.
+  if (document.readyState !== 'loading') {
+    if (window.initTabs) window.initTabs();
+  } else {
+    document.addEventListener('DOMContentLoaded', () => {
+      if (window.initTabs) window.initTabs();
+    });
+  }
+
+}());
+</script>
+
+</body>
+</html>

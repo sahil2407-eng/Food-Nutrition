@@ -1,0 +1,666 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Food Safety &amp; Adulteration Awareness — NutriGuard</title>
+  <meta name="description" content="Learn about common food adulteration in India, warning signs to watch for, what to do if you suspect adulteration, and official FSSAI reporting resources.">
+  <meta property="og:title" content="Food Safety &amp; Adulteration Awareness — NutriGuard">
+  <meta property="og:description" content="Learn about common food adulteration in India, warning signs to watch for, what to do if you suspect adulteration, and official FSSAI reporting resources.">
+  <meta property="og:type" content="website">
+  <meta name="theme-color" content="#2e7d32">
+  <link rel="icon" href="favicon.svg" type="image/svg+xml">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Poppins:wght@700;800&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="css/style.css">
+  <style>
+    /* ─── Page-level tokens ─────────────────────────────────── */
+    :root {
+      --green-dark:   #1b5e20;
+      --green-mid:    #2e7d32;
+      --green-base:   #4caf50;
+      --green-light:  #8bc34a;
+      --off-white:    #f5f5f0;
+      --charcoal:     #212121;
+      --severity-high:   #c62828;
+      --severity-high-bg:#fff5f5;
+      --severity-med:    #e65100;
+      --severity-med-bg: #fff8f0;
+      --warn-yellow:  #f9a825;
+      --warn-yellow-bg:#fffde7;
+    }
+
+    /* ─── Page Hero ─────────────────────────────────────────── */
+    .page-hero {
+      background: linear-gradient(135deg, var(--green-dark) 0%, var(--green-mid) 60%, var(--green-base) 100%);
+      color: #fff;
+      padding: 5rem 1.5rem 4rem;
+      text-align: center;
+      position: relative;
+      overflow: hidden;
+    }
+    .page-hero::before {
+      content: '';
+      position: absolute;
+      inset: 0;
+      background: url('https://images.unsplash.com/photo-1606787366850-de6330128bfc?auto=format&fit=crop&w=1400&q=60') center/cover no-repeat;
+      opacity: .12;
+    }
+    .page-hero .hero-inner { position: relative; z-index: 1; max-width: 780px; margin: 0 auto; }
+    .page-hero .hero-badge {
+      display: inline-flex; align-items: center; gap: .45rem;
+      background: rgba(255,255,255,.18); border: 1px solid rgba(255,255,255,.35);
+      border-radius: 2rem; padding: .35rem 1rem; font-size: .8rem; font-weight: 600;
+      letter-spacing: .06em; text-transform: uppercase; margin-bottom: 1.2rem;
+    }
+    .page-hero h1 { font-family: 'Poppins', sans-serif; font-size: clamp(1.9rem, 5vw, 3rem); font-weight: 800; line-height: 1.15; margin: 0 0 1rem; }
+    .page-hero p  { font-size: 1.1rem; opacity: .92; max-width: 640px; margin: 0 auto; line-height: 1.7; }
+
+    /* ─── Breadcrumb ─────────────────────────────────────────── */
+    .breadcrumb-bar { background: var(--off-white); border-bottom: 1px solid #e0e0e0; padding: .75rem 1.5rem; }
+    .breadcrumb { list-style: none; margin: 0; padding: 0; display: flex; flex-wrap: wrap; gap: .25rem .4rem; align-items: center; max-width: 1200px; margin: 0 auto; font-size: .85rem; }
+    .breadcrumb li { display: flex; align-items: center; gap: .4rem; color: #555; }
+    .breadcrumb li + li::before { content: '›'; color: #999; }
+    .breadcrumb a { color: var(--green-mid); text-decoration: none; font-weight: 500; }
+    .breadcrumb a:hover { text-decoration: underline; }
+    .breadcrumb li[aria-current] { color: var(--charcoal); font-weight: 600; }
+
+    /* ─── Layout wrapper ─────────────────────────────────────── */
+    .fs-container { max-width: 1200px; margin: 0 auto; padding: 0 1.5rem 4rem; }
+
+    /* ─── Alert ──────────────────────────────────────────────── */
+    .alert { border-radius: .75rem; padding: 1.2rem 1.5rem; margin: 2rem 0; display: flex; gap: 1rem; align-items: flex-start; }
+    .alert-warning { background: var(--warn-yellow-bg); border: 2px solid var(--warn-yellow); color: #5d4000; }
+    .alert-icon { font-size: 1.6rem; flex-shrink: 0; line-height: 1; }
+    .alert-body strong { display: block; font-size: 1rem; margin-bottom: .4rem; }
+    .alert-body p { margin: 0; font-size: .93rem; line-height: 1.65; }
+
+    /* ─── Section headers ────────────────────────────────────── */
+    .section-header { margin: 3.5rem 0 1.8rem; }
+    .section-header h2 { font-family: 'Poppins', sans-serif; font-size: clamp(1.35rem, 3.5vw, 1.9rem); font-weight: 800; color: var(--green-dark); margin: 0 0 .5rem; display: flex; align-items: center; gap: .6rem; }
+    .section-header p  { color: #444; font-size: .97rem; max-width: 760px; margin: 0; line-height: 1.7; }
+    .section-divider { border: none; border-top: 2px solid #e8f5e9; margin: 0 0 .5rem; }
+
+    /* ─── Safety Warning Cards ───────────────────────────────── */
+    .safety-cards-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(320px, 1fr)); gap: 1.5rem; }
+
+    .safety-warning-card {
+      border-radius: 1rem;
+      padding: 1.5rem;
+      position: relative;
+      box-shadow: 6px 6px 14px rgba(0,0,0,.08), -4px -4px 10px rgba(255,255,255,.9);
+      transition: transform .25s ease, box-shadow .25s ease;
+    }
+    .safety-warning-card:hover { transform: translateY(-4px); box-shadow: 8px 8px 20px rgba(0,0,0,.12), -4px -4px 10px rgba(255,255,255,.95); }
+
+    .safety-warning-card.high   { background: var(--severity-high-bg); border-left: 5px solid var(--severity-high); }
+    .safety-warning-card.medium { background: var(--severity-med-bg);  border-left: 5px solid var(--severity-med); }
+
+    .card-severity-badge {
+      display: inline-flex; align-items: center; gap: .35rem;
+      font-size: .72rem; font-weight: 700; letter-spacing: .07em; text-transform: uppercase;
+      padding: .28rem .75rem; border-radius: 2rem; margin-bottom: .9rem;
+    }
+    .high  .card-severity-badge { background: var(--severity-high); color: #fff; }
+    .medium .card-severity-badge { background: var(--severity-med); color: #fff; }
+
+    .safety-warning-card h3 { font-size: 1.1rem; font-weight: 700; color: var(--charcoal); margin: 0 0 1rem; display: flex; align-items: center; gap: .5rem; }
+    .safety-warning-card h3 .food-icon { font-size: 1.4rem; }
+
+    .card-section-label {
+      font-size: .7rem; font-weight: 700; letter-spacing: .08em; text-transform: uppercase;
+      color: #777; margin: .9rem 0 .35rem;
+    }
+    .card-pill-list { display: flex; flex-wrap: wrap; gap: .4rem; margin: 0; padding: 0; list-style: none; }
+    .card-pill { display: inline-block; font-size: .78rem; padding: .22rem .65rem; border-radius: 2rem; font-weight: 500; }
+    .high   .card-pill { background: #fce4e4; color: #b71c1c; border: 1px solid #ef9a9a; }
+    .medium .card-pill { background: #fde8d8; color: #bf360c; border: 1px solid #ffab91; }
+
+    .card-risk-text { font-size: .85rem; color: #555; line-height: 1.6; margin: 0; }
+
+    .home-test-box {
+      margin-top: 1rem; border-radius: .6rem; padding: .8rem 1rem;
+      background: rgba(255,255,255,.7); border: 1px dashed #aaa;
+    }
+    .home-test-box .ht-label {
+      font-size: .7rem; font-weight: 700; letter-spacing: .07em; text-transform: uppercase;
+      color: var(--green-mid); display: flex; align-items: center; gap: .3rem; margin-bottom: .4rem;
+    }
+    .home-test-box p { font-size: .82rem; color: #444; margin: 0; line-height: 1.6; }
+    .indicative-note { font-size: .75rem; color: #888; font-style: italic; margin-top: .35rem; display: block; }
+
+    /* ─── Warning Signs Grid ─────────────────────────────────── */
+    .warning-signs-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(240px, 1fr)); gap: 1.25rem; }
+    .warning-sign-card {
+      background: #fff; border-radius: .9rem; padding: 1.3rem 1.2rem;
+      box-shadow: 5px 5px 12px rgba(0,0,0,.07), -3px -3px 8px rgba(255,255,255,.95);
+      border-top: 3px solid var(--green-base);
+      transition: transform .2s ease;
+    }
+    .warning-sign-card:hover { transform: translateY(-3px); }
+    .warning-sign-card .ws-icon { font-size: 2.2rem; margin-bottom: .7rem; display: block; }
+    .warning-sign-card h3 { font-size: .95rem; font-weight: 700; color: var(--green-dark); margin: 0 0 .5rem; }
+    .warning-sign-card p  { font-size: .83rem; color: #555; margin: 0; line-height: 1.6; }
+
+    /* ─── Action Steps ───────────────────────────────────────── */
+    .action-steps { display: flex; flex-direction: column; gap: 1.1rem; }
+    .action-step {
+      display: flex; gap: 1.25rem; align-items: flex-start;
+      background: #fff; border-radius: .9rem; padding: 1.2rem 1.4rem;
+      box-shadow: 5px 5px 12px rgba(0,0,0,.07), -3px -3px 8px rgba(255,255,255,.9);
+    }
+    .step-number {
+      flex-shrink: 0; width: 2.4rem; height: 2.4rem;
+      background: linear-gradient(135deg, var(--green-mid), var(--green-base));
+      color: #fff; border-radius: 50%; font-weight: 800; font-size: 1rem;
+      display: flex; align-items: center; justify-content: center;
+    }
+    .step-content h3 { font-size: .98rem; font-weight: 700; color: var(--charcoal); margin: 0 0 .3rem; }
+    .step-content p  { font-size: .87rem; color: #555; margin: 0; line-height: 1.65; }
+    .step-content a  { color: var(--green-mid); font-weight: 600; }
+    .step-critical { border-left: 4px solid var(--severity-high); }
+    .step-critical .step-number { background: linear-gradient(135deg, var(--severity-high), #e53935); }
+
+    /* ─── Resource Cards ─────────────────────────────────────── */
+    .resource-cards-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(300px, 1fr)); gap: 1.4rem; }
+    .resource-card {
+      background: #fff; border-radius: 1rem; padding: 1.5rem;
+      box-shadow: 6px 6px 14px rgba(0,0,0,.08), -4px -4px 10px rgba(255,255,255,.9);
+      display: flex; flex-direction: column; gap: .7rem;
+      border-top: 4px solid var(--green-base);
+      transition: transform .25s ease;
+    }
+    .resource-card:hover { transform: translateY(-4px); }
+    .resource-card .rc-icon { font-size: 2rem; }
+    .resource-card h3 { font-size: 1rem; font-weight: 700; color: var(--green-dark); margin: 0; }
+    .resource-card p  { font-size: .86rem; color: #555; margin: 0; line-height: 1.6; flex: 1; }
+    .resource-card .rc-btn {
+      display: inline-flex; align-items: center; gap: .4rem;
+      background: linear-gradient(135deg, var(--green-mid), var(--green-base));
+      color: #fff; text-decoration: none; font-size: .85rem; font-weight: 600;
+      padding: .6rem 1.2rem; border-radius: .5rem; width: fit-content;
+      transition: opacity .2s ease;
+    }
+    .resource-card .rc-btn:hover { opacity: .88; }
+
+    /* ─── Packaging CTA ──────────────────────────────────────── */
+    .packaging-cta {
+      margin-top: 3.5rem; background: linear-gradient(135deg, var(--green-dark) 0%, var(--green-mid) 100%);
+      color: #fff; border-radius: 1.25rem; padding: 2.5rem; text-align: center;
+    }
+    .packaging-cta h2 { font-family: 'Poppins', sans-serif; font-size: 1.5rem; margin: 0 0 .6rem; }
+    .packaging-cta p  { font-size: .95rem; opacity: .9; margin: 0 0 1.5rem; max-width: 560px; margin-left: auto; margin-right: auto; line-height: 1.7; }
+    .packaging-cta a.cta-btn {
+      display: inline-flex; align-items: center; gap: .5rem;
+      background: #fff; color: var(--green-dark); font-weight: 700;
+      padding: .9rem 2rem; border-radius: .6rem; text-decoration: none;
+      font-size: 1rem; transition: transform .2s ease, box-shadow .2s ease;
+    }
+    .packaging-cta a.cta-btn:hover { transform: translateY(-2px); box-shadow: 0 6px 18px rgba(0,0,0,.25); }
+
+    /* ─── Responsive tweaks ──────────────────────────────────── */
+    @media (max-width: 600px) {
+      .safety-cards-grid, .warning-signs-grid, .resource-cards-grid { grid-template-columns: 1fr; }
+      .action-step { flex-direction: column; gap: .75rem; }
+      .step-number { width: 2rem; height: 2rem; font-size: .9rem; }
+    }
+  </style>
+</head>
+<body>
+
+  <!-- ══════════════════════════════════════════════════════════
+       HERO
+  ══════════════════════════════════════════════════════════ -->
+  <div class="page-hero" role="banner">
+    <div class="hero-inner">
+      <span class="hero-badge" aria-hidden="true">🛡️ Consumer Safety</span>
+      <h1>Food Safety &amp; Adulteration Awareness Hub</h1>
+      <p>Empowering Indian consumers with knowledge about common food adulteration, how to spot it, and how to report it to protect yourself and your family.</p>
+    </div>
+  </div>
+
+  <!-- ══════════════════════════════════════════════════════════
+       BREADCRUMB
+  ══════════════════════════════════════════════════════════ -->
+  <nav class="breadcrumb-bar" aria-label="Breadcrumb">
+    <ol class="breadcrumb">
+      <li><a href="index.html">🏠 Home</a></li>
+      <li aria-current="page">Food Safety</li>
+    </ol>
+  </nav>
+
+  <!-- ══════════════════════════════════════════════════════════
+       MAIN CONTENT
+  ══════════════════════════════════════════════════════════ -->
+  <main id="main-content">
+    <div class="fs-container">
+
+      <!-- ── Prominent Disclaimer Alert ────────────────────── -->
+      <div class="alert alert-warning" role="alert" aria-live="polite">
+        <span class="alert-icon" aria-hidden="true">⚠️</span>
+        <div class="alert-body">
+          <strong>Important Disclaimer — Please Read Before Proceeding</strong>
+          <p>NutriGuard provides <strong>educational information only</strong>. Laboratory testing by accredited facilities is the <strong>ONLY reliable way to confirm food adulteration</strong>. Home tests described below are <em>indicative only</em> and cannot be used as legal or scientific proof. If you suspect food adulteration, <strong>stop using the product immediately</strong> and report it to FSSAI via the Food Safety Connect portal or call <strong>1800-112-100</strong> (toll-free).</p>
+        </div>
+      </div>
+
+      <!-- ══════════════════════════════════════════════════════
+           SECTION 1 — Commonly Adulterated Foods
+      ══════════════════════════════════════════════════════ -->
+      <div class="section-header">
+        <hr class="section-divider">
+        <h2><span aria-hidden="true">🧪</span> Commonly Adulterated Foods in India</h2>
+        <p>These everyday foods are frequently adulterated. Learn what adulterants are used, the associated health risks, and simple indicative home checks — always follow up with certified laboratory testing.</p>
+      </div>
+
+      <div class="safety-cards-grid" aria-label="Commonly adulterated foods">
+
+        <!-- Milk -->
+        <article class="safety-warning-card high card-neu" aria-label="Milk adulteration">
+          <span class="card-severity-badge" aria-label="High severity">🔴 HIGH SEVERITY</span>
+          <h3><span class="food-icon" aria-hidden="true">🥛</span> Milk</h3>
+          <p class="card-section-label">Common Adulterants</p>
+          <ul class="card-pill-list" aria-label="Common adulterants in milk">
+            <li class="card-pill">Water</li>
+            <li class="card-pill">Detergent / Soap</li>
+            <li class="card-pill">Starch</li>
+            <li class="card-pill">Urea</li>
+            <li class="card-pill">Synthetic milk</li>
+            <li class="card-pill">Formalin</li>
+          </ul>
+          <p class="card-section-label">Health Risks</p>
+          <p class="card-risk-text">Detergent causes gastroenteritis and kidney damage. Urea is toxic to the liver and kidneys. Formalin is a known carcinogen. Synthetic milk can cause metabolic disorders.</p>
+          <div class="home-test-box">
+            <span class="ht-label" aria-hidden="true">🔬 Indicative Home Test</span>
+            <p><strong>Detergent:</strong> Shake a small amount in a bottle — excessive persistent foam indicates detergent. <strong>Starch:</strong> Add a few drops of iodine solution; blue-black colour suggests starch. <strong>Water:</strong> A drop of milk on a polished surface slides slowly if pure, quickly if watered down.</p>
+            <span class="indicative-note">⚠️ These tests are indicative only — not conclusive proof.</span>
+          </div>
+        </article>
+
+        <!-- Turmeric Powder -->
+        <article class="safety-warning-card high card-neu" aria-label="Turmeric powder adulteration">
+          <span class="card-severity-badge" aria-label="High severity">🔴 HIGH SEVERITY</span>
+          <h3><span class="food-icon" aria-hidden="true">🌿</span> Turmeric Powder</h3>
+          <p class="card-section-label">Common Adulterants</p>
+          <ul class="card-pill-list" aria-label="Common adulterants in turmeric">
+            <li class="card-pill">Lead chromate</li>
+            <li class="card-pill">Chalk powder</li>
+            <li class="card-pill">Metanil yellow dye</li>
+            <li class="card-pill">Artificial colour</li>
+          </ul>
+          <p class="card-section-label">Health Risks</p>
+          <p class="card-risk-text">Lead chromate is highly toxic, causing neurological damage, kidney failure, and anaemia. Metanil yellow is a non-permitted dye linked to cancer and nervous system disorders.</p>
+          <div class="home-test-box">
+            <span class="ht-label" aria-hidden="true">🔬 Indicative Home Test</span>
+            <p><strong>Chalk/starch:</strong> Add a teaspoon to a glass of water — chalk settles quickly. <strong>Metanil yellow:</strong> Add a few drops of HCl (if safely available) — a pink colour indicates the dye. <strong>Lead chromate:</strong> Add a few drops of concentrated HCl to the sample — it turns a pink/magenta colour.</p>
+            <span class="indicative-note">⚠️ These tests are indicative only — not conclusive proof.</span>
+          </div>
+        </article>
+
+        <!-- Chilli Powder -->
+        <article class="safety-warning-card high card-neu" aria-label="Chilli powder adulteration">
+          <span class="card-severity-badge" aria-label="High severity">🔴 HIGH SEVERITY</span>
+          <h3><span class="food-icon" aria-hidden="true">🌶️</span> Chilli Powder</h3>
+          <p class="card-section-label">Common Adulterants</p>
+          <ul class="card-pill-list" aria-label="Common adulterants in chilli powder">
+            <li class="card-pill">Brick dust</li>
+            <li class="card-pill">Sawdust</li>
+            <li class="card-pill">Sudan Red dye</li>
+            <li class="card-pill">Artificial colour</li>
+            <li class="card-pill">Starch</li>
+          </ul>
+          <p class="card-section-label">Health Risks</p>
+          <p class="card-risk-text">Sudan Red is a probable human carcinogen (IARC Group 3). Brick dust and sawdust can damage the digestive tract and cause intestinal injuries over time.</p>
+          <div class="home-test-box">
+            <span class="ht-label" aria-hidden="true">🔬 Indicative Home Test</span>
+            <p><strong>Brick dust:</strong> Mix with water and let settle — brick dust particles will sink, and water may turn red/orange. <strong>Sawdust:</strong> Place on water surface — sawdust floats while genuine chilli powder partially dissolves.</p>
+            <span class="indicative-note">⚠️ These tests are indicative only — not conclusive proof.</span>
+          </div>
+        </article>
+
+        <!-- Honey -->
+        <article class="safety-warning-card medium card-neu" aria-label="Honey adulteration">
+          <span class="card-severity-badge" aria-label="Medium severity">🟠 MEDIUM SEVERITY</span>
+          <h3><span class="food-icon" aria-hidden="true">🍯</span> Honey</h3>
+          <p class="card-section-label">Common Adulterants</p>
+          <ul class="card-pill-list" aria-label="Common adulterants in honey">
+            <li class="card-pill">Sugar syrup</li>
+            <li class="card-pill">High-fructose corn syrup</li>
+            <li class="card-pill">Jaggery / glucose</li>
+            <li class="card-pill">Artificial colouring</li>
+          </ul>
+          <p class="card-section-label">Health Risks</p>
+          <p class="card-risk-text">Adulterated honey provides no genuine health benefits, causes blood sugar spikes — particularly dangerous for diabetics — and defeats the antimicrobial properties of real honey.</p>
+          <div class="home-test-box">
+            <span class="ht-label" aria-hidden="true">🔬 Indicative Home Test</span>
+            <p><strong>Thumb test:</strong> Place a drop on your thumb — pure honey stays in place, adulterated honey spreads. <strong>Water test:</strong> Add a spoonful to water — pure honey settles at the bottom without dissolving immediately. <strong>Paper test:</strong> A drop on blotting paper — adulterated honey leaves a wet mark.</p>
+            <span class="indicative-note">⚠️ These tests are indicative only — not conclusive proof.</span>
+          </div>
+        </article>
+
+        <!-- Mustard Seeds -->
+        <article class="safety-warning-card high card-neu" aria-label="Mustard seeds adulteration">
+          <span class="card-severity-badge" aria-label="High severity">🔴 HIGH SEVERITY</span>
+          <h3><span class="food-icon" aria-hidden="true">🌱</span> Mustard Seeds</h3>
+          <p class="card-section-label">Common Adulterants</p>
+          <ul class="card-pill-list" aria-label="Common adulterants in mustard seeds">
+            <li class="card-pill">Argemone seeds (toxic)</li>
+            <li class="card-pill">Grass seeds</li>
+          </ul>
+          <p class="card-section-label">Health Risks</p>
+          <p class="card-risk-text"><strong>Epidemic dropsy:</strong> Argemone seeds contain sanguinarine and dihydrosanguinarine, which cause severe oedema (swelling), glaucoma, diarrhoea, and can be fatal in high doses. This is a documented public health crisis in India.</p>
+          <div class="home-test-box">
+            <span class="ht-label" aria-hidden="true">🔬 Indicative Home Test</span>
+            <p><strong>Visual check:</strong> Argemone seeds are slightly larger, rough-surfaced, and dark brownish-black with a rough coat, unlike smooth yellowish or dark brown mustard seeds. <strong>Crush test:</strong> Mustard seeds are yellow inside; argemone seeds are white inside.</p>
+            <span class="indicative-note">⚠️ These tests are indicative only — not conclusive proof.</span>
+          </div>
+        </article>
+
+        <!-- Edible Oils -->
+        <article class="safety-warning-card medium card-neu" aria-label="Edible oils adulteration">
+          <span class="card-severity-badge" aria-label="Medium severity">🟠 MEDIUM SEVERITY</span>
+          <h3><span class="food-icon" aria-hidden="true">🫙</span> Edible Oils</h3>
+          <p class="card-section-label">Common Adulterants</p>
+          <ul class="card-pill-list" aria-label="Common adulterants in edible oils">
+            <li class="card-pill">Mineral oil</li>
+            <li class="card-pill">Cheaper vegetable oils</li>
+            <li class="card-pill">Palm oil</li>
+            <li class="card-pill">Rancid oils</li>
+          </ul>
+          <p class="card-section-label">Health Risks</p>
+          <p class="card-risk-text">Mineral oil is non-digestible and can accumulate in organs. Blended cheaper oils alter the fatty acid profile, negating health claims. Rancid oils produce free radicals linked to cancer and cardiovascular disease.</p>
+          <div class="home-test-box">
+            <span class="ht-label" aria-hidden="true">🔬 Indicative Home Test</span>
+            <p><strong>Cold test for coconut oil:</strong> Genuine coconut oil solidifies at 24°C; adulterated oil may remain liquid. <strong>Rancidity smell:</strong> Sniff carefully — rancid oils have a bitter, off-putting odour. Note: definitive adulteration tests require lab equipment.</p>
+            <span class="indicative-note">⚠️ These tests are indicative only — not conclusive proof.</span>
+          </div>
+        </article>
+
+        <!-- Tea Leaves -->
+        <article class="safety-warning-card medium card-neu" aria-label="Tea leaves adulteration">
+          <span class="card-severity-badge" aria-label="Medium severity">🟠 MEDIUM SEVERITY</span>
+          <h3><span class="food-icon" aria-hidden="true">🍵</span> Tea Leaves</h3>
+          <p class="card-section-label">Common Adulterants</p>
+          <ul class="card-pill-list" aria-label="Common adulterants in tea leaves">
+            <li class="card-pill">Exhausted (used) tea</li>
+            <li class="card-pill">Iron filings</li>
+            <li class="card-pill">Artificial colouring</li>
+            <li class="card-pill">Sawdust</li>
+          </ul>
+          <p class="card-section-label">Health Risks</p>
+          <p class="card-risk-text">Artificial dyes may be non-permitted and carcinogenic. Iron filings cause digestive issues. Exhausted tea has no nutritional value. Consumed regularly, these adulterants burden the liver and kidneys.</p>
+          <div class="home-test-box">
+            <span class="ht-label" aria-hidden="true">🔬 Indicative Home Test</span>
+            <p><strong>Iron filings:</strong> Pass a magnet through a thin spread of dry tea — iron filings will be attracted. <strong>Artificial colour:</strong> Soak a blotting paper in tea and let it dry — artificial dye leaves a distinct coloured stain rather than the natural brownish ring of real tea.</p>
+            <span class="indicative-note">⚠️ These tests are indicative only — not conclusive proof.</span>
+          </div>
+        </article>
+
+        <!-- Paneer / Khoya -->
+        <article class="safety-warning-card medium card-neu" aria-label="Paneer and Khoya adulteration">
+          <span class="card-severity-badge" aria-label="Medium severity">🟠 MEDIUM SEVERITY</span>
+          <h3><span class="food-icon" aria-hidden="true">🧀</span> Paneer / Khoya</h3>
+          <p class="card-section-label">Common Adulterants</p>
+          <ul class="card-pill-list" aria-label="Common adulterants in paneer or khoya">
+            <li class="card-pill">Starch</li>
+            <li class="card-pill">Vanaspati (hydrogenated fat)</li>
+            <li class="card-pill">Soda</li>
+            <li class="card-pill">Skimmed milk powder</li>
+            <li class="card-pill">Synthetic milk solids</li>
+          </ul>
+          <p class="card-section-label">Health Risks</p>
+          <p class="card-risk-text">Trans fats from vanaspati increase cardiovascular disease risk. Starch adulteration reduces protein quality. Synthetic dairy solids often contain harmful chemicals that affect kidney and liver function.</p>
+          <div class="home-test-box">
+            <span class="ht-label" aria-hidden="true">🔬 Indicative Home Test</span>
+            <p><strong>Starch in paneer:</strong> Add a few drops of iodine solution to a small piece — a blue-black colour indicates starch adulteration. <strong>Vanaspati:</strong> Dissolve a small piece in hot water, add a few drops of iodine — pure paneer turns light brown; vanaspati-adulterated paneer reacts differently.</p>
+            <span class="indicative-note">⚠️ These tests are indicative only — not conclusive proof.</span>
+          </div>
+        </article>
+
+      </div><!-- /.safety-cards-grid -->
+
+
+      <!-- ══════════════════════════════════════════════════════
+           SECTION 2 — Warning Signs
+      ══════════════════════════════════════════════════════ -->
+      <div class="section-header">
+        <hr class="section-divider">
+        <h2><span aria-hidden="true">👁️</span> Warning Signs to Watch For</h2>
+        <p>Before testing, your senses and sharp observation are your first line of defence. Be alert to these red flags when buying or using food products.</p>
+      </div>
+
+      <div class="warning-signs-grid" aria-label="Warning signs of food adulteration">
+
+        <article class="warning-sign-card" aria-label="Unusual smell">
+          <span class="ws-icon" aria-hidden="true">👃</span>
+          <h3>Unusual Smell or Off-Odour</h3>
+          <p>Any sour, chemical, musty, or otherwise unexpected smell in a food product is a serious warning. Trust your nose — if it doesn't smell right, don't consume it.</p>
+        </article>
+
+        <article class="warning-sign-card" aria-label="Abnormal colour">
+          <span class="ws-icon" aria-hidden="true">🎨</span>
+          <h3>Abnormal Colour</h3>
+          <p>Unnaturally bright, too dull, or unevenly distributed colour can signal added synthetic dyes or other adulterants. Compare with authentic product colour you know.</p>
+        </article>
+
+        <article class="warning-sign-card" aria-label="Unexpected texture">
+          <span class="ws-icon" aria-hidden="true">✋</span>
+          <h3>Unexpected Texture or Consistency</h3>
+          <p>Grittiness in spices, unusual viscosity in oils or honey, or a grainy feel in dairy products can indicate foreign matter mixed in to bulk up the product.</p>
+        </article>
+
+        <article class="warning-sign-card" aria-label="Sediment or foreign matter">
+          <span class="ws-icon" aria-hidden="true">🔍</span>
+          <h3>Sediment or Foreign Matter Visible</h3>
+          <p>Visible particles that shouldn't be there — specks in oil, lumps in spice powder, or floating debris — are a clear warning sign of contamination or adulteration.</p>
+        </article>
+
+        <article class="warning-sign-card" aria-label="Price too cheap">
+          <span class="ws-icon" aria-hidden="true">💸</span>
+          <h3>Price Too Cheap for Quality Claimed</h3>
+          <p>If the price is significantly lower than market rate for a premium product, be sceptical. Adulterants are often added specifically to cut production costs and sell at "bargain" prices.</p>
+        </article>
+
+        <article class="warning-sign-card" aria-label="Packaging damage">
+          <span class="ws-icon" aria-hidden="true">📦</span>
+          <h3>Packaging Damage or Broken Seals</h3>
+          <p>Torn, resealed, punctured, or otherwise tampered packaging indicates that the product may have been adulterated after leaving the original manufacturer. Always check seals.</p>
+        </article>
+
+        <article class="warning-sign-card" aria-label="Missing FSSAI number">
+          <span class="ws-icon" aria-hidden="true">🏷️</span>
+          <h3>Missing or Illegible FSSAI Licence Number</h3>
+          <p>Every legally sold food product in India must carry a valid FSSAI licence number. Its absence, blurring, or suspicious formatting is a major red flag requiring immediate action.</p>
+        </article>
+
+        <article class="warning-sign-card" aria-label="Suspicious best-before date">
+          <span class="ws-icon" aria-hidden="true">📅</span>
+          <h3>Tampered or Suspicious Best-Before Date</h3>
+          <p>Smudged, over-printed, stickered-over, or inconsistent best-before or manufacturing dates indicate potential label fraud or date-tampering on expired products.</p>
+        </article>
+
+      </div><!-- /.warning-signs-grid -->
+
+
+      <!-- ══════════════════════════════════════════════════════
+           SECTION 3 — What To Do
+      ══════════════════════════════════════════════════════ -->
+      <div class="section-header">
+        <hr class="section-divider">
+        <h2><span aria-hidden="true">🚨</span> What To Do If You Suspect Adulteration</h2>
+        <p>Follow these steps carefully if you believe a food product may be adulterated. Your report could protect many other consumers.</p>
+      </div>
+
+      <ol class="action-steps" aria-label="Step-by-step action guide for suspected adulteration">
+
+        <li class="action-step step-critical">
+          <div class="step-number" aria-hidden="true">1</div>
+          <div class="step-content">
+            <h3>Stop Using the Product Immediately</h3>
+            <p>Cease all consumption or use of the suspected product right away. Do not serve it to others, including children or elderly family members who may be more vulnerable.</p>
+          </div>
+        </li>
+
+        <li class="action-step step-critical">
+          <div class="step-number" aria-hidden="true">2</div>
+          <div class="step-content">
+            <h3>Do NOT Taste or Sniff Directly to Test</h3>
+            <p>Resist the urge to taste or inhale closely to detect adulterants. Some substances (like argemone alkaloids or lead compounds) are toxic even in tiny quantities. Never assume a small amount is safe.</p>
+          </div>
+        </li>
+
+        <li class="action-step">
+          <div class="step-number" aria-hidden="true">3</div>
+          <div class="step-content">
+            <h3>Note All Label Details</h3>
+            <p>Carefully write down or photograph: the <strong>batch number</strong>, manufacturing date, best-before date, FSSAI licence number, barcode/QR code, and the full address of the manufacturer. This is critical for any official report.</p>
+          </div>
+        </li>
+
+        <li class="action-step">
+          <div class="step-number" aria-hidden="true">4</div>
+          <div class="step-content">
+            <h3>Photograph the Packaging and Product</h3>
+            <p>Take clear, well-lit photographs of the full packaging (all sides), any visible damage or tampering, and — if safely possible — the product itself. These photos serve as evidence for your complaint.</p>
+          </div>
+        </li>
+
+        <li class="action-step">
+          <div class="step-number" aria-hidden="true">5</div>
+          <div class="step-content">
+            <h3>Contact the Brand's Consumer Helpline</h3>
+            <p>Many large food companies have consumer helplines or grievance cells. Reporting directly may trigger a faster product recall. The number is usually printed on the packaging.</p>
+          </div>
+        </li>
+
+        <li class="action-step">
+          <div class="step-number" aria-hidden="true">6</div>
+          <div class="step-content">
+            <h3>Report Online at FSSAI Food Safety Connect Portal</h3>
+            <p>File a formal complaint at <a href="https://foodsafety.gov.in/" target="_blank" rel="noopener noreferrer">foodsafety.gov.in</a>. This is the official government portal for food safety complaints. You can upload your photos and provide all product details.</p>
+          </div>
+        </li>
+
+        <li class="action-step">
+          <div class="step-number" aria-hidden="true">7</div>
+          <div class="step-content">
+            <h3>Or Call FSSAI Helpline: 1800-112-100 (Toll-Free)</h3>
+            <p>You can call the FSSAI toll-free helpline <strong>1800-112-100</strong> to report food safety concerns verbally. The helpline is operational during government working hours and can guide you through the complaint process.</p>
+          </div>
+        </li>
+
+        <li class="action-step">
+          <div class="step-number" aria-hidden="true">8</div>
+          <div class="step-content">
+            <h3>Seek Laboratory Testing If Needed</h3>
+            <p>For definitive confirmation, contact an <strong>NABL-accredited food testing laboratory</strong>. FSSAI maintains a list of approved labs. Laboratory results are required for any legal proceedings. Keep the original product sample sealed and labelled.</p>
+          </div>
+        </li>
+
+      </ol><!-- /.action-steps -->
+
+
+      <!-- ══════════════════════════════════════════════════════
+           SECTION 4 — Official Resources
+      ══════════════════════════════════════════════════════ -->
+      <div class="section-header">
+        <hr class="section-divider">
+        <h2><span aria-hidden="true">🏛️</span> Official Resources &amp; Reporting</h2>
+        <p>These government portals are your primary tools for reporting adulteration, verifying food business licences, and accessing consumer protection services.</p>
+      </div>
+
+      <div class="resource-cards-grid" aria-label="Official food safety resources">
+
+        <article class="resource-card" aria-label="FSSAI Food Safety Connect portal">
+          <span class="rc-icon" aria-hidden="true">🛡️</span>
+          <h3>FSSAI Food Safety Connect</h3>
+          <p>The primary government portal to file food adulteration complaints online. Upload evidence, track your complaint, and receive official feedback from food safety authorities.</p>
+          <a class="rc-btn" href="https://foodsafety.gov.in/" target="_blank" rel="noopener noreferrer" aria-label="Visit FSSAI Food Safety Connect (opens in new tab)">
+            Visit Portal <span aria-hidden="true">↗</span>
+          </a>
+        </article>
+
+        <article class="resource-card" aria-label="FOSCOS licence verification">
+          <span class="rc-icon" aria-hidden="true">🔎</span>
+          <h3>FOSCOS Licence Verification</h3>
+          <p>Verify the authenticity of any food business's FSSAI licence number. Essential to check before purchasing from unfamiliar brands or small local manufacturers.</p>
+          <a class="rc-btn" href="https://foscos.fssai.gov.in/" target="_blank" rel="noopener noreferrer" aria-label="Visit FOSCOS Licence Verification (opens in new tab)">
+            Verify Licence <span aria-hidden="true">↗</span>
+          </a>
+        </article>
+
+        <article class="resource-card" aria-label="FSSAI official website">
+          <span class="rc-icon" aria-hidden="true">🏢</span>
+          <h3>FSSAI Official Homepage</h3>
+          <p>The Food Safety and Standards Authority of India — access regulations, standards, approved food additives lists, public notices, recall alerts, and consumer education resources.</p>
+          <a class="rc-btn" href="https://www.fssai.gov.in/" target="_blank" rel="noopener noreferrer" aria-label="Visit FSSAI homepage (opens in new tab)">
+            FSSAI Website <span aria-hidden="true">↗</span>
+          </a>
+        </article>
+
+        <article class="resource-card" aria-label="National Consumer Helpline">
+          <span class="rc-icon" aria-hidden="true">📞</span>
+          <h3>National Consumer Helpline</h3>
+          <p>Government of India's consumer grievance portal. File complaints about misleading labelling, unfair trade practices, or defective/unsafe food products. Helpline: <strong>1800-11-4000</strong>.</p>
+          <a class="rc-btn" href="https://consumerhelpline.gov.in/" target="_blank" rel="noopener noreferrer" aria-label="Visit National Consumer Helpline (opens in new tab)">
+            Consumer Portal <span aria-hidden="true">↗</span>
+          </a>
+        </article>
+
+        <article class="resource-card" aria-label="Ministry of Health and Family Welfare">
+          <span class="rc-icon" aria-hidden="true">🏥</span>
+          <h3>Ministry of Health &amp; Family Welfare</h3>
+          <p>For health advisories, disease outbreaks linked to food contamination, and national food safety policy updates. Also the parent ministry overseeing FSSAI.</p>
+          <a class="rc-btn" href="https://www.mohfw.gov.in/" target="_blank" rel="noopener noreferrer" aria-label="Visit Ministry of Health and Family Welfare (opens in new tab)">
+            MoHFW Website <span aria-hidden="true">↗</span>
+          </a>
+        </article>
+
+      </div><!-- /.resource-cards-grid -->
+
+
+      <!-- ══════════════════════════════════════════════════════
+           PACKAGING RISK CTA
+      ══════════════════════════════════════════════════════ -->
+      <div class="packaging-cta" role="complementary" aria-label="Link to packaging risk checklist">
+        <h2>🏷️ Also Check: Packaging Risk &amp; Label Checklist</h2>
+        <p>Beyond adulteration, misleading labels and unsafe packaging are serious concerns. Use our Packaging Risk Checklist to evaluate any food product's label and packaging before you buy.</p>
+        <a class="cta-btn" href="packaging-risk.html" aria-label="Open Packaging Risk Checklist page">
+          <span aria-hidden="true">📋</span> Open Packaging Risk Checklist
+        </a>
+      </div>
+
+    </div><!-- /.fs-container -->
+  </main>
+
+  <script src="js/components.js"></script>
+  <script>
+    // ── Smooth reveal on scroll ────────────────────────────────
+    (function () {
+      const revealTargets = document.querySelectorAll(
+        '.safety-warning-card, .warning-sign-card, .action-step, .resource-card'
+      );
+
+      if (!window.IntersectionObserver) return;
+
+      const obs = new IntersectionObserver((entries) => {
+        entries.forEach(entry => {
+          if (entry.isIntersecting) {
+            entry.target.style.opacity = '1';
+            entry.target.style.transform = 'translateY(0)';
+            obs.unobserve(entry.target);
+          }
+        });
+      }, { threshold: 0.08, rootMargin: '0px 0px -40px 0px' });
+
+      revealTargets.forEach((el, i) => {
+        el.style.opacity = '0';
+        el.style.transform = 'translateY(22px)';
+        el.style.transition = `opacity .45s ease ${(i % 6) * 0.07}s, transform .45s ease ${(i % 6) * 0.07}s`;
+        obs.observe(el);
+      });
+    })();
+  </script>
+</body>
+</html>

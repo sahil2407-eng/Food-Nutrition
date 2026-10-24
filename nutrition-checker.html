@@ -1,0 +1,1109 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Nutrition Checker — NutriGuard</title>
+  <meta name="description" content="Check detailed nutrition facts for Indian foods. Calories, protein, carbs, fats, vitamins and minerals with serving-size calculations.">
+  <meta property="og:title" content="Nutrition Checker — NutriGuard">
+  <meta property="og:description" content="Check detailed nutrition facts for Indian foods. Calories, protein, carbs, fats, vitamins and minerals with serving-size calculations.">
+  <meta property="og:type" content="website">
+  <meta name="theme-color" content="#2e7d32">
+  <link rel="icon" href="favicon.svg" type="image/svg+xml">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Poppins:wght@700;800&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="css/style.css">
+  <style>
+    /* ── Page-level styles ── */
+    .nc-hero {
+      background: linear-gradient(135deg, var(--clr-primary-dark) 0%, var(--clr-primary) 60%, var(--clr-accent) 100%);
+      color: white;
+      padding: 3rem 0 2.5rem;
+      text-align: center;
+      position: relative;
+      overflow: hidden;
+    }
+    .nc-hero::before {
+      content: '';
+      position: absolute;
+      inset: 0;
+      background: url("data:image/svg+xml,%3Csvg width='60' height='60' viewBox='0 0 60 60' xmlns='http://www.w3.org/2000/svg'%3E%3Cg fill='none' fill-rule='evenodd'%3E%3Cg fill='%23ffffff' fill-opacity='0.05'%3E%3Cpath d='M36 34v-4h-2v4h-4v2h4v4h2v-4h4v-2h-4zm0-30V0h-2v4h-4v2h4v4h2V6h4V4h-4zM6 34v-4H4v4H0v2h4v4h2v-4h4v-2H6zM6 4V0H4v4H0v2h4v4h2V6h4V4H6z'/%3E%3C/g%3E%3C/g%3E%3C/svg%3E");
+    }
+    .nc-hero h1 { font-size: clamp(1.8rem, 4vw, 2.8rem); color: white; margin-bottom: .5rem; position: relative; }
+    .nc-hero p  { font-size: 1.05rem; color: rgba(255,255,255,.85); max-width: 540px; margin: 0 auto .5rem; position: relative; }
+
+    /* ── Layout ── */
+    .nc-layout {
+      display: grid;
+      grid-template-columns: 1fr;
+      gap: 2rem;
+      padding: 2.5rem 0 4rem;
+    }
+    @media (min-width: 960px) {
+      .nc-layout { grid-template-columns: 380px 1fr; align-items: start; }
+    }
+
+    /* ── Controls panel ── */
+    .nc-controls {
+      background: var(--clr-bg);
+      border-radius: var(--r-xl);
+      padding: 1.75rem;
+      box-shadow: var(--neu-shadow-card);
+      border: 1px solid var(--clr-divider);
+      position: sticky;
+      top: 80px;
+    }
+    .nc-controls h2 {
+      font-size: 1.1rem;
+      margin-bottom: 1.25rem;
+      color: var(--clr-primary-dark);
+      display: flex;
+      align-items: center;
+      gap: .5rem;
+    }
+
+    /* Search */
+    .nc-search-wrap { position: relative; margin-bottom: 1rem; }
+    .nc-search-input {
+      width: 100%;
+      padding: .7rem 2.8rem .7rem 1rem;
+      border-radius: var(--r-md);
+      border: 2px solid var(--clr-border);
+      background: var(--clr-surface);
+      color: var(--clr-text);
+      font-size: .95rem;
+      outline: none;
+      transition: border-color var(--transition), box-shadow var(--transition);
+      box-shadow: var(--neu-shadow-in);
+    }
+    .nc-search-input:focus {
+      border-color: var(--clr-primary-light);
+      box-shadow: 0 0 0 3px rgba(76,175,80,.18), var(--neu-shadow-in);
+    }
+    .nc-search-clear {
+      position: absolute;
+      right: 10px;
+      top: 50%;
+      transform: translateY(-50%);
+      color: var(--clr-text-muted);
+      font-size: 1rem;
+      padding: 4px;
+      display: none;
+      background: none;
+      border: none;
+      cursor: pointer;
+      line-height: 1;
+    }
+    .nc-search-clear.visible { display: block; }
+
+    /* Food list */
+    .nc-food-list {
+      list-style: none;
+      max-height: 300px;
+      overflow-y: auto;
+      border: 1px solid var(--clr-divider);
+      border-radius: var(--r-md);
+      background: var(--clr-surface);
+      margin-bottom: 1.25rem;
+      scrollbar-width: thin;
+      scrollbar-color: var(--clr-border) transparent;
+    }
+    .nc-food-list::-webkit-scrollbar { width: 6px; }
+    .nc-food-list::-webkit-scrollbar-track { background: transparent; }
+    .nc-food-list::-webkit-scrollbar-thumb { background: var(--clr-border); border-radius: 10px; }
+
+    .nc-food-item {
+      padding: .65rem 1rem;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: .5rem;
+      border-bottom: 1px solid var(--clr-divider);
+      transition: background var(--transition);
+      font-size: .9rem;
+    }
+    .nc-food-item:last-child { border-bottom: none; }
+    .nc-food-item:hover { background: var(--clr-surface-alt); }
+    .nc-food-item.selected {
+      background: #e8f5e9;
+      color: var(--clr-primary-dark);
+      font-weight: 600;
+    }
+    [data-theme="dark"] .nc-food-item.selected { background: rgba(46,125,50,.2); }
+    .nc-food-category {
+      font-size: .72rem;
+      color: var(--clr-text-muted);
+      background: var(--clr-surface-alt);
+      padding: 1px 8px;
+      border-radius: var(--r-full);
+      white-space: nowrap;
+      flex-shrink: 0;
+    }
+    .nc-food-item.selected .nc-food-category { background: rgba(46,125,50,.15); color: var(--clr-primary); }
+    .nc-no-results {
+      text-align: center;
+      padding: 1.5rem;
+      color: var(--clr-text-muted);
+      font-size: .88rem;
+    }
+
+    /* Serving control */
+    .nc-serving-row {
+      display: flex;
+      gap: .75rem;
+      align-items: flex-end;
+      margin-bottom: .5rem;
+    }
+    .nc-serving-row .form-group { margin-bottom: 0; flex: 1; }
+    .nc-serving-unit {
+      font-size: .82rem;
+      color: var(--clr-text-muted);
+      padding-bottom: .55rem;
+      white-space: nowrap;
+      line-height: 1.4;
+      flex-shrink: 0;
+      max-width: 130px;
+    }
+    .nc-error-msg {
+      font-size: .78rem;
+      color: var(--clr-error);
+      margin-top: .25rem;
+      min-height: 1em;
+    }
+
+    /* Toggle basis */
+    .basis-toggle {
+      display: flex;
+      border: 2px solid var(--clr-border);
+      border-radius: var(--r-md);
+      overflow: hidden;
+      margin-bottom: 1.25rem;
+    }
+    .basis-btn {
+      flex: 1;
+      padding: .5rem .75rem;
+      font-size: .82rem;
+      font-weight: 600;
+      color: var(--clr-text-muted);
+      background: var(--clr-surface);
+      border: none;
+      cursor: pointer;
+      transition: background var(--transition), color var(--transition);
+      text-align: center;
+    }
+    .basis-btn.active {
+      background: var(--clr-primary);
+      color: white;
+    }
+    .basis-btn:first-child { border-right: 1px solid var(--clr-border); }
+
+    /* Compare link */
+    .nc-compare-link {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: .5rem;
+      margin-top: 1.25rem;
+      padding: .6rem 1.2rem;
+      border-radius: var(--r-md);
+      border: 2px solid var(--clr-primary);
+      color: var(--clr-primary);
+      font-weight: 600;
+      font-size: .88rem;
+      text-decoration: none;
+      transition: all var(--transition);
+    }
+    .nc-compare-link:hover {
+      background: var(--clr-primary);
+      color: white;
+      text-decoration: none;
+    }
+
+    /* ── Results panel ── */
+    .nc-results { min-height: 400px; }
+
+    /* Empty state */
+    .nc-empty {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      text-align: center;
+      padding: 4rem 2rem;
+      gap: 1rem;
+      color: var(--clr-text-muted);
+    }
+    .nc-empty-icon {
+      font-size: 4rem;
+      opacity: .45;
+      line-height: 1;
+    }
+    .nc-empty h3 { font-size: 1.2rem; color: var(--clr-text); }
+    .nc-empty p { font-size: .9rem; max-width: 340px; }
+
+    /* Skeleton */
+    .nc-skeleton {
+      display: none;
+    }
+    .nc-skeleton.visible { display: block; animation: fadeIn .25s ease; }
+    .sk-line { height: 1rem; border-radius: var(--r-md); margin-bottom: .6rem; }
+
+    /* Food header */
+    .nc-food-header {
+      display: flex;
+      align-items: flex-start;
+      justify-content: space-between;
+      gap: 1rem;
+      margin-bottom: 1.5rem;
+      flex-wrap: wrap;
+    }
+    .nc-food-title { flex: 1; min-width: 200px; }
+    .nc-food-title h2 { font-size: 1.45rem; color: var(--clr-primary-dark); margin-bottom: .25rem; }
+    .nc-food-cat-badge {
+      display: inline-flex;
+      align-items: center;
+      gap: .3rem;
+      font-size: .75rem;
+      font-weight: 700;
+      letter-spacing: .05em;
+      text-transform: uppercase;
+      background: var(--clr-surface-alt);
+      color: var(--clr-primary);
+      border: 1px solid var(--clr-border);
+      padding: 2px 10px;
+      border-radius: var(--r-full);
+    }
+    .nc-claim {
+      font-size: .82rem;
+      color: var(--clr-primary);
+      font-style: italic;
+      margin-top: .35rem;
+      display: flex;
+      align-items: center;
+      gap: .3rem;
+    }
+
+    /* ── Nutrition facts panel ── */
+    .nutrition-facts {
+      background: var(--clr-surface);
+      border: 3px solid var(--clr-text);
+      border-radius: var(--r-md);
+      padding: 1rem 1.1rem;
+      max-width: 420px;
+      font-family: 'Arial', sans-serif;
+    }
+    .nf-title {
+      font-size: 2rem;
+      font-family: 'Arial Black', 'Arial', sans-serif;
+      font-weight: 900;
+      line-height: 1;
+      border-bottom: 8px solid var(--clr-text);
+      padding-bottom: .4rem;
+      margin-bottom: .3rem;
+    }
+    .nf-serving-info {
+      font-size: .82rem;
+      border-bottom: 3px solid var(--clr-text);
+      padding-bottom: .4rem;
+      margin-bottom: .25rem;
+      line-height: 1.5;
+    }
+    .nf-serving-label { font-weight: 700; }
+    .nf-calories-row {
+      border-bottom: 6px solid var(--clr-text);
+      padding-bottom: .4rem;
+      margin-bottom: .2rem;
+      display: flex;
+      align-items: flex-end;
+      justify-content: space-between;
+    }
+    .nf-calories-label { font-size: .78rem; font-weight: 700; line-height: 1.2; }
+    .nf-calories-val {
+      font-size: 2.8rem;
+      font-weight: 900;
+      line-height: 1;
+      font-family: 'Arial Black', 'Arial', sans-serif;
+    }
+    .nf-col-header {
+      display: flex;
+      justify-content: flex-end;
+      font-size: .72rem;
+      font-weight: 700;
+      border-top: 1px solid var(--clr-text);
+      padding: 2px 0;
+      gap: 2rem;
+      color: var(--clr-text-muted);
+    }
+    .nf-row {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      border-top: 1px solid #c0c0c0;
+      padding: 2px 0;
+      font-size: .88rem;
+      gap: .5rem;
+    }
+    .nf-row.thick { border-top: 5px solid var(--clr-text); }
+    .nf-row.bold .nf-label { font-weight: 700; }
+    .nf-indent .nf-label { padding-left: 1.1rem; font-weight: 400; font-size: .84rem; }
+    .nf-values {
+      display: flex;
+      gap: 2rem;
+      align-items: center;
+      flex-shrink: 0;
+      font-size: .83rem;
+    }
+    .nf-dv { font-weight: 700; min-width: 40px; text-align: right; }
+    .nf-per-serving { min-width: 70px; text-align: right; }
+    .nf-per100g { min-width: 50px; text-align: right; color: var(--clr-text-muted); }
+
+    .nf-daily-footnote {
+      border-top: 3px solid var(--clr-text);
+      margin-top: .5rem;
+      padding-top: .4rem;
+      font-size: .7rem;
+      line-height: 1.45;
+      color: var(--clr-text-muted);
+    }
+
+    /* ── DV bar section ── */
+    .nc-dv-section {
+      margin-top: 1.75rem;
+    }
+    .nc-dv-section h3 {
+      font-size: .95rem;
+      margin-bottom: .85rem;
+      color: var(--clr-text);
+    }
+    .nc-dv-grid {
+      display: grid;
+      grid-template-columns: 1fr;
+      gap: .6rem;
+    }
+    @media (min-width: 600px) {
+      .nc-dv-grid { grid-template-columns: 1fr 1fr; }
+    }
+    .nc-dv-item { }
+    .nc-dv-label-row {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      font-size: .8rem;
+      margin-bottom: 3px;
+    }
+    .nc-dv-name { font-weight: 600; color: var(--clr-text); }
+    .nc-dv-pct  { font-weight: 700; }
+    .nc-dv-pct.low    { color: var(--clr-primary); }
+    .nc-dv-pct.medium { color: #e65100; }
+    .nc-dv-pct.high   { color: #c62828; }
+    .dv-bar-track {
+      width: 100%;
+      height: 7px;
+      background: var(--clr-divider);
+      border-radius: var(--r-full);
+      overflow: hidden;
+    }
+    .dv-bar-fill {
+      height: 100%;
+      background: linear-gradient(90deg, var(--clr-primary), var(--clr-accent));
+      border-radius: var(--r-full);
+      transition: width .65s ease;
+    }
+    .dv-bar-fill.warn   { background: linear-gradient(90deg, #f9a825, #e65100); }
+    .dv-bar-fill.danger { background: linear-gradient(90deg, #e53935, #b71c1c); }
+
+    /* ── Allergen badges ── */
+    .nc-allergen-section { margin-top: 1.75rem; }
+    .nc-allergen-section h3 { font-size: .95rem; margin-bottom: .6rem; }
+    .nc-allergen-badges { display: flex; flex-wrap: wrap; gap: .4rem; }
+    .allergen-badge {
+      display: inline-flex;
+      align-items: center;
+      gap: .3rem;
+      padding: .28rem .75rem;
+      border-radius: var(--r-full);
+      font-size: .76rem;
+      font-weight: 700;
+      background: #fff3e0;
+      color: #bf360c;
+      border: 1px solid #ffccbc;
+    }
+    [data-theme="dark"] .allergen-badge { background: rgba(191,54,12,.18); color: #ffab91; border-color: rgba(191,54,12,.35); }
+    .nc-no-allergens {
+      font-size: .85rem;
+      color: var(--clr-primary);
+      display: flex;
+      align-items: center;
+      gap: .4rem;
+    }
+
+    /* ── Additives ── */
+    .nc-additives { margin-top: 1rem; }
+    .nc-additives h4 { font-size: .85rem; margin-bottom: .4rem; color: var(--clr-text-muted); }
+    .additive-badge {
+      display: inline-flex;
+      align-items: center;
+      margin: .2rem .2rem 0 0;
+      padding: .22rem .65rem;
+      border-radius: var(--r-full);
+      font-size: .73rem;
+      font-weight: 600;
+      background: var(--clr-surface-alt);
+      color: var(--clr-text-muted);
+      border: 1px solid var(--clr-divider);
+    }
+
+    /* ── Data source note ── */
+    .nc-source-note {
+      margin-top: 1.75rem;
+      padding: .85rem 1rem;
+      border-radius: var(--r-md);
+      background: #e8f5e9;
+      border-left: 4px solid var(--clr-primary);
+      font-size: .8rem;
+      color: #1b5e20;
+      line-height: 1.55;
+      display: flex;
+      gap: .6rem;
+      align-items: flex-start;
+    }
+    [data-theme="dark"] .nc-source-note { background: rgba(46,125,50,.12); color: #a5d6a7; border-color: var(--clr-primary); }
+    .nc-source-note strong { display: block; margin-bottom: .15rem; }
+
+    /* ── Highlight summary cards ── */
+    .nc-summary-cards {
+      display: grid;
+      grid-template-columns: repeat(2, 1fr);
+      gap: .75rem;
+      margin-bottom: 1.5rem;
+    }
+    @media (min-width: 500px) { .nc-summary-cards { grid-template-columns: repeat(4, 1fr); } }
+    .nc-summary-card {
+      background: var(--clr-bg);
+      border-radius: var(--r-lg);
+      padding: .85rem .75rem;
+      box-shadow: var(--neu-shadow-card);
+      text-align: center;
+      border: 1px solid var(--clr-divider);
+    }
+    .nc-summary-card .sc-val {
+      font-size: 1.35rem;
+      font-weight: 800;
+      color: var(--clr-primary-dark);
+      font-family: var(--font-display);
+      line-height: 1.1;
+    }
+    .nc-summary-card .sc-unit { font-size: .7rem; color: var(--clr-text-muted); font-weight: 500; }
+    .nc-summary-card .sc-label { font-size: .72rem; color: var(--clr-text-muted); margin-top: .2rem; }
+
+    /* ── Animations ── */
+    @keyframes fadeIn { from { opacity: 0; transform: translateY(8px); } to { opacity: 1; transform: translateY(0); } }
+    .nc-result-content { animation: fadeIn .3s ease; }
+
+    /* ── Responsive footer-note ── */
+    .nc-disclaimer-banner {
+      background: #fffde7;
+      border: 1px solid #ffe082;
+      border-radius: var(--r-md);
+      padding: .75rem 1rem;
+      font-size: .8rem;
+      color: #5d4037;
+      margin-bottom: 2.5rem;
+      display: flex;
+      gap: .6rem;
+      align-items: flex-start;
+    }
+    [data-theme="dark"] .nc-disclaimer-banner { background: rgba(249,168,37,.1); color: #ffe082; border-color: rgba(249,168,37,.3); }
+  </style>
+</head>
+<body>
+  <main id="main-content">
+
+    <!-- Hero -->
+    <section class="nc-hero" aria-labelledby="nc-hero-heading">
+      <div class="container">
+        <h1 id="nc-hero-heading">🥗 Nutrition Checker</h1>
+        <p>Select a food, adjust your serving size and instantly see every macro, micro, and %DV — all client-side, no sign-in needed.</p>
+      </div>
+    </section>
+
+    <!-- Disclaimer banner -->
+    <div class="container">
+      <div class="nc-disclaimer-banner" role="note" aria-label="Data disclaimer">
+        <span aria-hidden="true">⚠️</span>
+        <span><strong>Demo Data Notice:</strong> Data shown is curated demo data based on ICMR-NIN / USDA FoodData Central. Always verify with actual product labels before making health decisions.</span>
+      </div>
+    </div>
+
+    <!-- Main layout -->
+    <div class="container">
+      <div class="nc-layout">
+
+        <!-- ── LEFT: Controls ── -->
+        <aside class="nc-controls" aria-label="Food selector and serving controls">
+          <h2><span aria-hidden="true">🔍</span> Choose a Food</h2>
+
+          <!-- Search -->
+          <div class="nc-search-wrap" role="search">
+            <label for="nc-search" class="sr-only">Search foods</label>
+            <input
+              type="search"
+              id="nc-search"
+              class="nc-search-input"
+              placeholder="Search by name or category…"
+              autocomplete="off"
+              aria-label="Search foods by name or category"
+              aria-controls="nc-food-list"
+            >
+            <button class="nc-search-clear" id="nc-search-clear" aria-label="Clear search" title="Clear search">✕</button>
+          </div>
+
+          <!-- Food list -->
+          <ul id="nc-food-list" class="nc-food-list" role="listbox" aria-label="Available foods" tabindex="0"></ul>
+
+          <hr style="border:none;border-top:1px solid var(--clr-divider);margin:.5rem 0 1.1rem;">
+
+          <!-- Serving size -->
+          <h2 style="font-size:1rem;margin-bottom:.85rem;"><span aria-hidden="true">⚖️</span> Serving Size</h2>
+          <div class="nc-serving-row">
+            <div class="form-group">
+              <label for="nc-serving-input">Grams (g)</label>
+              <input
+                type="number"
+                id="nc-serving-input"
+                class="form-control"
+                min="1"
+                max="2000"
+                step="1"
+                value=""
+                placeholder="e.g. 100"
+                aria-label="Serving size in grams"
+                disabled
+              >
+            </div>
+            <div class="nc-serving-unit" id="nc-serving-unit-label" aria-live="polite">—</div>
+          </div>
+          <div class="nc-error-msg" id="nc-serving-error" role="alert" aria-live="polite"></div>
+
+          <hr style="border:none;border-top:1px solid var(--clr-divider);margin:.85rem 0;">
+
+          <!-- Basis toggle -->
+          <h2 style="font-size:.9rem;margin-bottom:.6rem;color:var(--clr-text-muted);font-weight:600;text-transform:uppercase;letter-spacing:.05em;">Display basis</h2>
+          <div class="basis-toggle" role="group" aria-label="Display basis toggle">
+            <button class="basis-btn active" id="btn-per-serving" aria-pressed="true">Per Serving</button>
+            <button class="basis-btn" id="btn-per-100g" aria-pressed="false">Per 100 g</button>
+          </div>
+
+          <!-- Compare link -->
+          <a href="compare.html" class="nc-compare-link" aria-label="Compare multiple foods on the Compare page">
+            <span aria-hidden="true">⚡</span> Compare Foods
+          </a>
+        </aside>
+
+        <!-- ── RIGHT: Results ── -->
+        <section class="nc-results" aria-label="Nutrition results" aria-live="polite">
+
+          <!-- Empty state -->
+          <div class="nc-empty" id="nc-empty" role="status" aria-live="polite">
+            <div class="nc-empty-icon" aria-hidden="true">🥦</div>
+            <h3>No food selected</h3>
+            <p>Pick a food from the list on the left to see its complete nutritional breakdown.</p>
+          </div>
+
+          <!-- Skeleton loader -->
+          <div class="nc-skeleton" id="nc-skeleton" aria-hidden="true">
+            <div class="skeleton sk-line wide"  style="height:2rem;width:60%;margin-bottom:.85rem;"></div>
+            <div class="nc-summary-cards">
+              <div class="skeleton nc-summary-card" style="height:80px;"></div>
+              <div class="skeleton nc-summary-card" style="height:80px;"></div>
+              <div class="skeleton nc-summary-card" style="height:80px;"></div>
+              <div class="skeleton nc-summary-card" style="height:80px;"></div>
+            </div>
+            <div class="skeleton sk-line" style="height:240px;max-width:420px;"></div>
+          </div>
+
+          <!-- Actual result content (hidden until food selected) -->
+          <div id="nc-result-content" hidden>
+            <!-- Food header -->
+            <div class="nc-food-header">
+              <div class="nc-food-title">
+                <h2 id="result-food-name">—</h2>
+                <span class="nc-food-cat-badge" id="result-food-cat">—</span>
+                <p class="nc-claim" id="result-health-claim" hidden></p>
+              </div>
+            </div>
+
+            <!-- Quick summary cards -->
+            <div class="nc-summary-cards" id="nc-summary-cards"></div>
+
+            <!-- Nutrition Facts label -->
+            <div class="nutrition-facts" id="nf-panel" role="region" aria-label="Nutrition Facts panel">
+              <div class="nf-title">Nutrition Facts</div>
+              <div class="nf-serving-info" id="nf-serving-info"></div>
+              <div class="nf-calories-row" id="nf-calories-row"></div>
+              <!-- column header -->
+              <div class="nf-col-header" id="nf-col-header"></div>
+              <!-- rows injected here -->
+              <div id="nf-rows"></div>
+              <div class="nf-daily-footnote">
+                * Percent Daily Values are based on a 2,000 kcal diet (FSSAI reference values for Indian adults).
+                Your daily values may be higher or lower depending on your calorie needs.
+              </div>
+            </div>
+
+            <!-- DV bars -->
+            <div class="nc-dv-section" id="nc-dv-section">
+              <h3>% Daily Value — Key Nutrients</h3>
+              <div class="nc-dv-grid" id="nc-dv-grid"></div>
+            </div>
+
+            <!-- Allergens -->
+            <div class="nc-allergen-section">
+              <h3>⚠️ Allergen Information</h3>
+              <div class="nc-allergen-badges" id="nc-allergens"></div>
+            </div>
+
+            <!-- Additives (if any) -->
+            <div class="nc-additives" id="nc-additives-wrap" hidden>
+              <h4>🧪 Additives / Preservatives</h4>
+              <div id="nc-additives"></div>
+            </div>
+
+            <!-- Source note -->
+            <div class="nc-source-note" id="nc-source-note" role="note">
+              <span aria-hidden="true">ℹ️</span>
+              <div>
+                <strong>Data Source</strong>
+                <span id="nc-note-text">ICMR-NIN / USDA FoodData Central (curated demo data)</span>.
+                Always verify with actual product labels before making dietary decisions.
+              </div>
+            </div>
+          </div>
+
+        </section>
+      </div><!-- /.nc-layout -->
+    </div><!-- /.container -->
+
+  </main>
+
+  <script src="js/nutrition-data.js"></script>
+  <script src="js/components.js"></script>
+  <script>
+  /* =====================================================
+     NutriGuard — Nutrition Checker Page Script
+     ===================================================== */
+  (function () {
+    'use strict';
+
+    /* ── State ── */
+    let selectedFood  = null;   // full food object from NUTRITION_DB
+    let servingG      = 100;    // current serving in grams
+    let displayBasis  = 'serving'; // 'serving' | '100g'
+    let skeletonTimer = null;
+
+    /* ── DOM refs ── */
+    const searchInput    = document.getElementById('nc-search');
+    const searchClear    = document.getElementById('nc-search-clear');
+    const foodList       = document.getElementById('nc-food-list');
+    const servingInput   = document.getElementById('nc-serving-input');
+    const servingUnitLbl = document.getElementById('nc-serving-unit-label');
+    const servingError   = document.getElementById('nc-serving-error');
+    const btnPerServing  = document.getElementById('btn-per-serving');
+    const btnPer100g     = document.getElementById('btn-per-100g');
+
+    const emptyState     = document.getElementById('nc-empty');
+    const skeleton       = document.getElementById('nc-skeleton');
+    const resultContent  = document.getElementById('nc-result-content');
+
+    /* result sub-elements */
+    const elFoodName     = document.getElementById('result-food-name');
+    const elFoodCat      = document.getElementById('result-food-cat');
+    const elHealthClaim  = document.getElementById('result-health-claim');
+    const elSummCards    = document.getElementById('nc-summary-cards');
+    const elNfServInfo   = document.getElementById('nf-serving-info');
+    const elNfCalRow     = document.getElementById('nf-calories-row');
+    const elNfColHeader  = document.getElementById('nf-col-header');
+    const elNfRows       = document.getElementById('nf-rows');
+    const elDvGrid       = document.getElementById('nc-dv-grid');
+    const elAllergens    = document.getElementById('nc-allergens');
+    const elAdditivesWrap = document.getElementById('nc-additives-wrap');
+    const elAdditives    = document.getElementById('nc-additives');
+    const elNoteText     = document.getElementById('nc-note-text');
+
+    /* ── Helper: safe format ── */
+    function fmt(val, decimals = 1) {
+      if (val === undefined || val === null || isNaN(val)) return 'N/A';
+      const n = parseFloat(val);
+      if (isNaN(n)) return 'N/A';
+      return n.toFixed(decimals);
+    }
+
+    /* ── Helper: DV bar class ── */
+    function dvClass(pct) {
+      if (pct === null || pct === undefined) return '';
+      if (pct > 30) return 'danger';
+      if (pct >= 15) return 'warn';
+      return '';
+    }
+
+    /* ── Helper: DV pct class for label ── */
+    function dvLabelClass(pct) {
+      if (pct === null || pct === undefined) return '';
+      if (pct > 30) return 'high';
+      if (pct >= 15) return 'medium';
+      return 'low';
+    }
+
+    /* ── Render food list ── */
+    function renderFoodList(query) {
+      const results = window.searchFoods ? window.searchFoods(query) : window.NUTRITION_DB;
+      foodList.innerHTML = '';
+
+      if (!results || results.length === 0) {
+        foodList.innerHTML = `<li class="nc-no-results" role="option" aria-selected="false">No foods found for "<strong>${escHtml(query)}</strong>"</li>`;
+        return;
+      }
+
+      results.forEach(food => {
+        const li = document.createElement('li');
+        li.className = 'nc-food-item' + (selectedFood && selectedFood.id === food.id ? ' selected' : '');
+        li.setAttribute('role', 'option');
+        li.setAttribute('aria-selected', selectedFood && selectedFood.id === food.id ? 'true' : 'false');
+        li.setAttribute('tabindex', '0');
+        li.setAttribute('data-id', food.id);
+        li.innerHTML = `
+          <span class="nc-food-name-text">${escHtml(food.name)}</span>
+          <span class="nc-food-category">${escHtml(food.category)}</span>
+        `;
+        li.addEventListener('click', () => selectFood(food));
+        li.addEventListener('keydown', e => {
+          if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); selectFood(food); }
+          if (e.key === 'ArrowDown') { e.preventDefault(); const next = li.nextElementSibling; if (next) next.focus(); }
+          if (e.key === 'ArrowUp') { e.preventDefault(); const prev = li.previousElementSibling; if (prev) prev.focus(); }
+        });
+        foodList.appendChild(li);
+      });
+    }
+
+    /* ── Select a food ── */
+    function selectFood(food) {
+      selectedFood = food;
+      servingG = food.servingSize || 100;
+
+      servingInput.value = servingG;
+      servingInput.disabled = false;
+      servingUnitLbl.textContent = food.servingUnit || 'g';
+      servingError.textContent = '';
+
+      // Update list selection state
+      renderFoodList(searchInput.value);
+
+      showSkeleton();
+      setTimeout(() => {
+        hideSkeleton();
+        renderResults();
+      }, 380); // brief skeleton moment
+    }
+
+    /* ── Skeleton ── */
+    function showSkeleton() {
+      emptyState.hidden = true;
+      emptyState.removeAttribute('aria-hidden');
+      emptyState.setAttribute('aria-hidden', 'true');
+      resultContent.hidden = true;
+      skeleton.classList.add('visible');
+      skeleton.removeAttribute('aria-hidden');
+    }
+    function hideSkeleton() {
+      skeleton.classList.remove('visible');
+      skeleton.setAttribute('aria-hidden', 'true');
+    }
+
+    /* ── Main render ── */
+    function renderResults() {
+      if (!selectedFood) return;
+
+      const food     = selectedFood;
+      const per100g  = food.per100g;
+      const serving  = window.calcServing(per100g, servingG);
+      const isServing = displayBasis === 'serving';
+
+      /* Display data = what we show as "primary" values */
+      const display = isServing ? serving : per100g;
+      const basisLabel = isServing
+        ? `${servingG}g serving`
+        : 'per 100 g';
+
+      /* Food header */
+      elFoodName.textContent = food.name;
+      elFoodCat.textContent  = food.category;
+      if (food.healthClaim) {
+        elHealthClaim.innerHTML = `<span aria-hidden="true">✅</span> ${escHtml(food.healthClaim)}`;
+        elHealthClaim.hidden = false;
+      } else {
+        elHealthClaim.hidden = true;
+      }
+
+      /* ── Summary cards ── */
+      const summaryNutrients = [
+        { key: 'calories', label: 'Calories', unit: 'kcal', decimals: 0 },
+        { key: 'protein',  label: 'Protein',  unit: 'g',    decimals: 1 },
+        { key: 'carbs',    label: 'Carbs',    unit: 'g',    decimals: 1 },
+        { key: 'fat',      label: 'Fat',      unit: 'g',    decimals: 1 },
+      ];
+      elSummCards.innerHTML = summaryNutrients.map(n => {
+        const val = display[n.key];
+        const disp = (val !== undefined && val !== null && !isNaN(val))
+          ? parseFloat(val).toFixed(n.decimals)
+          : 'N/A';
+        return `
+          <div class="nc-summary-card card-neu" role="figure" aria-label="${n.label}: ${disp} ${n.unit}">
+            <div class="sc-val">${disp}</div>
+            <div class="sc-unit">${n.unit}</div>
+            <div class="sc-label">${n.label}</div>
+          </div>`;
+      }).join('');
+
+      /* ── Nutrition Facts label ── */
+      elNfServInfo.innerHTML = `
+        <span class="nf-serving-label">Serving size:</span>
+        ${servingG}g &nbsp;|&nbsp; ${escHtml(food.servingUnit || 'g')}
+      `;
+
+      const calVal = serving.calories;
+      elNfCalRow.innerHTML = `
+        <div>
+          <div class="nf-calories-label">Amount per<br>serving</div>
+          <div style="font-size:.72rem;font-weight:700;margin-top:2px;">Calories</div>
+        </div>
+        <div class="nf-calories-val">${(calVal !== undefined && !isNaN(calVal)) ? Math.round(calVal) : 'N/A'}</div>
+      `;
+
+      /* Column header */
+      elNfColHeader.innerHTML = `
+        <span>% DV*</span>
+        <span>${servingG}g</span>
+        <span>100g</span>
+      `;
+
+      /* Row definitions */
+      const nfRows = [
+        { key: 'fat',          label: 'Total Fat',          bold: true, thick: false },
+        { key: 'saturatedFat', label: 'Saturated Fat',      bold: false, indent: true },
+        { key: 'carbs',        label: 'Total Carbohydrate', bold: true, thick: true },
+        { key: 'fibre',        label: 'Dietary Fibre',      bold: false, indent: true },
+        { key: 'sugar',        label: 'Total Sugars',       bold: false, indent: true },
+        { key: 'protein',      label: 'Protein',            bold: true, thick: true },
+        { key: 'sodium',       label: 'Sodium',             bold: true, thick: true },
+        { key: 'potassium',    label: 'Potassium',          bold: false },
+        { key: 'calcium',      label: 'Calcium',            bold: false },
+        { key: 'iron',         label: 'Iron',               bold: false },
+        { key: 'vitaminC',     label: 'Vitamin C',          bold: false },
+        { key: 'vitaminA',     label: 'Vitamin A',          bold: false },
+        { key: 'vitaminD',     label: 'Vitamin D',          bold: false },
+        { key: 'vitaminB12',   label: 'Vitamin B12',        bold: false },
+        { key: 'folate',       label: 'Folate',             bold: false },
+        { key: 'magnesium',    label: 'Magnesium',          bold: false },
+        { key: 'zinc',         label: 'Zinc',               bold: false },
+        { key: 'phosphorus',   label: 'Phosphorus',         bold: false },
+      ];
+
+      const UNITS = window.NUTRIENT_UNITS || {};
+      elNfRows.innerHTML = '';
+
+      nfRows.forEach(row => {
+        const valServing = serving[row.key];
+        const val100g    = per100g[row.key];
+
+        // Only show rows that exist in the food
+        if (val100g === undefined || val100g === null) return;
+
+        const unit        = UNITS[row.key] || 'g';
+        const dvPct       = window.getDV ? window.getDV(row.key, valServing) : null;
+        const dvStr       = (dvPct !== null && dvPct !== undefined) ? dvPct + '%' : '—';
+
+        const servingDisp = (valServing !== undefined && !isNaN(valServing))
+          ? fmt(valServing, unit === 'kcal' ? 0 : unit === 'µg' ? 1 : 1) + unit
+          : 'N/A';
+        const p100Disp    = (val100g !== undefined && !isNaN(val100g))
+          ? fmt(val100g, unit === 'kcal' ? 0 : 1) + unit
+          : 'N/A';
+
+        const div = document.createElement('div');
+        div.className = 'nf-row'
+          + (row.thick  ? ' thick'  : '')
+          + (row.bold   ? ' bold'   : '')
+          + (row.indent ? ' nf-indent' : '');
+
+        div.innerHTML = `
+          <span class="nf-label">${escHtml(row.label)}</span>
+          <span class="nf-values">
+            <span class="nf-dv">${dvStr}</span>
+            <span class="nf-per-serving">${servingDisp}</span>
+            <span class="nf-per100g">${p100Disp}</span>
+          </span>`;
+        elNfRows.appendChild(div);
+      });
+
+      /* ── DV Bars ── */
+      const dvBarNutrients = [
+        'fat', 'saturatedFat', 'carbs', 'fibre', 'sugar',
+        'protein', 'sodium', 'potassium', 'calcium', 'iron',
+        'vitaminC', 'vitaminA', 'vitaminD', 'vitaminB12',
+        'folate', 'magnesium', 'zinc', 'phosphorus'
+      ];
+      const DISPLAY_NAMES = window.NUTRIENT_DISPLAY_NAMES || {};
+
+      elDvGrid.innerHTML = '';
+      dvBarNutrients.forEach(key => {
+        const val100g = per100g[key];
+        if (val100g === undefined || val100g === null) return;
+
+        const servingVal = serving[key];
+        if (servingVal === undefined || isNaN(servingVal)) return;
+
+        const dvPct = window.getDV ? window.getDV(key, servingVal) : null;
+        if (dvPct === null) return; // no DV defined
+
+        const barWidth  = Math.min(dvPct, 100);
+        const barFill   = dvClass(dvPct);
+        const lblClass  = dvLabelClass(dvPct);
+        const unit      = UNITS[key] || 'g';
+        const name      = DISPLAY_NAMES[key] || key;
+        const valStr    = fmt(servingVal, unit === 'µg' ? 1 : 1) + unit;
+
+        const item = document.createElement('div');
+        item.className = 'nc-dv-item';
+        item.innerHTML = `
+          <div class="nc-dv-label-row">
+            <span class="nc-dv-name">${escHtml(name)}</span>
+            <span class="nc-dv-pct ${lblClass}">${dvPct}% DV &nbsp;·&nbsp; ${valStr}</span>
+          </div>
+          <div class="dv-bar-track" role="progressbar" aria-valuenow="${dvPct}" aria-valuemin="0" aria-valuemax="100" aria-label="${name} ${dvPct}% daily value">
+            <div class="dv-bar-fill ${barFill}" style="width:${barWidth}%"></div>
+          </div>`;
+        elDvGrid.appendChild(item);
+      });
+
+      /* ── Allergens ── */
+      elAllergens.innerHTML = '';
+      if (food.allergens && food.allergens.length > 0) {
+        food.allergens.forEach(a => {
+          const span = document.createElement('span');
+          span.className = 'allergen-badge';
+          span.innerHTML = `<span aria-hidden="true">⚠</span> ${escHtml(a)}`;
+          elAllergens.appendChild(span);
+        });
+      } else {
+        elAllergens.innerHTML = `<span class="nc-no-allergens"><span aria-hidden="true">✅</span> No major allergens declared</span>`;
+      }
+
+      /* ── Additives ── */
+      if (food.additives && food.additives.length > 0) {
+        elAdditivesWrap.hidden = false;
+        elAdditives.innerHTML = food.additives.map(a =>
+          `<span class="additive-badge">${escHtml(a)}</span>`
+        ).join('');
+      } else {
+        elAdditivesWrap.hidden = true;
+      }
+
+      /* ── Source note ── */
+      elNoteText.textContent = food.note || 'ICMR-NIN / USDA FoodData Central (curated demo data)';
+
+      /* ── Show result ── */
+      resultContent.hidden = false;
+      resultContent.classList.add('nc-result-content');
+    }
+
+    /* ── Recalculate on serving change ── */
+    function onServingChange() {
+      const raw = parseFloat(servingInput.value);
+
+      // Validation
+      if (servingInput.value === '' || isNaN(raw)) {
+        servingError.textContent = 'Please enter a valid serving size.';
+        servingInput.classList.add('is-invalid');
+        return;
+      }
+      if (raw <= 0) {
+        servingError.textContent = 'Serving size must be greater than 0 g.';
+        servingInput.classList.add('is-invalid');
+        return;
+      }
+      if (raw > 2000) {
+        servingError.textContent = 'Serving size cannot exceed 2000 g.';
+        servingInput.classList.add('is-invalid');
+        return;
+      }
+
+      servingError.textContent = '';
+      servingInput.classList.remove('is-invalid');
+      servingG = raw;
+
+      if (selectedFood) renderResults();
+    }
+
+    /* ── Basis toggle ── */
+    function setBasis(basis) {
+      displayBasis = basis;
+      btnPerServing.classList.toggle('active', basis === 'serving');
+      btnPer100g.classList.toggle('active', basis === '100g');
+      btnPerServing.setAttribute('aria-pressed', basis === 'serving' ? 'true' : 'false');
+      btnPer100g.setAttribute('aria-pressed', basis === '100g' ? 'true' : 'false');
+      if (selectedFood) renderResults();
+    }
+
+    /* ── Escape HTML ── */
+    function escHtml(str) {
+      if (!str) return '';
+      return String(str)
+        .replace(/&/g, '&amp;')
+        .replace(/</g, '&lt;')
+        .replace(/>/g, '&gt;')
+        .replace(/"/g, '&quot;')
+        .replace(/'/g, '&#39;');
+    }
+
+    /* ── Event listeners ── */
+    searchInput.addEventListener('input', function () {
+      const q = this.value.trim();
+      searchClear.classList.toggle('visible', q.length > 0);
+      renderFoodList(q);
+    });
+
+    searchClear.addEventListener('click', function () {
+      searchInput.value = '';
+      searchClear.classList.remove('visible');
+      renderFoodList('');
+      searchInput.focus();
+    });
+
+    servingInput.addEventListener('input',  onServingChange);
+    servingInput.addEventListener('change', onServingChange);
+
+    btnPerServing.addEventListener('click', () => setBasis('serving'));
+    btnPer100g.addEventListener('click',    () => setBasis('100g'));
+
+    /* ── Init ── */
+    function init() {
+      if (!window.NUTRITION_DB) {
+        foodList.innerHTML = `<li class="nc-no-results">⚠ Nutrition database not loaded.</li>`;
+        return;
+      }
+      renderFoodList('');
+    }
+
+    // Run after DOM + scripts are ready
+    if (document.readyState === 'loading') {
+      document.addEventListener('DOMContentLoaded', init);
+    } else {
+      init();
+    }
+
+  })();
+  </script>
+</body>
+</html>

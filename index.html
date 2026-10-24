@@ -1,0 +1,299 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>NutriGuard — Smart Food & Nutrition | Know What You Eat</title>
+  <meta name="description" content="NutriGuard helps you understand food nutrition, decode food labels, spot adulteration warning signs, compare products, and make smart, affordable food choices.">
+  <meta property="og:title" content="NutriGuard — Smart Food & Nutrition">
+  <meta property="og:description" content="Check nutrition facts, decode food labels, identify food safety risks, and make healthier, budget-friendly food choices.">
+  <meta property="og:type" content="website">
+  <meta name="theme-color" content="#2e7d32">
+  <link rel="icon" href="favicon.svg" type="image/svg+xml">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Poppins:wght@700;800&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="css/style.css">
+  <style>
+    .hero-search-wrap { max-width: 580px; }
+    .search-hero { background: rgba(255,255,255,0.12); backdrop-filter: blur(12px); border: 1px solid rgba(255,255,255,0.25); border-radius: var(--r-xl); padding: var(--sp-5); }
+    .search-hero .search-input { background: rgba(255,255,255,0.95); }
+    .trust-bar { background: var(--clr-surface-alt); border-bottom: 1px solid var(--clr-divider); padding: var(--sp-3) 0; }
+    .trust-items { display: flex; flex-wrap: wrap; justify-content: center; gap: var(--sp-5); }
+    .trust-item { display: flex; align-items: center; gap: var(--sp-2); font-size: 0.82rem; color: var(--clr-text-muted); font-weight: 500; }
+    .trust-item span { font-size: 1.1rem; }
+    .cta-section { background: linear-gradient(135deg, var(--clr-primary-dark), var(--clr-primary)); color: white; }
+    .cta-section h2 { color: white; }
+    .cta-section p { color: rgba(255,255,255,0.85); }
+    .highlight-card { background: var(--clr-surface-alt); border-radius: var(--r-xl); overflow: hidden; display: grid; grid-template-columns: 1fr; gap: 0; }
+    @media(min-width:768px) { .highlight-card { grid-template-columns: 1fr 1fr; } }
+    .highlight-img { aspect-ratio: 4/3; object-fit: cover; width: 100%; }
+    .highlight-body { padding: var(--sp-8); display: flex; flex-direction: column; justify-content: center; gap: var(--sp-4); }
+    .quick-tips { display: grid; grid-template-columns: 1fr; gap: var(--sp-4); }
+    @media(min-width:640px) { .quick-tips { grid-template-columns: 1fr 1fr; } }
+    @media(min-width:960px) { .quick-tips { grid-template-columns: repeat(4,1fr); } }
+    .tip-card { background: var(--clr-surface); border-radius: var(--r-lg); padding: var(--sp-5); border: 1px solid var(--clr-divider); text-align: center; }
+    .tip-emoji { font-size: 2rem; margin-bottom: var(--sp-3); display: block; }
+    .tip-card h3 { font-size: 0.95rem; margin-bottom: var(--sp-2); }
+    .tip-card p { font-size: 0.82rem; color: var(--clr-text-muted); }
+  </style>
+</head>
+<body>
+<main id="main-content">
+  <!-- HERO -->
+  <section class="hero" aria-labelledby="hero-heading">
+    <div class="container">
+      <div class="hero-inner">
+        <div class="hero-content fade-in">
+          <div class="hero-eyebrow"><span>🛡️</span> Trusted Nutrition Guidance</div>
+          <h1 id="hero-heading">
+            Know Exactly <span class="highlight">What You Eat</span>
+          </h1>
+          <p class="hero-desc">
+            NutriGuard helps you check nutrition facts, decode food labels, spot adulteration warning signs,
+            compare packaged products, and make smarter — more affordable — food choices every day.
+          </p>
+          <div class="hero-ctas">
+            <a href="nutrition-checker.html" class="btn btn-primary btn-lg">🔬 Check Nutrition</a>
+            <a href="food-safety.html" class="btn btn-outline btn-lg">🛡️ Food Safety Guide</a>
+          </div>
+          <div class="hero-search-wrap mt-8">
+            <div class="search-hero">
+              <p style="color:rgba(255,255,255,0.9);font-size:.85rem;margin-bottom:var(--sp-2);font-weight:600;">Quick food search</p>
+              <form action="search.html" method="get" role="search">
+                <div class="search-wrap" style="max-width:100%">
+                  <label for="hero-search" class="sr-only">Search for a food item</label>
+                  <input type="search" id="hero-search" name="q" class="search-input"
+                    placeholder="e.g. brown rice, moong dal, oats…"
+                    autocomplete="off" aria-label="Search for a food item">
+                  <button type="submit" class="search-btn" aria-label="Search">🔍</button>
+                </div>
+              </form>
+            </div>
+          </div>
+        </div>
+        <div class="hero-image fade-in" aria-hidden="true">
+          <img src="https://images.unsplash.com/photo-1512621776951-a57141f2eefd?auto=format&fit=crop&w=800&q=75"
+               alt="Colourful fresh vegetables and fruits arranged on a table"
+               loading="eager" width="800" height="600">
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- TRUST BAR -->
+  <div class="trust-bar" aria-label="Trust indicators">
+    <div class="container">
+      <div class="trust-items">
+        <div class="trust-item"><span>✅</span> FSSAI Regulation Guidance</div>
+        <div class="trust-item"><span>📊</span> ICMR-NIN Based Data</div>
+        <div class="trust-item"><span>🔬</span> Science-Backed Information</div>
+        <div class="trust-item"><span>🇮🇳</span> India-Focused</div>
+        <div class="trust-item"><span>🆓</span> Free to Use</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- FEATURE CARDS -->
+  <section class="section" aria-labelledby="features-heading">
+    <div class="container">
+      <div class="section-header">
+        <div class="section-tag">🌿 What NutriGuard Offers</div>
+        <h2 id="features-heading">Your Complete Food Knowledge Hub</h2>
+        <p>Everything you need to make informed, confident food choices — from the supermarket shelf to your plate.</p>
+      </div>
+      <div class="feature-grid">
+        <a href="nutrition-checker.html" class="feature-card">
+          <div class="feature-icon" aria-hidden="true">🔬</div>
+          <h3>Nutrition Checker</h3>
+          <p>Calories, protein, carbs, fats, vitamins, minerals — with serving-size calculations.</p>
+        </a>
+        <a href="label-decoder.html" class="feature-card">
+          <div class="feature-icon" aria-hidden="true">🏷️</div>
+          <h3>Label Decoder</h3>
+          <p>Understand every part of a packaged food label: ingredients, additives, dates, FSSAI.</p>
+        </a>
+        <a href="food-safety.html" class="feature-card">
+          <div class="feature-icon" aria-hidden="true">🛡️</div>
+          <h3>Food Safety Hub</h3>
+          <p>Adulteration warning signs, safe actions, and official reporting resources.</p>
+        </a>
+        <a href="packaging-risk.html" class="feature-card">
+          <div class="feature-icon" aria-hidden="true">📋</div>
+          <h3>Packaging Risk Checklist</h3>
+          <p>Quickly assess packaging concerns and identify potential red flags.</p>
+        </a>
+        <a href="compare.html" class="feature-card">
+          <div class="feature-icon" aria-hidden="true">⚖️</div>
+          <h3>Product Comparison</h3>
+          <p>Compare nutrition per 100 g and per serving across multiple products.</p>
+        </a>
+        <a href="nutrient-hub.html" class="feature-card">
+          <div class="feature-icon" aria-hidden="true">💊</div>
+          <h3>Nutrient Hub</h3>
+          <p>Functions, deficiency signs, and best food sources for all key nutrients.</p>
+        </a>
+        <a href="meal-ideas.html" class="feature-card">
+          <div class="feature-icon" aria-hidden="true">🍲</div>
+          <h3>Budget Meal Ideas</h3>
+          <p>Nutritious Indian meals under ₹50 — with full nutrition comparisons.</p>
+        </a>
+        <a href="quiz.html" class="feature-card">
+          <div class="feature-icon" aria-hidden="true">🧠</div>
+          <h3>Food Safety Quiz</h3>
+          <p>Test your food knowledge with scored questions and expert explanations.</p>
+        </a>
+      </div>
+    </div>
+  </section>
+
+  <!-- STATS -->
+  <section class="section-sm" style="background:var(--clr-surface-alt);" aria-label="Why food knowledge matters">
+    <div class="container">
+      <div class="section-header">
+        <div class="section-tag">📈 Why It Matters</div>
+        <h2>Food Safety Is a Daily Concern</h2>
+      </div>
+      <div class="stats-grid">
+        <div class="stat-card">
+          <div class="stat-num">77%</div>
+          <div class="stat-label">of packaged foods exceed recommended sodium levels per serving</div>
+        </div>
+        <div class="stat-card">
+          <div class="stat-num">68%</div>
+          <div class="stat-label">of consumers don't regularly read food labels before buying</div>
+        </div>
+        <div class="stat-card">
+          <div class="stat-num">₹50</div>
+          <div class="stat-label">or less is enough for a nutritionally complete Indian meal</div>
+        </div>
+        <div class="stat-card">
+          <div class="stat-num">1800</div>
+          <div class="stat-label">FSSAI helpline number for reporting food safety concerns (toll-free)</div>
+        </div>
+      </div>
+      <p class="text-center text-muted mt-4" style="font-size:.8rem;">
+        * Statistics are illustrative figures used for educational awareness. Always refer to official FSSAI and ICMR publications for verified data.
+      </p>
+    </div>
+  </section>
+
+  <!-- HIGHLIGHT: Label Decoder -->
+  <section class="section" aria-labelledby="highlight1-heading">
+    <div class="container">
+      <div class="highlight-card card-neu">
+        <img class="highlight-img"
+          src="https://images.unsplash.com/photo-1606914501449-5a96b6ce24ca?auto=format&fit=crop&w=800&q=75"
+          alt="Person reading the nutrition label on a packaged food product"
+          loading="lazy" width="800" height="600">
+        <div class="highlight-body">
+          <div class="section-tag">🏷️ Label Decoder</div>
+          <h2 id="highlight1-heading">Confused by Packaged Food Labels?</h2>
+          <p style="color:var(--clr-text-muted);line-height:1.7;">
+            Food labels are packed with information — ingredient lists, nutrition tables, allergen warnings, 
+            date codes, additive E-numbers, FSSAI licence numbers, and health claims. 
+            Our Label Decoder breaks it all down in plain language.
+          </p>
+          <ul style="display:flex;flex-direction:column;gap:var(--sp-2);padding-left:0;list-style:none;">
+            <li style="display:flex;align-items:center;gap:var(--sp-2);font-size:.9rem;"><span style="color:var(--clr-primary)">✓</span> Understand ingredient order</li>
+            <li style="display:flex;align-items:center;gap:var(--sp-2);font-size:.9rem;"><span style="color:var(--clr-primary)">✓</span> Identify allergens and additives</li>
+            <li style="display:flex;align-items:center;gap:var(--sp-2);font-size:.9rem;"><span style="color:var(--clr-primary)">✓</span> Verify FSSAI licence numbers</li>
+            <li style="display:flex;align-items:center;gap:var(--sp-2);font-size:.9rem;"><span style="color:var(--clr-primary)">✓</span> Decode health claims and date codes</li>
+          </ul>
+          <a href="label-decoder.html" class="btn btn-primary" style="align-self:flex-start;">Decode a Label →</a>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- QUICK TIPS -->
+  <section class="section-sm" aria-labelledby="tips-heading">
+    <div class="container">
+      <div class="section-header">
+        <div class="section-tag">💡 Quick Tips</div>
+        <h2 id="tips-heading">Smarter Shopping Starts Here</h2>
+      </div>
+      <div class="quick-tips">
+        <div class="tip-card">
+          <span class="tip-emoji">🧾</span>
+          <h3>Always Read Labels</h3>
+          <p>Check serving size first — nutrition numbers may look small but often refer to a fraction of the pack.</p>
+        </div>
+        <div class="tip-card">
+          <span class="tip-emoji">🔢</span>
+          <h3>Compare Per 100g</h3>
+          <p>Always compare products on a per-100g basis for a fair apples-to-apples nutritional comparison.</p>
+        </div>
+        <div class="tip-card">
+          <span class="tip-emoji">🧂</span>
+          <h3>Watch for Hidden Salt</h3>
+          <p>Sodium can hide in bread, cereals, sauces, and biscuits. Aim for under 2,000 mg per day.</p>
+        </div>
+        <div class="tip-card">
+          <span class="tip-emoji">🌾</span>
+          <h3>Whole Grains First</h3>
+          <p>Choose whole wheat, brown rice, or oats over refined options for more fibre and micronutrients.</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- HIGHLIGHT: Food Safety -->
+  <section class="section" aria-labelledby="highlight2-heading">
+    <div class="container">
+      <div class="highlight-card card-neu" style="direction:ltr">
+        <div class="highlight-body" style="order:1">
+          <div class="section-tag">🛡️ Food Safety</div>
+          <h2 id="highlight2-heading">Protect Your Family from Food Adulteration</h2>
+          <p style="color:var(--clr-text-muted);line-height:1.7;">
+            Food adulteration — mixing inferior or harmful substances into food — is a serious public health concern in India.
+            Learn to spot warning signs, understand which foods are commonly adulterated, and know exactly what to do if you suspect a problem.
+          </p>
+          <div class="alert alert-warning" role="note">
+            <span class="alert-icon">⚠️</span>
+            <div>Laboratory testing is the <strong>only reliable way</strong> to confirm food adulteration. Our guidance helps you identify warning signs and take safe precautions.</div>
+          </div>
+          <a href="food-safety.html" class="btn btn-primary" style="align-self:flex-start;">Explore Food Safety →</a>
+        </div>
+        <img class="highlight-img" style="order:2"
+          src="https://images.unsplash.com/photo-1576402187878-974f70c890a5?auto=format&fit=crop&w=800&q=75"
+          alt="Spices and food products laid out on a market table"
+          loading="lazy" width="800" height="600">
+      </div>
+    </div>
+  </section>
+
+  <!-- CTA SECTION -->
+  <section class="cta-section section" aria-labelledby="cta-heading">
+    <div class="container text-center">
+      <div class="section-tag" style="background:rgba(255,255,255,0.15);color:white;border-color:rgba(255,255,255,0.3)">🧠 Test Your Knowledge</div>
+      <h2 id="cta-heading" style="margin-top:var(--sp-3)">How Food-Safe Are You?</h2>
+      <p style="max-width:480px;margin:var(--sp-3) auto var(--sp-6)">
+        Take our 10-question food safety quiz and find out how well you know your labels, nutrients, and food risks.
+      </p>
+      <div style="display:flex;flex-wrap:wrap;justify-content:center;gap:var(--sp-4)">
+        <a href="quiz.html" class="btn btn-outline btn-lg">Start the Quiz →</a>
+        <a href="nutrient-hub.html" class="btn btn-outline btn-lg">Explore Nutrients →</a>
+      </div>
+    </div>
+  </section>
+</main>
+
+<script src="js/components.js"></script>
+<script>
+  // Hero search: on Enter/submit, redirect to search page
+  document.addEventListener('DOMContentLoaded', () => {
+    const form = document.querySelector('.search-hero form');
+    if (form) {
+      form.addEventListener('submit', (e) => {
+        const input = form.querySelector('input[type=search]');
+        if (input && !input.value.trim()) {
+          e.preventDefault();
+          input.focus();
+        }
+      });
+    }
+  });
+</script>
+</body>
+</html>

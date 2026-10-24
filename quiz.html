@@ -1,0 +1,1044 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Food Safety Quiz — NutriGuard</title>
+  <meta name="description" content="Test your food safety and nutrition knowledge with 10 expert questions. Get instant explanations and a score to guide your learning.">
+  <meta property="og:title" content="Food Safety Quiz — NutriGuard">
+  <meta property="og:description" content="Test your food safety and nutrition knowledge with 10 expert questions. Get instant explanations and a score to guide your learning.">
+  <meta property="og:type" content="website">
+  <meta name="theme-color" content="#2e7d32">
+  <link rel="icon" href="favicon.svg" type="image/svg+xml">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Poppins:wght@700;800&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="css/style.css">
+  <style>
+    /* ── Quiz page-specific styles ── */
+
+    .quiz-page-hero {
+      background: linear-gradient(135deg, var(--clr-primary-dark) 0%, var(--clr-primary) 60%, #558b2f 100%);
+      color: white;
+      padding: 3rem 0 2.5rem;
+      text-align: center;
+      position: relative;
+      overflow: hidden;
+    }
+    .quiz-page-hero::before {
+      content: '';
+      position: absolute;
+      inset: 0;
+      background: url("data:image/svg+xml,%3Csvg width='60' height='60' viewBox='0 0 60 60' xmlns='http://www.w3.org/2000/svg'%3E%3Cg fill='none' fill-rule='evenodd'%3E%3Cg fill='%23ffffff' fill-opacity='0.04'%3E%3Cpath d='M36 34v-4h-2v4h-4v2h4v4h2v-4h4v-2h-4zm0-30V0h-2v4h-4v2h4v4h2V6h4V4h-4zM6 34v-4H4v4H0v2h4v4h2v-4h4v-2H6zM6 4V0H4v4H0v2h4v4h2V6h4V4H6z'/%3E%3C/g%3E%3C/g%3E%3C/svg%3E");
+      pointer-events: none;
+    }
+    .quiz-page-hero .container { position: relative; z-index: 1; }
+    .quiz-page-hero h1 {
+      color: white;
+      font-size: clamp(1.65rem, 4vw, 2.6rem);
+      margin-bottom: 0.75rem;
+    }
+    .quiz-page-hero p {
+      color: rgba(255,255,255,0.85);
+      font-size: 1.05rem;
+      max-width: 540px;
+      margin: 0 auto;
+      line-height: 1.65;
+    }
+    .quiz-hero-badges {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 0.6rem;
+      justify-content: center;
+      margin-top: 1.25rem;
+    }
+    .quiz-hero-badge {
+      display: inline-flex;
+      align-items: center;
+      gap: 0.35rem;
+      background: rgba(255,255,255,0.14);
+      border: 1px solid rgba(255,255,255,0.25);
+      border-radius: 999px;
+      padding: 0.28rem 0.9rem;
+      font-size: 0.78rem;
+      font-weight: 600;
+      color: rgba(255,255,255,0.95);
+      letter-spacing: 0.03em;
+    }
+
+    /* ── Quiz section wrapper ── */
+    .quiz-section {
+      padding: 3rem 0 5rem;
+    }
+
+    /* ── Quiz card screens ── */
+    .quiz-card {
+      background: var(--clr-bg);
+      border-radius: var(--r-xl);
+      padding: 2.5rem 2rem;
+      box-shadow: var(--neu-shadow-out);
+      max-width: 720px;
+      margin: 0 auto;
+      animation: fadeIn 0.3s ease both;
+    }
+    @media (max-width: 500px) {
+      .quiz-card { padding: 1.5rem 1rem; }
+    }
+
+    /* ── Start screen ── */
+    .quiz-start {
+      text-align: center;
+    }
+    .quiz-start-icon {
+      font-size: 4rem;
+      margin-bottom: 1rem;
+      display: block;
+      line-height: 1;
+      filter: drop-shadow(0 4px 12px rgba(46,125,50,0.25));
+    }
+    .quiz-start h2 {
+      font-size: clamp(1.3rem, 3.5vw, 1.85rem);
+      color: var(--clr-text);
+      margin-bottom: 0.75rem;
+    }
+    .quiz-start p {
+      color: var(--clr-text-muted);
+      font-size: 0.97rem;
+      line-height: 1.65;
+      max-width: 480px;
+      margin: 0 auto 1.5rem;
+    }
+    .quiz-meta-row {
+      display: flex;
+      flex-wrap: wrap;
+      justify-content: center;
+      gap: 0.75rem;
+      margin-bottom: 2rem;
+    }
+    .quiz-meta-chip {
+      display: inline-flex;
+      align-items: center;
+      gap: 0.4rem;
+      padding: 0.4rem 1rem;
+      border-radius: 999px;
+      font-size: 0.82rem;
+      font-weight: 600;
+      background: var(--clr-surface);
+      border: 1.5px solid var(--clr-border);
+      color: var(--clr-text-muted);
+      box-shadow: var(--neu-shadow-card);
+    }
+    .quiz-meta-chip .chip-icon { font-size: 1rem; }
+
+    /* ── Progress ── */
+    .quiz-progress-wrap {
+      margin-bottom: 1.5rem;
+    }
+    .quiz-progress-label {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      font-size: 0.82rem;
+      font-weight: 600;
+      color: var(--clr-text-muted);
+      margin-bottom: 0.45rem;
+    }
+    .quiz-progress-label .q-counter {
+      font-size: 0.9rem;
+      color: var(--clr-primary);
+      font-weight: 700;
+    }
+    .quiz-progress-bar {
+      height: 8px;
+      background: var(--clr-divider);
+      border-radius: 999px;
+      overflow: hidden;
+    }
+    .quiz-progress-fill {
+      height: 100%;
+      background: linear-gradient(90deg, var(--clr-primary), var(--clr-accent));
+      border-radius: 999px;
+      transition: width 0.45s cubic-bezier(.4,0,.2,1);
+    }
+    @media (prefers-reduced-motion: reduce) {
+      .quiz-progress-fill { transition: none; }
+    }
+
+    /* ── Question screen ── */
+    .quiz-question-num {
+      display: inline-block;
+      background: var(--clr-surface-alt);
+      color: var(--clr-primary);
+      font-size: 0.78rem;
+      font-weight: 700;
+      letter-spacing: 0.07em;
+      text-transform: uppercase;
+      padding: 0.2rem 0.75rem;
+      border-radius: 999px;
+      border: 1px solid var(--clr-border);
+      margin-bottom: 0.75rem;
+    }
+    .quiz-question-text {
+      font-size: clamp(1.05rem, 2.5vw, 1.25rem);
+      font-family: var(--font-display);
+      font-weight: 700;
+      color: var(--clr-text);
+      line-height: 1.45;
+      margin-bottom: 0;
+    }
+    .quiz-options {
+      display: flex;
+      flex-direction: column;
+      gap: 0.75rem;
+      margin: 1.5rem 0 1.25rem;
+    }
+    .quiz-option {
+      padding: 1rem 1.1rem;
+      border-radius: var(--r-md);
+      border: 2px solid var(--clr-border);
+      background: var(--clr-surface);
+      text-align: left;
+      font-size: 0.95rem;
+      color: var(--clr-text);
+      cursor: pointer;
+      transition: border-color 0.18s ease, background 0.18s ease, transform 0.15s ease;
+      line-height: 1.5;
+      display: flex;
+      align-items: flex-start;
+      gap: 0.75rem;
+      position: relative;
+    }
+    .quiz-option:hover:not(:disabled) {
+      border-color: var(--clr-primary-light);
+      background: var(--clr-surface-alt);
+      transform: translateX(3px);
+    }
+    .quiz-option:focus-visible {
+      outline: 3px solid var(--clr-primary-light);
+      outline-offset: 2px;
+    }
+    .quiz-option:disabled { cursor: not-allowed; }
+    .option-letter {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      flex-shrink: 0;
+      width: 26px;
+      height: 26px;
+      border-radius: 50%;
+      background: var(--clr-surface-alt);
+      border: 1.5px solid var(--clr-border);
+      font-size: 0.78rem;
+      font-weight: 700;
+      color: var(--clr-text-muted);
+      transition: background 0.18s, color 0.18s, border-color 0.18s;
+      margin-top: 1px;
+    }
+    .quiz-option.correct .option-letter {
+      background: #2e7d32;
+      border-color: #2e7d32;
+      color: white;
+    }
+    .quiz-option.wrong .option-letter {
+      background: #c62828;
+      border-color: #c62828;
+      color: white;
+    }
+    .quiz-option.correct {
+      border-color: #43a047;
+      background: #e8f5e9;
+      color: #1b5e20;
+    }
+    .quiz-option.wrong {
+      border-color: #e53935;
+      background: #ffebee;
+      color: #b71c1c;
+    }
+    [data-theme="dark"] .quiz-option.correct {
+      background: rgba(67,160,71,0.15);
+      border-color: #43a047;
+      color: #a5d6a7;
+    }
+    [data-theme="dark"] .quiz-option.correct .option-letter {
+      background: #388e3c;
+      border-color: #388e3c;
+    }
+    [data-theme="dark"] .quiz-option.wrong {
+      background: rgba(229,57,53,0.15);
+      border-color: #e53935;
+      color: #ef9a9a;
+    }
+    [data-theme="dark"] .quiz-option.wrong .option-letter {
+      background: #c62828;
+      border-color: #c62828;
+    }
+    .quiz-option[aria-selected="true"]:not(.correct):not(.wrong) {
+      border-color: var(--clr-primary);
+      background: var(--clr-surface-alt);
+    }
+
+    /* ── Explanation ── */
+    .quiz-explanation {
+      margin-top: 1.25rem;
+      padding: 1rem 1.1rem;
+      border-radius: var(--r-md);
+      background: var(--clr-surface-alt);
+      border-left: 4px solid var(--clr-primary);
+      font-size: 0.88rem;
+      line-height: 1.65;
+      color: var(--clr-text);
+      display: none;
+    }
+    .quiz-explanation.show {
+      display: block;
+      animation: fadeIn 0.3s ease both;
+    }
+    @media (prefers-reduced-motion: reduce) {
+      .quiz-explanation.show { animation: none; }
+    }
+    .quiz-explanation strong {
+      display: block;
+      margin-bottom: 0.35rem;
+      color: var(--clr-primary);
+      font-size: 0.82rem;
+      text-transform: uppercase;
+      letter-spacing: 0.06em;
+    }
+
+    /* ── Nav buttons ── */
+    .quiz-nav {
+      display: flex;
+      justify-content: flex-end;
+      margin-top: 1.25rem;
+    }
+    #btn-next {
+      display: none;
+    }
+
+    /* ── Results screen ── */
+    .quiz-results { text-align: center; }
+    .results-score-circle {
+      width: 140px;
+      height: 140px;
+      border-radius: 50%;
+      background: linear-gradient(135deg, var(--clr-primary-dark), var(--clr-primary));
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      margin: 0 auto 1.5rem;
+      box-shadow: 0 8px 32px rgba(46,125,50,0.35);
+      color: white;
+      gap: 0;
+      animation: fadeIn 0.5s ease both;
+    }
+    @media (prefers-reduced-motion: reduce) {
+      .results-score-circle { animation: none; }
+    }
+    .score-fraction {
+      font-family: var(--font-display);
+      font-size: 2.2rem;
+      font-weight: 800;
+      line-height: 1;
+      letter-spacing: -0.02em;
+    }
+    .score-label {
+      font-size: 0.75rem;
+      font-weight: 600;
+      opacity: 0.85;
+      letter-spacing: 0.05em;
+      text-transform: uppercase;
+      margin-top: 0.2rem;
+    }
+    .score-pct {
+      font-size: 1.25rem;
+      font-weight: 700;
+      margin-top: 0.2rem;
+    }
+    .results-grade {
+      font-size: clamp(1.2rem, 3vw, 1.6rem);
+      font-family: var(--font-display);
+      font-weight: 800;
+      color: var(--clr-primary);
+      margin-bottom: 0.5rem;
+    }
+    .results-feedback {
+      color: var(--clr-text-muted);
+      font-size: 0.97rem;
+      line-height: 1.6;
+      max-width: 440px;
+      margin: 0 auto 2rem;
+    }
+
+    /* ── Review list ── */
+    .review-list {
+      text-align: left;
+      margin-top: 2rem;
+      border-top: 1px solid var(--clr-divider);
+      padding-top: 1.5rem;
+    }
+    .review-list h3 {
+      font-size: 1rem;
+      margin-bottom: 1rem;
+      color: var(--clr-text);
+    }
+    .review-item {
+      background: var(--clr-surface);
+      border-radius: var(--r-md);
+      padding: 1rem;
+      margin-bottom: 0.75rem;
+      border: 1.5px solid var(--clr-divider);
+      position: relative;
+    }
+    .review-item.review-correct { border-color: #a5d6a7; background: #f1f8f1; }
+    .review-item.review-wrong { border-color: #ef9a9a; background: #fff5f5; }
+    [data-theme="dark"] .review-item.review-correct { background: rgba(46,125,50,0.08); border-color: #388e3c; }
+    [data-theme="dark"] .review-item.review-wrong { background: rgba(198,40,40,0.08); border-color: #c62828; }
+    .review-item-header {
+      display: flex;
+      align-items: flex-start;
+      gap: 0.6rem;
+      margin-bottom: 0.5rem;
+    }
+    .review-status-icon {
+      font-size: 1.1rem;
+      flex-shrink: 0;
+      margin-top: 1px;
+    }
+    .review-q-text {
+      font-size: 0.9rem;
+      font-weight: 600;
+      color: var(--clr-text);
+      line-height: 1.4;
+    }
+    .review-answer-row {
+      font-size: 0.83rem;
+      color: var(--clr-text-muted);
+      margin-top: 0.3rem;
+      padding-left: 1.7rem;
+    }
+    .review-answer-correct { color: #2e7d32; font-weight: 600; }
+    .review-answer-wrong { color: #c62828; font-weight: 600; }
+    [data-theme="dark"] .review-answer-correct { color: #81c784; }
+    [data-theme="dark"] .review-answer-wrong { color: #ef9a9a; }
+
+    /* ── Results CTA row ── */
+    .results-cta-row {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 0.75rem;
+      justify-content: center;
+      margin-top: 1.75rem;
+    }
+    .results-learn-links {
+      margin-top: 1.5rem;
+      padding: 1.25rem;
+      border-radius: var(--r-md);
+      background: var(--clr-surface-alt);
+      border: 1px solid var(--clr-border);
+    }
+    .results-learn-links h4 {
+      font-size: 0.88rem;
+      font-weight: 700;
+      color: var(--clr-text-muted);
+      text-transform: uppercase;
+      letter-spacing: 0.06em;
+      margin-bottom: 0.75rem;
+    }
+    .learn-links-grid {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 0.6rem;
+      justify-content: center;
+    }
+    .learn-link-btn {
+      display: inline-flex;
+      align-items: center;
+      gap: 0.4rem;
+      padding: 0.5rem 1.1rem;
+      border-radius: 999px;
+      font-size: 0.85rem;
+      font-weight: 600;
+      background: var(--clr-surface);
+      border: 1.5px solid var(--clr-border);
+      color: var(--clr-primary);
+      text-decoration: none;
+      transition: background 0.18s, border-color 0.18s, box-shadow 0.18s;
+      box-shadow: var(--neu-shadow-card);
+    }
+    .learn-link-btn:hover {
+      background: var(--clr-primary);
+      border-color: var(--clr-primary);
+      color: white;
+      text-decoration: none;
+      box-shadow: 0 4px 16px rgba(46,125,50,0.3);
+    }
+
+    /* ── Keyboard focus ring for options ── */
+    .quiz-option.keyboard-focus {
+      outline: 3px solid var(--clr-primary-light);
+      outline-offset: 2px;
+    }
+
+    /* ── Reduced-motion override ── */
+    @media (prefers-reduced-motion: reduce) {
+      .quiz-card,
+      .results-score-circle { animation: none; }
+      .quiz-option { transition: border-color 0.01ms, background 0.01ms; }
+    }
+  </style>
+</head>
+<body>
+  <!-- ARIA live region for screen reader announcements -->
+  <div id="live-region" aria-live="polite" aria-atomic="true" class="sr-only"></div>
+
+  <main id="main-content">
+
+    <!-- ═══════════════════════════════════════════
+         PAGE HERO
+    ════════════════════════════════════════════ -->
+    <section class="quiz-page-hero" aria-label="Quiz page hero">
+      <div class="container">
+        <h1>Food Safety Knowledge Quiz</h1>
+        <p>How well do you know your food labels, additives, and safety standards? Put your knowledge to the test with 10 expert-crafted questions.</p>
+        <div class="quiz-hero-badges" aria-label="Quiz information">
+          <span class="quiz-hero-badge"><span aria-hidden="true">🧪</span> 10 Questions</span>
+          <span class="quiz-hero-badge"><span aria-hidden="true">⏱️</span> No Time Limit</span>
+          <span class="quiz-hero-badge"><span aria-hidden="true">💡</span> Instant Explanations</span>
+          <span class="quiz-hero-badge"><span aria-hidden="true">🏆</span> Graded Score</span>
+        </div>
+      </div>
+    </section>
+
+    <!-- ═══════════════════════════════════════════
+         BREADCRUMB
+    ════════════════════════════════════════════ -->
+    <nav class="container" aria-label="Breadcrumb">
+      <ol class="breadcrumb" itemscope itemtype="https://schema.org/BreadcrumbList">
+        <li itemprop="itemListElement" itemscope itemtype="https://schema.org/ListItem">
+          <a href="index.html" itemprop="item"><span itemprop="name">Home</span></a>
+          <meta itemprop="position" content="1">
+        </li>
+        <span aria-hidden="true">›</span>
+        <li itemprop="itemListElement" itemscope itemtype="https://schema.org/ListItem">
+          <span itemprop="name" aria-current="page">Quiz</span>
+          <meta itemprop="position" content="2">
+        </li>
+      </ol>
+    </nav>
+
+    <!-- ═══════════════════════════════════════════
+         QUIZ SECTION
+    ════════════════════════════════════════════ -->
+    <section class="quiz-section" aria-label="Food safety quiz">
+      <div class="container">
+
+        <!-- ── START SCREEN ── -->
+        <div id="quiz-start" class="quiz-card quiz-start" role="region" aria-label="Quiz introduction">
+          <span class="quiz-start-icon" aria-hidden="true">🍽️</span>
+          <h2>Ready to Test Your Knowledge?</h2>
+          <p>This quiz covers FSSAI regulations, label reading, food adulteration detection, nutritional facts, and common food safety practices. Each question comes with a detailed explanation.</p>
+
+          <div class="quiz-meta-row" role="list" aria-label="Quiz details">
+            <span class="quiz-meta-chip" role="listitem">
+              <span class="chip-icon" aria-hidden="true">📋</span>
+              <strong id="total-q-count">10</strong> Questions
+            </span>
+            <span class="quiz-meta-chip" role="listitem">
+              <span class="chip-icon" aria-hidden="true">🎯</span>
+              Multiple Choice
+            </span>
+            <span class="quiz-meta-chip" role="listitem">
+              <span class="chip-icon" aria-hidden="true">⌨️</span>
+              Keyboard Friendly
+            </span>
+            <span class="quiz-meta-chip" role="listitem">
+              <span class="chip-icon" aria-hidden="true">🔄</span>
+              Retakeable
+            </span>
+          </div>
+
+          <button class="btn btn-primary btn-lg" id="btn-start" aria-label="Start the food safety quiz">
+            <span aria-hidden="true">▶</span> Start Quiz
+          </button>
+        </div>
+
+        <!-- ── QUESTION SCREEN ── -->
+        <div id="quiz-question" class="quiz-card hidden" role="region" aria-label="Quiz question">
+
+          <!-- Progress -->
+          <div class="quiz-progress-wrap" aria-label="Quiz progress">
+            <div class="quiz-progress-label">
+              <span class="q-counter" id="q-counter-text" aria-live="polite">Question 1 of 10</span>
+              <span id="q-score-live" aria-live="polite" class="text-muted" style="font-size:0.8rem;"></span>
+            </div>
+            <div class="quiz-progress-bar" role="progressbar" aria-valuemin="0" aria-valuemax="10" aria-valuenow="0" id="progress-bar-el">
+              <div class="quiz-progress-fill" id="quiz-progress-fill" style="width:0%"></div>
+            </div>
+          </div>
+
+          <!-- Question -->
+          <span class="quiz-question-num" id="q-num-label" aria-hidden="true">Question 1</span>
+          <h2 class="quiz-question-text" id="question-text"></h2>
+
+          <!-- Options -->
+          <div class="quiz-options" id="quiz-options" role="group" aria-labelledby="question-text"></div>
+
+          <!-- Explanation -->
+          <div class="quiz-explanation" id="quiz-explanation" aria-live="polite" aria-label="Answer explanation">
+            <strong>💡 Explanation</strong>
+            <span id="explanation-text"></span>
+          </div>
+
+          <!-- Nav -->
+          <div class="quiz-nav">
+            <button class="btn btn-primary" id="btn-next" aria-label="Go to the next question">
+              Next Question <span aria-hidden="true">→</span>
+            </button>
+            <button class="btn btn-primary hidden" id="btn-results" aria-label="See your quiz results">
+              See Results <span aria-hidden="true">🏆</span>
+            </button>
+          </div>
+        </div>
+
+        <!-- ── RESULTS SCREEN ── -->
+        <div id="quiz-results" class="quiz-card quiz-results hidden" role="region" aria-label="Quiz results">
+
+          <div class="results-score-circle" aria-hidden="true">
+            <span class="score-fraction" id="res-fraction">0 / 10</span>
+            <span class="score-pct" id="res-pct">0%</span>
+            <span class="score-label">Score</span>
+          </div>
+
+          <h2 class="results-grade" id="res-grade"></h2>
+          <p class="results-feedback" id="res-feedback"></p>
+
+          <div class="results-cta-row">
+            <button class="btn btn-primary btn-lg" id="btn-retake">
+              <span aria-hidden="true">🔄</span> Take Quiz Again
+            </button>
+          </div>
+
+          <!-- Learn more links -->
+          <div class="results-learn-links" aria-label="Explore related topics">
+            <h4>Continue Learning</h4>
+            <div class="learn-links-grid">
+              <a href="food-safety.html" class="learn-link-btn">
+                <span aria-hidden="true">🛡️</span> Food Safety Hub
+              </a>
+              <a href="label-decoder.html" class="learn-link-btn">
+                <span aria-hidden="true">🔍</span> Label Decoder
+              </a>
+              <a href="nutrient-hub.html" class="learn-link-btn">
+                <span aria-hidden="true">🧬</span> Nutrient Hub
+              </a>
+            </div>
+          </div>
+
+          <!-- Full review -->
+          <div class="review-list" aria-label="Question-by-question review">
+            <h3>📝 Question Review</h3>
+            <div id="review-items"></div>
+          </div>
+
+        </div><!-- /#quiz-results -->
+
+      </div><!-- /.container -->
+    </section>
+
+  </main>
+
+  <script src="js/quiz-data.js"></script>
+  <script src="js/components.js"></script>
+  <script>
+    /* =====================================================
+       NutriGuard — quiz.html — Page Script
+       ===================================================== */
+
+    (() => {
+      'use strict';
+
+      // ── Helpers ──────────────────────────────────────────
+      const $ = (sel, ctx = document) => ctx.querySelector(sel);
+      const $$ = (sel, ctx = document) => [...ctx.querySelectorAll(sel)];
+      const show = el => el.classList.remove('hidden');
+      const hide = el => el.classList.add('hidden');
+
+      // Respect prefers-reduced-motion
+      const prefersReducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+
+      // ── Screen reader announcement ────────────────────────
+      function announce(msg) {
+        if (typeof window.announce === 'function') {
+          window.announce(msg);
+        } else {
+          const lr = document.getElementById('live-region');
+          if (lr) {
+            lr.textContent = '';
+            // Force repaint so AT re-reads
+            requestAnimationFrame(() => { lr.textContent = msg; });
+          }
+        }
+      }
+
+      // ── State ─────────────────────────────────────────────
+      let questions   = [];
+      let current     = 0;    // index of current question
+      let score       = 0;
+      let answered    = false;
+      let userAnswers = [];    // [{qIndex, chosen, correct}]
+      let focusedOptionIndex = 0;  // keyboard navigation
+
+      // ── DOM refs ──────────────────────────────────────────
+      const screenStart    = document.getElementById('quiz-start');
+      const screenQuestion = document.getElementById('quiz-question');
+      const screenResults  = document.getElementById('quiz-results');
+
+      const btnStart    = document.getElementById('btn-start');
+      const btnNext     = document.getElementById('btn-next');
+      const btnResults  = document.getElementById('btn-results');
+      const btnRetake   = document.getElementById('btn-retake');
+
+      const progressFill = document.getElementById('quiz-progress-fill');
+      const progressBar  = document.getElementById('progress-bar-el');
+      const qCounterText = document.getElementById('q-counter-text');
+      const qScoreLive   = document.getElementById('q-score-live');
+      const qNumLabel    = document.getElementById('q-num-label');
+      const questionText = document.getElementById('question-text');
+      const optionsWrap  = document.getElementById('quiz-options');
+      const explanation  = document.getElementById('quiz-explanation');
+      const explanationText = document.getElementById('explanation-text');
+
+      const resFraction  = document.getElementById('res-fraction');
+      const resPct       = document.getElementById('res-pct');
+      const resGrade     = document.getElementById('res-grade');
+      const resFeedback  = document.getElementById('res-feedback');
+      const reviewItems  = document.getElementById('review-items');
+      const totalQCount  = document.getElementById('total-q-count');
+
+      // ── Grades config ─────────────────────────────────────
+      const GRADES = [
+        { min: 90, label: 'Food Safety Expert 🏆',  feedback: 'Outstanding! You have an expert-level understanding of food safety, labelling laws, and nutritional science. Share your knowledge to help others make safer food choices.' },
+        { min: 70, label: 'Nutrition-Aware 🌟',      feedback: 'Great work! You\'re well-informed about food safety. A little more study on the trickier topics — like additive codes and adulteration tests — and you\'ll be a true expert.' },
+        { min: 50, label: 'Getting There 💡',        feedback: 'Good effort! You have a solid foundation but there are some gaps to fill. Explore the NutriGuard Food Safety Hub and Label Decoder to sharpen your knowledge.' },
+        { min:  0, label: 'Keep Learning 📚',        feedback: 'Everyone starts somewhere! Dive into our resources — the Food Safety Hub, Label Decoder, and Nutrient Hub — to build a confident understanding of what\'s in your food.' },
+      ];
+
+      function getGrade(pct) {
+        return GRADES.find(g => pct >= g.min);
+      }
+
+      // ── Init ──────────────────────────────────────────────
+      function init() {
+        // Load questions from global
+        if (!window.QUIZ_QUESTIONS || !window.QUIZ_QUESTIONS.length) {
+          console.error('NutriGuard: QUIZ_QUESTIONS not found. Ensure quiz-data.js is loaded.');
+          return;
+        }
+        questions = window.QUIZ_QUESTIONS;
+        totalQCount.textContent = questions.length;
+
+        btnStart.addEventListener('click', startQuiz);
+        btnNext.addEventListener('click', nextQuestion);
+        btnResults.addEventListener('click', showResults);
+        btnRetake.addEventListener('click', resetQuiz);
+
+        // Global keyboard support
+        document.addEventListener('keydown', handleGlobalKey);
+      }
+
+      // ── Start ─────────────────────────────────────────────
+      function startQuiz() {
+        current     = 0;
+        score       = 0;
+        answered    = false;
+        userAnswers = [];
+
+        hide(screenStart);
+        show(screenQuestion);
+        hide(screenResults);
+
+        renderQuestion();
+        announce('Quiz started. ' + questions[0].question);
+      }
+
+      // ── Render a question ─────────────────────────────────
+      function renderQuestion() {
+        answered = false;
+        focusedOptionIndex = 0;
+
+        const q     = questions[current];
+        const total = questions.length;
+        const pct   = Math.round((current / total) * 100);
+
+        // Progress
+        qCounterText.textContent = `Question ${current + 1} of ${total}`;
+        qNumLabel.textContent    = `Question ${current + 1}`;
+        progressFill.style.width = pct + '%';
+        progressBar.setAttribute('aria-valuenow', current);
+        qScoreLive.textContent   = current > 0 ? `Score: ${score}/${current}` : '';
+
+        // Question text
+        questionText.textContent = q.question;
+
+        // Clear explanation
+        explanation.classList.remove('show');
+        explanationText.textContent = '';
+
+        // Hide next/results buttons
+        hide(btnNext);
+        hide(btnResults);
+        btnNext.style.display    = 'none';
+        btnResults.style.display = 'none';
+
+        // Render options
+        optionsWrap.innerHTML = '';
+        const letters = ['A', 'B', 'C', 'D'];
+
+        q.options.forEach((optText, idx) => {
+          const btn = document.createElement('button');
+          btn.className = 'quiz-option';
+          btn.setAttribute('data-index', idx);
+          btn.setAttribute('role', 'radio');
+          btn.setAttribute('aria-checked', 'false');
+          btn.setAttribute('tabindex', idx === 0 ? '0' : '-1');
+
+          // Letter badge + text
+          const letter = document.createElement('span');
+          letter.className = 'option-letter';
+          letter.textContent = letters[idx];
+          letter.setAttribute('aria-hidden', 'true');
+
+          const textNode = document.createElement('span');
+          textNode.textContent = optText;
+
+          btn.appendChild(letter);
+          btn.appendChild(textNode);
+
+          btn.addEventListener('click', () => selectOption(idx));
+          btn.addEventListener('keydown', handleOptionKey);
+
+          optionsWrap.appendChild(btn);
+        });
+
+        // Animate card in
+        if (!prefersReducedMotion) {
+          screenQuestion.style.animation = 'none';
+          void screenQuestion.offsetWidth; // reflow
+          screenQuestion.style.animation = '';
+        }
+
+        // Focus first option after a brief moment (allows DOM settle)
+        requestAnimationFrame(() => {
+          const firstOpt = optionsWrap.querySelector('.quiz-option');
+          if (firstOpt) firstOpt.focus();
+        });
+      }
+
+      // ── Select an option ──────────────────────────────────
+      function selectOption(chosenIdx) {
+        if (answered) return;
+        answered = true;
+
+        const q       = questions[current];
+        const correct = q.correct;
+        const isRight = chosenIdx === correct;
+
+        if (isRight) score++;
+
+        // Record
+        userAnswers[current] = { chosen: chosenIdx, correct: isRight };
+
+        // Style options
+        const opts = $$('.quiz-option', optionsWrap);
+        opts.forEach((btn, idx) => {
+          btn.disabled = true;
+          btn.setAttribute('aria-checked', idx === chosenIdx ? 'true' : 'false');
+
+          if (idx === correct) {
+            btn.classList.add('correct');
+          } else if (idx === chosenIdx && !isRight) {
+            btn.classList.add('wrong');
+          }
+        });
+
+        // Show explanation
+        explanationText.textContent = q.explanation;
+        explanation.classList.add('show');
+
+        // Show correct/wrong nav button
+        const isLast = current === questions.length - 1;
+        if (isLast) {
+          btnResults.style.display = '';
+          show(btnResults);
+          btnResults.focus();
+        } else {
+          btnNext.style.display = '';
+          show(btnNext);
+          btnNext.focus();
+        }
+
+        // Live score update
+        qScoreLive.textContent = `Score: ${score}/${current + 1}`;
+
+        // Announce to screen readers
+        const msg = isRight
+          ? `Correct! ${q.explanation}`
+          : `Incorrect. The correct answer was: ${q.options[correct]}. ${q.explanation}`;
+        announce(msg);
+      }
+
+      // ── Next question ──────────────────────────────────────
+      function nextQuestion() {
+        current++;
+        if (current < questions.length) {
+          renderQuestion();
+          announce(`Question ${current + 1} of ${questions.length}: ${questions[current].question}`);
+        }
+      }
+
+      // ── Show results ───────────────────────────────────────
+      function showResults() {
+        hide(screenQuestion);
+        show(screenResults);
+
+        const total = questions.length;
+        const pct   = Math.round((score / total) * 100);
+        const grade = getGrade(pct);
+
+        resFraction.textContent = `${score} / ${total}`;
+        resPct.textContent      = pct + '%';
+        resGrade.textContent    = grade.label;
+        resFeedback.textContent = grade.feedback;
+
+        // Update progress to full
+        progressFill.style.width = '100%';
+        progressBar.setAttribute('aria-valuenow', total);
+
+        // Build review
+        buildReview();
+
+        // Announce score
+        announce(`Quiz complete! Your score is ${score} out of ${total}, ${pct} percent. Grade: ${grade.label}`);
+
+        // Scroll to top of results
+        screenResults.scrollIntoView({ behavior: prefersReducedMotion ? 'auto' : 'smooth', block: 'start' });
+      }
+
+      // ── Build review list ──────────────────────────────────
+      function buildReview() {
+        reviewItems.innerHTML = '';
+
+        questions.forEach((q, idx) => {
+          const ua      = userAnswers[idx];
+          const wasRight = ua && ua.correct;
+          const chosen   = ua ? ua.chosen : -1;
+
+          const item = document.createElement('div');
+          item.className = `review-item ${wasRight ? 'review-correct' : 'review-wrong'}`;
+          item.setAttribute('aria-label', `Question ${idx + 1}: ${wasRight ? 'Correct' : 'Incorrect'}`);
+
+          const letters = ['A', 'B', 'C', 'D'];
+
+          item.innerHTML = `
+            <div class="review-item-header">
+              <span class="review-status-icon" aria-hidden="true">${wasRight ? '✅' : '❌'}</span>
+              <span class="review-q-text">Q${idx + 1}. ${escHtml(q.question)}</span>
+            </div>
+            ${!wasRight && chosen >= 0 ? `
+              <div class="review-answer-row">
+                <span class="review-answer-wrong">Your answer: ${letters[chosen]}. ${escHtml(q.options[chosen])}</span>
+              </div>
+            ` : ''}
+            <div class="review-answer-row">
+              <span class="review-answer-correct">✔ Correct: ${letters[q.correct]}. ${escHtml(q.options[q.correct])}</span>
+            </div>
+          `;
+
+          reviewItems.appendChild(item);
+        });
+      }
+
+      // ── Reset / retake ─────────────────────────────────────
+      function resetQuiz() {
+        hide(screenResults);
+        hide(screenQuestion);
+        show(screenStart);
+
+        // Reset progress fill
+        progressFill.style.width = '0%';
+
+        btnStart.focus();
+        announce('Quiz reset. Press Start Quiz to begin again.');
+      }
+
+      // ── Keyboard: option keys ──────────────────────────────
+      function handleOptionKey(e) {
+        const opts = $$('.quiz-option', optionsWrap);
+        if (!opts.length) return;
+
+        let newIdx = focusedOptionIndex;
+
+        switch (e.key) {
+          case 'ArrowDown':
+          case 'ArrowRight':
+            e.preventDefault();
+            newIdx = (focusedOptionIndex + 1) % opts.length;
+            break;
+          case 'ArrowUp':
+          case 'ArrowLeft':
+            e.preventDefault();
+            newIdx = (focusedOptionIndex - 1 + opts.length) % opts.length;
+            break;
+          case 'Enter':
+          case ' ':
+            e.preventDefault();
+            if (!answered) selectOption(focusedOptionIndex);
+            return;
+          default:
+            // Letter shortcuts A/B/C/D
+            {
+              const letter = e.key.toUpperCase();
+              const keyMap = { A: 0, B: 1, C: 2, D: 3 };
+              if (letter in keyMap && !answered) {
+                selectOption(keyMap[letter]);
+              }
+            }
+            return;
+        }
+
+        // Update focus
+        focusedOptionIndex = newIdx;
+        opts.forEach((o, i) => o.setAttribute('tabindex', i === newIdx ? '0' : '-1'));
+        opts[newIdx].focus();
+      }
+
+      // ── Global keyboard: Escape resets, Enter on start screen ──
+      function handleGlobalKey(e) {
+        if (e.key === 'Escape') {
+          // No action needed — no modals
+        }
+      }
+
+      // ── HTML escape helper ─────────────────────────────────
+      function escHtml(str) {
+        return str
+          .replace(/&/g, '&amp;')
+          .replace(/</g, '&lt;')
+          .replace(/>/g, '&gt;')
+          .replace(/"/g, '&quot;')
+          .replace(/'/g, '&#39;');
+      }
+
+      // ── Bootstrap ─────────────────────────────────────────
+      // Wait for components.js DOMContentLoaded + quiz-data.js to be ready
+      if (document.readyState === 'loading') {
+        document.addEventListener('DOMContentLoaded', init);
+      } else {
+        init();
+      }
+
+    })();
+  </script>
+</body>
+</html>

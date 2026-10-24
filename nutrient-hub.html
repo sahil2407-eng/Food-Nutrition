@@ -1,0 +1,918 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Nutrient Knowledge Hub — NutriGuard</title>
+  <meta name="description" content="Learn about vitamins, minerals, macronutrients — their functions, food sources, and daily requirements — with India-specific guidance.">
+  <meta property="og:title" content="Nutrient Knowledge Hub — NutriGuard">
+  <meta property="og:description" content="Learn about vitamins, minerals, macronutrients — their functions, food sources, and daily requirements — with India-specific guidance.">
+  <meta property="og:type" content="website">
+  <meta name="theme-color" content="#2e7d32">
+  <link rel="icon" href="favicon.svg" type="image/svg+xml">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Poppins:wght@700;800&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="css/style.css">
+  <style>
+    /* ── Page-level variables ────────────────────────────────────────── */
+    :root {
+      --green-dark:  #1b5e20;
+      --green-mid:   #2e7d32;
+      --green-base:  #4caf50;
+      --green-light: #8bc34a;
+      --off-white:   #f5f5f0;
+      --charcoal:    #212121;
+      --surface:     #fff;
+      --radius-card: 18px;
+      --transition:  0.25s ease;
+    }
+
+    /* ── Hero ────────────────────────────────────────────────────────── */
+    .hub-hero {
+      background: linear-gradient(135deg, var(--green-dark) 0%, var(--green-mid) 60%, #388e3c 100%);
+      color: #fff;
+      padding: 72px 24px 56px;
+      text-align: center;
+      position: relative;
+      overflow: hidden;
+    }
+    .hub-hero::before {
+      content: '';
+      position: absolute;
+      inset: 0;
+      background: url("data:image/svg+xml,%3Csvg width='60' height='60' viewBox='0 0 60 60' xmlns='http://www.w3.org/2000/svg'%3E%3Cg fill='none' fill-rule='evenodd'%3E%3Cg fill='%23ffffff' fill-opacity='0.04'%3E%3Cpath d='M36 34v-4h-2v4h-4v2h4v4h2v-4h4v-2h-4zm0-30V0h-2v4h-4v2h4v4h2V6h4V4h-4zM6 34v-4H4v4H0v2h4v4h2v-4h4v-2H6zM6 4V0H4v4H0v2h4v4h2V6h4V4H6z'/%3E%3C/g%3E%3C/g%3E%3C/svg%3E");
+      pointer-events: none;
+    }
+    .hub-hero h1 {
+      font-family: 'Poppins', sans-serif;
+      font-size: clamp(2rem, 5vw, 3.2rem);
+      font-weight: 800;
+      margin: 0 0 16px;
+      line-height: 1.15;
+    }
+    .hub-hero p {
+      font-size: clamp(1rem, 2.5vw, 1.2rem);
+      opacity: 0.9;
+      max-width: 620px;
+      margin: 0 auto;
+      line-height: 1.6;
+    }
+
+    /* ── Breadcrumb ──────────────────────────────────────────────────── */
+    .breadcrumb {
+      background: var(--off-white);
+      border-bottom: 1px solid #e0e0e0;
+      padding: 12px 24px;
+    }
+    .breadcrumb-inner {
+      max-width: 1200px;
+      margin: 0 auto;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      font-size: 0.875rem;
+      color: #555;
+    }
+    .breadcrumb-inner a {
+      color: var(--green-mid);
+      text-decoration: none;
+      font-weight: 500;
+      transition: color var(--transition);
+    }
+    .breadcrumb-inner a:hover { color: var(--green-dark); text-decoration: underline; }
+    .breadcrumb-sep { opacity: 0.5; font-size: 0.75rem; }
+    .breadcrumb-current { color: var(--charcoal); font-weight: 600; }
+
+    /* ── Main wrapper ────────────────────────────────────────────────── */
+    .hub-body {
+      max-width: 1200px;
+      margin: 0 auto;
+      padding: 40px 20px 64px;
+    }
+
+    /* ── Notice banner ───────────────────────────────────────────────── */
+    .notice-banner {
+      background: #e8f5e9;
+      border-left: 4px solid var(--green-base);
+      border-radius: 10px;
+      padding: 14px 18px;
+      font-size: 0.875rem;
+      color: #2d4a2e;
+      margin-bottom: 36px;
+      display: flex;
+      align-items: flex-start;
+      gap: 10px;
+      line-height: 1.6;
+    }
+    .notice-banner .notice-icon { font-size: 1.2rem; flex-shrink: 0; margin-top: 1px; }
+
+    /* ── Controls (search + filter) ─────────────────────────────────── */
+    .controls {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 16px;
+      align-items: center;
+      margin-bottom: 36px;
+    }
+    .search-wrap {
+      position: relative;
+      flex: 1 1 220px;
+      min-width: 200px;
+    }
+    .search-wrap .search-icon {
+      position: absolute;
+      left: 14px;
+      top: 50%;
+      transform: translateY(-50%);
+      font-size: 1rem;
+      pointer-events: none;
+      opacity: 0.5;
+    }
+    #nutrient-search {
+      width: 100%;
+      padding: 12px 14px 12px 40px;
+      border: 2px solid #ddd;
+      border-radius: 40px;
+      font-size: 0.95rem;
+      font-family: 'Inter', sans-serif;
+      background: #fff;
+      color: var(--charcoal);
+      transition: border-color var(--transition), box-shadow var(--transition);
+      box-sizing: border-box;
+    }
+    #nutrient-search:focus {
+      outline: none;
+      border-color: var(--green-base);
+      box-shadow: 0 0 0 3px rgba(76, 175, 80, 0.15);
+    }
+    #nutrient-search::placeholder { color: #aaa; }
+
+    .filter-bar {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 8px;
+    }
+    .filter-btn {
+      padding: 9px 20px;
+      border-radius: 40px;
+      border: 2px solid #ddd;
+      background: #fff;
+      font-family: 'Inter', sans-serif;
+      font-size: 0.875rem;
+      font-weight: 600;
+      cursor: pointer;
+      color: #555;
+      transition: all var(--transition);
+    }
+    .filter-btn:hover {
+      border-color: var(--green-base);
+      color: var(--green-mid);
+    }
+    .filter-btn.active {
+      background: var(--green-mid);
+      border-color: var(--green-mid);
+      color: #fff;
+      box-shadow: 0 3px 10px rgba(46, 125, 50, 0.3);
+    }
+
+    /* ── Results count ───────────────────────────────────────────────── */
+    .results-info {
+      font-size: 0.875rem;
+      color: #666;
+      margin-bottom: 20px;
+      font-weight: 500;
+    }
+    .results-info strong { color: var(--green-mid); }
+
+    /* ── Nutrient grid ───────────────────────────────────────────────── */
+    .nutrient-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+      gap: 24px;
+    }
+
+    /* ── Nutrient card ───────────────────────────────────────────────── */
+    .nutrient-card {
+      background: #fff;
+      border-radius: var(--radius-card);
+      box-shadow: 6px 6px 16px rgba(0,0,0,0.07), -4px -4px 12px rgba(255,255,255,0.8);
+      overflow: hidden;
+      transition: transform var(--transition), box-shadow var(--transition);
+      cursor: pointer;
+      border: 1px solid #f0f0f0;
+      display: flex;
+      flex-direction: column;
+    }
+    .nutrient-card:hover {
+      transform: translateY(-4px);
+      box-shadow: 8px 12px 28px rgba(0,0,0,0.12), -4px -4px 12px rgba(255,255,255,0.9);
+    }
+    .nutrient-card.expanded {
+      box-shadow: 0 8px 32px rgba(46,125,50,0.18), -4px -4px 12px rgba(255,255,255,0.9);
+      border-color: #c8e6c9;
+    }
+
+    /* card header stripe by category */
+    .nutrient-card-header {
+      padding: 22px 22px 16px;
+      display: flex;
+      align-items: flex-start;
+      gap: 14px;
+      border-bottom: 1px solid #f0f0f0;
+      position: relative;
+    }
+    .nutrient-card[data-cat="Macronutrients"] .nutrient-card-header { border-top: 4px solid #4caf50; }
+    .nutrient-card[data-cat="Vitamins"]       .nutrient-card-header { border-top: 4px solid #8bc34a; }
+    .nutrient-card[data-cat="Minerals"]       .nutrient-card-header { border-top: 4px solid #2e7d32; }
+
+    .nutrient-icon {
+      font-size: 2.2rem;
+      line-height: 1;
+      flex-shrink: 0;
+      width: 52px;
+      height: 52px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      background: var(--off-white);
+      border-radius: 14px;
+    }
+    .nutrient-card-title { flex: 1; }
+    .nutrient-card-title h3 {
+      margin: 0 0 6px;
+      font-size: 1.05rem;
+      font-weight: 700;
+      color: var(--charcoal);
+      line-height: 1.3;
+    }
+
+    /* badge */
+    .badge {
+      display: inline-block;
+      padding: 3px 10px;
+      border-radius: 20px;
+      font-size: 0.72rem;
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: 0.04em;
+    }
+    .badge-macro { background: #e8f5e9; color: #2e7d32; }
+    .badge-vitamin { background: #f1f8e9; color: #558b2f; }
+    .badge-mineral { background: #e8f5e9; color: #1b5e20; }
+
+    /* expand chevron */
+    .expand-chevron {
+      position: absolute;
+      right: 18px;
+      top: 50%;
+      transform: translateY(-50%);
+      font-size: 1rem;
+      color: #aaa;
+      transition: transform var(--transition), color var(--transition);
+    }
+    .nutrient-card.expanded .expand-chevron {
+      transform: translateY(-50%) rotate(180deg);
+      color: var(--green-mid);
+    }
+
+    /* card body (always visible) */
+    .nutrient-card-body {
+      padding: 16px 22px 18px;
+      flex: 1;
+    }
+    .nutrient-function {
+      font-size: 0.9rem;
+      color: #444;
+      line-height: 1.55;
+      margin-bottom: 14px;
+    }
+
+    /* source chips */
+    .nutrient-sources {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 6px;
+      margin-bottom: 14px;
+    }
+    .nutrient-source {
+      background: #f1f8e9;
+      color: #33691e;
+      border-radius: 20px;
+      padding: 4px 10px;
+      font-size: 0.78rem;
+      font-weight: 600;
+      border: 1px solid #dcedc8;
+    }
+
+    /* DV bar */
+    .dv-row {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      font-size: 0.82rem;
+      color: #555;
+    }
+    .dv-label { font-weight: 600; color: var(--green-dark); white-space: nowrap; }
+    .dv-value { background: #e8f5e9; color: #1b5e20; padding: 3px 9px; border-radius: 10px; font-weight: 700; font-size: 0.8rem; }
+
+    /* expanded details */
+    .nutrient-expanded {
+      max-height: 0;
+      overflow: hidden;
+      transition: max-height 0.35s cubic-bezier(0.4,0,0.2,1), padding 0.25s ease;
+      padding: 0 22px;
+      background: #fafff7;
+    }
+    .nutrient-card.expanded .nutrient-expanded {
+      max-height: 400px;
+      padding: 14px 22px 20px;
+    }
+    .nutrient-expanded-inner {
+      border-top: 1px dashed #c8e6c9;
+      padding-top: 14px;
+    }
+    .detail-row {
+      display: flex;
+      gap: 8px;
+      font-size: 0.875rem;
+      margin-bottom: 10px;
+      align-items: flex-start;
+      line-height: 1.5;
+    }
+    .detail-row:last-child { margin-bottom: 0; }
+    .detail-icon { flex-shrink: 0; font-size: 1rem; margin-top: 1px; }
+    .detail-text { color: #333; }
+    .detail-text strong { color: var(--green-dark); font-weight: 700; }
+
+    /* empty state */
+    .empty-state {
+      grid-column: 1 / -1;
+      text-align: center;
+      padding: 60px 20px;
+      color: #888;
+    }
+    .empty-state .empty-icon { font-size: 3rem; margin-bottom: 12px; }
+    .empty-state p { font-size: 1rem; max-width: 360px; margin: 0 auto; line-height: 1.6; }
+
+    /* ── CTA section ─────────────────────────────────────────────────── */
+    .cta-section {
+      background: linear-gradient(135deg, var(--green-dark) 0%, #2e7d32 100%);
+      border-radius: 24px;
+      padding: 52px 32px;
+      text-align: center;
+      color: #fff;
+      margin-top: 64px;
+      position: relative;
+      overflow: hidden;
+    }
+    .cta-section::before {
+      content: '🥗';
+      position: absolute;
+      font-size: 9rem;
+      opacity: 0.06;
+      right: -20px;
+      top: -20px;
+      transform: rotate(20deg);
+      pointer-events: none;
+    }
+    .cta-section h2 {
+      font-family: 'Poppins', sans-serif;
+      font-size: clamp(1.5rem, 4vw, 2.1rem);
+      font-weight: 800;
+      margin: 0 0 12px;
+    }
+    .cta-section p {
+      font-size: 1.05rem;
+      opacity: 0.88;
+      max-width: 520px;
+      margin: 0 auto 32px;
+      line-height: 1.6;
+    }
+    .cta-buttons {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 14px;
+      justify-content: center;
+    }
+    .cta-btn {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      padding: 14px 28px;
+      border-radius: 40px;
+      font-family: 'Inter', sans-serif;
+      font-size: 0.95rem;
+      font-weight: 700;
+      text-decoration: none;
+      transition: transform var(--transition), box-shadow var(--transition), background var(--transition);
+      cursor: pointer;
+      border: none;
+    }
+    .cta-btn-primary {
+      background: #fff;
+      color: var(--green-dark);
+    }
+    .cta-btn-primary:hover {
+      background: var(--off-white);
+      transform: translateY(-2px);
+      box-shadow: 0 6px 20px rgba(0,0,0,0.2);
+    }
+    .cta-btn-secondary {
+      background: transparent;
+      color: #fff;
+      border: 2px solid rgba(255,255,255,0.7);
+    }
+    .cta-btn-secondary:hover {
+      background: rgba(255,255,255,0.12);
+      transform: translateY(-2px);
+      border-color: #fff;
+    }
+
+    /* ── Responsive tweaks ───────────────────────────────────────────── */
+    @media (max-width: 600px) {
+      .hub-hero { padding: 52px 20px 40px; }
+      .controls { flex-direction: column; align-items: stretch; }
+      .filter-bar { justify-content: flex-start; }
+      .nutrient-grid { grid-template-columns: 1fr; }
+      .cta-section { padding: 40px 20px; }
+    }
+  </style>
+</head>
+<body>
+
+<main id="main-content">
+
+  <!-- ── Hero ──────────────────────────────────────────────────────── -->
+  <section class="hub-hero" aria-label="Page hero">
+    <h1>🌿 Nutrient Knowledge Hub</h1>
+    <p>Understand what each nutrient does, why you need it, and the best food sources.</p>
+  </section>
+
+  <!-- ── Breadcrumb ─────────────────────────────────────────────────── -->
+  <nav class="breadcrumb" aria-label="Breadcrumb">
+    <div class="breadcrumb-inner">
+      <a href="index.html">🏠 Home</a>
+      <span class="breadcrumb-sep" aria-hidden="true">›</span>
+      <span class="breadcrumb-current" aria-current="page">Nutrient Hub</span>
+    </div>
+  </nav>
+
+  <!-- ── Main body ──────────────────────────────────────────────────── -->
+  <div class="hub-body">
+
+    <!-- Notice -->
+    <aside class="notice-banner" role="note" aria-label="Disclaimer">
+      <span class="notice-icon">ℹ️</span>
+      <span>Nutrient requirements vary by age, sex, pregnancy, and health status. These are general adult reference values from <strong>ICMR-NIN / FSSAI</strong>. Always consult a qualified healthcare professional for personalised advice.</span>
+    </aside>
+
+    <!-- Controls -->
+    <div class="controls" role="search" aria-label="Filter nutrients">
+      <div class="search-wrap">
+        <span class="search-icon" aria-hidden="true">🔍</span>
+        <label for="nutrient-search" class="sr-only">Search nutrients</label>
+        <input
+          type="search"
+          id="nutrient-search"
+          placeholder="Search nutrients…"
+          autocomplete="off"
+          aria-label="Search nutrients by name"
+        >
+      </div>
+      <div class="filter-bar" role="group" aria-label="Category filter">
+        <button class="filter-btn active" data-filter="All"            aria-pressed="true">All</button>
+        <button class="filter-btn"        data-filter="Macronutrients" aria-pressed="false">Macronutrients</button>
+        <button class="filter-btn"        data-filter="Vitamins"       aria-pressed="false">Vitamins</button>
+        <button class="filter-btn"        data-filter="Minerals"       aria-pressed="false">Minerals</button>
+      </div>
+    </div>
+
+    <!-- Results count -->
+    <p class="results-info" aria-live="polite" id="results-info">Showing <strong id="results-count">20</strong> nutrients</p>
+
+    <!-- Grid -->
+    <div class="nutrient-grid" id="nutrient-grid" role="list" aria-label="Nutrient cards"></div>
+
+    <!-- CTA -->
+    <section class="cta-section" aria-label="Call to action">
+      <h2>Put Your Knowledge to Work</h2>
+      <p>Analyse your meals for nutrient content or discover healthy Indian recipes powered by these insights.</p>
+      <div class="cta-buttons">
+        <a href="nutrition-checker.html" class="cta-btn cta-btn-primary" aria-label="Go to Nutrition Checker">
+          🔬 Nutrition Checker
+        </a>
+        <a href="meal-ideas.html" class="cta-btn cta-btn-secondary" aria-label="Go to Meal Ideas">
+          🍽️ Meal Ideas
+        </a>
+      </div>
+    </section>
+
+  </div><!-- /.hub-body -->
+</main>
+
+<script src="js/components.js"></script>
+<script>
+(function () {
+  'use strict';
+
+  /* ─── Data ──────────────────────────────────────────────────────────── */
+  const NUTRIENTS = [
+    /* ── MACRONUTRIENTS ─────────────────────────────────────────────── */
+    {
+      id: 'protein',
+      name: 'Protein',
+      cat: 'Macronutrients',
+      icon: '🥚',
+      shortFn: 'Builds & repairs tissues, enzymes, and hormones.',
+      sources: ['Dal', 'Paneer', 'Eggs', 'Chicken', 'Soya'],
+      dv: '60 g',
+      deficiency: 'Muscle wasting, poor immunity, slow wound healing.',
+      note: 'Essential for every cell in the body. Choose a variety of protein sources across meals.',
+      extra: 'Complete proteins contain all 9 essential amino acids (eggs, meat, soy). Combining rice + dal provides a complete amino acid profile for vegetarians.'
+    },
+    {
+      id: 'carbohydrates',
+      name: 'Carbohydrates',
+      cat: 'Macronutrients',
+      icon: '🌾',
+      shortFn: 'Primary energy source for the brain and body.',
+      sources: ['Rice', 'Roti', 'Potatoes', 'Oats', 'Millets'],
+      dv: '300 g',
+      deficiency: 'Fatigue, poor concentration, ketosis.',
+      note: 'Prefer complex carbs (whole grains, millets, legumes) over refined sugars for sustained energy.',
+      extra: 'Complex carbohydrates digest slowly, providing steady glucose. Simple sugars (added sugar, white bread) cause rapid spikes and crashes.'
+    },
+    {
+      id: 'fibre',
+      name: 'Dietary Fibre',
+      cat: 'Macronutrients',
+      icon: '🥦',
+      shortFn: 'Supports digestive health and lowers cholesterol.',
+      sources: ['Whole Grains', 'Legumes', 'Vegetables', 'Fruits', 'Flaxseeds'],
+      dv: '30 g',
+      deficiency: 'Constipation, higher risk of heart disease & colon cancer.',
+      note: 'Most Indians get only ~15 g/day — aim to double your fibre intake through whole foods.',
+      extra: 'Soluble fibre (oats, psyllium) lowers LDL cholesterol. Insoluble fibre (wheat bran, vegetables) speeds up gut transit and reduces constipation.'
+    },
+    {
+      id: 'fat',
+      name: 'Total Fat',
+      cat: 'Macronutrients',
+      icon: '🥑',
+      shortFn: 'Energy storage, cell structure & absorption of fat-soluble vitamins.',
+      sources: ['Oils', 'Nuts', 'Dairy', 'Avocado', 'Seeds'],
+      dv: '65 g',
+      deficiency: 'Fat-soluble vitamin deficiencies (A, D, E, K), hormonal imbalances.',
+      note: 'Prefer unsaturated fats (olive oil, nuts, fish) over saturated and trans fats.',
+      extra: 'Omega-3 fatty acids (flaxseeds, walnuts, fatty fish) reduce inflammation and support heart and brain health.'
+    },
+    {
+      id: 'satfat',
+      name: 'Saturated Fat',
+      cat: 'Macronutrients',
+      icon: '🧈',
+      shortFn: 'Provides energy — keep intake within limits.',
+      sources: ['Butter', 'Ghee', 'Red Meat', 'Coconut Oil', 'Full-fat Dairy'],
+      dv: '≤ 20 g',
+      deficiency: 'Not applicable (excess is the concern).',
+      note: 'Excess saturated fat raises LDL ("bad") cholesterol and increases cardiovascular risk.',
+      extra: 'ICMR recommends limiting saturated fat to <10% of total energy. Replace with unsaturated fats where possible rather than refined carbohydrates.'
+    },
+
+    /* ── VITAMINS ────────────────────────────────────────────────────── */
+    {
+      id: 'vitA',
+      name: 'Vitamin A',
+      cat: 'Vitamins',
+      icon: '🥕',
+      shortFn: 'Essential for vision, immune function, and skin health.',
+      sources: ['Sweet Potato', 'Carrot', 'Spinach', 'Liver', 'Mango'],
+      dv: '900 µg RAE',
+      deficiency: 'Night blindness, increased infection risk, dry skin.',
+      note: 'India has significant Vitamin A deficiency in young children — orange & dark-green vegetables are key.',
+      extra: 'Beta-carotene (provitamin A) in plants converts to retinol in the body. Consuming with fat improves absorption.'
+    },
+    {
+      id: 'vitC',
+      name: 'Vitamin C',
+      cat: 'Vitamins',
+      icon: '🍋',
+      shortFn: 'Powerful antioxidant; builds collagen and boosts immunity.',
+      sources: ['Amla', 'Guava', 'Citrus', 'Bell Pepper', 'Strawberry'],
+      dv: '40 mg',
+      deficiency: 'Scurvy (bleeding gums, joint pain, poor wound healing).',
+      note: 'Amla (Indian gooseberry) is one of the richest sources of Vitamin C in the world.',
+      extra: 'Vitamin C dramatically increases non-haem iron absorption from plant sources — eat citrus or amla alongside dal and spinach.'
+    },
+    {
+      id: 'vitD',
+      name: 'Vitamin D',
+      cat: 'Vitamins',
+      icon: '☀️',
+      shortFn: 'Regulates calcium absorption, bone health, and immunity.',
+      sources: ['Sunlight', 'Egg Yolk', 'Fortified Milk', 'Fatty Fish', 'Mushrooms'],
+      dv: '15 µg (600 IU)',
+      deficiency: 'Rickets (children), osteoporosis, weak immunity, muscle weakness.',
+      note: 'Despite abundant sunlight, Vitamin D deficiency is extremely common in India — even >70% of adults in some studies.',
+      extra: 'Skin synthesis requires UVB exposure (10–30 min, midday sun). Dark skin requires longer exposure. Supplement if blood levels are low (consult your doctor).'
+    },
+    {
+      id: 'vitB12',
+      name: 'Vitamin B12',
+      cat: 'Vitamins',
+      icon: '🧠',
+      shortFn: 'Vital for nerve function and red blood cell formation.',
+      sources: ['Eggs', 'Milk', 'Meat', 'Fish', 'Fortified Foods'],
+      dv: '2.4 µg',
+      deficiency: 'Megaloblastic anaemia, nerve damage, fatigue, tingling hands/feet.',
+      note: 'Vegans are at very high risk. B12 is found almost exclusively in animal products — supplement if plant-based.',
+      extra: 'Deficiency can take years to develop (body stores ~2–5 years supply). Absorbed via intrinsic factor in the stomach; older adults may need higher doses.'
+    },
+    {
+      id: 'vitB1',
+      name: 'Vitamin B1 (Thiamine)',
+      cat: 'Vitamins',
+      icon: '⚡',
+      shortFn: 'Drives energy metabolism from carbohydrates.',
+      sources: ['Whole Grains', 'Legumes', 'Nuts', 'Seeds', 'Pork'],
+      dv: '1.2 mg',
+      deficiency: 'Beriberi (nerve and heart damage), Wernicke encephalopathy.',
+      note: 'Polished white rice loses most of its thiamine. Choosing parboiled or unpolished rice helps.',
+      extra: 'Heat and cooking water destroy thiamine. Use minimal water when boiling, or steam/pressure-cook vegetables.'
+    },
+    {
+      id: 'folate',
+      name: 'Folate (Vitamin B9)',
+      cat: 'Vitamins',
+      icon: '🤰',
+      shortFn: 'Essential for cell division, DNA synthesis, and healthy pregnancy.',
+      sources: ['Spinach', 'Methi', 'Legumes', 'Fortified Cereals', 'Broccoli'],
+      dv: '400 µg DFE',
+      deficiency: 'Neural tube defects in foetus, megaloblastic anaemia, fatigue.',
+      note: 'Critical before and during early pregnancy. Women planning pregnancy should supplement with folic acid (400–800 µg/day).',
+      extra: 'Folate in food vs. folic acid in supplements: supplements are ~1.7× more bioavailable. Cooking destroys up to 50% of food folate.'
+    },
+    {
+      id: 'vitK',
+      name: 'Vitamin K',
+      cat: 'Vitamins',
+      icon: '🩸',
+      shortFn: 'Essential for blood clotting and bone mineralisation.',
+      sources: ['Spinach', 'Fenugreek', 'Broccoli', 'Cabbage', 'Soybean Oil'],
+      dv: '120 µg',
+      deficiency: 'Excessive bleeding, poor bone density (long-term deficiency).',
+      note: 'Fat-soluble — eat leafy greens with a small amount of healthy fat for better absorption.',
+      extra: 'Vitamin K1 (phylloquinone) is found in green vegetables; K2 (menaquinone) is found in fermented foods and has distinct benefits for bone and cardiovascular health.'
+    },
+
+    /* ── MINERALS ────────────────────────────────────────────────────── */
+    {
+      id: 'iron',
+      name: 'Iron',
+      cat: 'Minerals',
+      icon: '🩺',
+      shortFn: 'Carries oxygen in red blood cells; supports energy metabolism.',
+      sources: ['Spinach', 'Legumes', 'Meat', 'Jaggery', 'Sesame Seeds'],
+      dv: '17 mg',
+      deficiency: 'Iron-deficiency anaemia — fatigue, pale skin, breathlessness.',
+      note: 'India has one of the highest anaemia rates in the world. Women of reproductive age are especially at risk.',
+      extra: 'Haem iron (meat, fish) is absorbed 2–3× better than non-haem iron (plants). Vitamin C boosts non-haem absorption; tea/coffee inhibit it — avoid with meals.'
+    },
+    {
+      id: 'calcium',
+      name: 'Calcium',
+      cat: 'Minerals',
+      icon: '🦴',
+      shortFn: 'Builds bones and teeth; regulates muscle contraction and heart rhythm.',
+      sources: ['Milk', 'Curd', 'Sesame', 'Ragi', 'Paneer'],
+      dv: '1000 mg',
+      deficiency: 'Osteoporosis, muscle cramps, rickets (children).',
+      note: 'Ragi (finger millet) is one of the richest plant-based calcium sources — a staple in South India.',
+      extra: 'Calcium absorption depends on Vitamin D. Oxalates (spinach) and phytates (whole grains) reduce absorption — soaking, sprouting, and fermenting help.'
+    },
+    {
+      id: 'magnesium',
+      name: 'Magnesium',
+      cat: 'Minerals',
+      icon: '⚙️',
+      shortFn: 'Cofactor in 300+ enzyme reactions; supports muscle, nerve, and heart function.',
+      sources: ['Nuts', 'Whole Grains', 'Dark Leafy Veg', 'Legumes', 'Dark Chocolate'],
+      dv: '340 mg',
+      deficiency: 'Muscle cramps, insomnia, irregular heartbeat, anxiety.',
+      note: 'Magnesium is widely under-consumed; processing and cooking strip it from foods.',
+      extra: 'Magnesium plays a key role in blood sugar control and blood pressure. Low levels are associated with type 2 diabetes and hypertension.'
+    },
+    {
+      id: 'zinc',
+      name: 'Zinc',
+      cat: 'Minerals',
+      icon: '🛡️',
+      shortFn: 'Supports immune function, wound healing, and growth.',
+      sources: ['Meat', 'Pumpkin Seeds', 'Legumes', 'Whole Grains', 'Cashews'],
+      dv: '12 mg',
+      deficiency: 'Poor wound healing, taste/smell loss, impaired immunity, stunted growth.',
+      note: 'Zinc deficiency is common in India, particularly among children, contributing to stunting.',
+      extra: 'Phytates in grains and legumes reduce zinc absorption. Soaking or sprouting legumes reduces phytate content and improves bioavailability.'
+    },
+    {
+      id: 'sodium',
+      name: 'Sodium',
+      cat: 'Minerals',
+      icon: '🧂',
+      shortFn: 'Regulates fluid balance, nerve signals, and muscle function.',
+      sources: ['Table Salt', 'Processed Foods', 'Pickles', 'Papad', 'Namkeen'],
+      dv: '< 2000 mg',
+      deficiency: 'Hyponatraemia (rare; mainly from over-hydration).',
+      note: 'Most Indians consume 2–3× the recommended limit. Excess sodium is a leading driver of high blood pressure.',
+      extra: 'WHO recommends <2000 mg/day (≈1 tsp salt). Hidden sodium in packaged foods is a major concern — read labels carefully.'
+    },
+    {
+      id: 'potassium',
+      name: 'Potassium',
+      cat: 'Minerals',
+      icon: '🍌',
+      shortFn: 'Maintains heart health and healthy blood pressure; counteracts sodium.',
+      sources: ['Banana', 'Potato', 'Dal', 'Orange', 'Coconut Water'],
+      dv: '4700 mg',
+      deficiency: 'Muscle weakness, cramps, irregular heartbeat, fatigue.',
+      note: 'A high-potassium diet (from whole foods) counters the blood-pressure-raising effect of sodium.',
+      extra: 'Most people do not meet daily potassium needs. Increasing fruits, vegetables, legumes, and dairy is the best dietary strategy.'
+    },
+    {
+      id: 'phosphorus',
+      name: 'Phosphorus',
+      cat: 'Minerals',
+      icon: '🔋',
+      shortFn: 'Key mineral for bone formation, energy (ATP), and DNA structure.',
+      sources: ['Milk', 'Meat', 'Nuts', 'Legumes', 'Whole Grains'],
+      dv: '700 mg',
+      deficiency: 'Bone pain, muscle weakness, fatigue (rare in healthy adults).',
+      note: 'Deficiency is uncommon in adults but can occur with malnutrition or certain medications.',
+      extra: 'Phosphorus works closely with calcium. The Ca:P ratio matters — excessive phosphorus (from processed foods) can reduce calcium absorption.'
+    },
+    {
+      id: 'selenium',
+      name: 'Selenium',
+      cat: 'Minerals',
+      icon: '🌰',
+      shortFn: 'Antioxidant defence; supports thyroid hormone metabolism.',
+      sources: ['Brazil Nuts', 'Fish', 'Eggs', 'Whole Grains', 'Chicken'],
+      dv: '55 µg',
+      deficiency: 'Keshan disease (heart muscle disease), hypothyroidism, weakened immunity.',
+      note: 'Just 1–2 Brazil nuts per day meets the daily requirement — but avoid excess as toxicity can occur.',
+      extra: 'Selenium content of plant foods depends heavily on soil selenium levels, which vary by region. Seafood and animal products are more reliable sources.'
+    }
+  ];
+
+  /* ─── State ──────────────────────────────────────────────────────────── */
+  let activeFilter = 'All';
+  let searchQuery  = '';
+
+  /* ─── Badge helper ───────────────────────────────────────────────────── */
+  function badgeClass(cat) {
+    if (cat === 'Macronutrients') return 'badge-macro';
+    if (cat === 'Vitamins')       return 'badge-vitamin';
+    return 'badge-mineral';
+  }
+
+  /* ─── Build a single card ────────────────────────────────────────────── */
+  function buildCard(n) {
+    const article = document.createElement('article');
+    article.className = 'nutrient-card card-neu';
+    article.setAttribute('data-cat', n.cat);
+    article.setAttribute('data-id',  n.id);
+    article.setAttribute('role', 'listitem');
+    article.setAttribute('tabindex', '0');
+    article.setAttribute('aria-expanded', 'false');
+    article.setAttribute('aria-label', `${n.name} — click to expand`);
+
+    const sourcePills = n.sources
+      .map(s => `<span class="nutrient-source">${s}</span>`)
+      .join('');
+
+    article.innerHTML = `
+      <div class="nutrient-card-header">
+        <div class="nutrient-icon" aria-hidden="true">${n.icon}</div>
+        <div class="nutrient-card-title">
+          <h3>${n.name}</h3>
+          <span class="badge ${badgeClass(n.cat)}">${n.cat}</span>
+        </div>
+        <span class="expand-chevron" aria-hidden="true">▼</span>
+      </div>
+
+      <div class="nutrient-card-body">
+        <p class="nutrient-function">${n.shortFn}</p>
+        <div class="nutrient-sources" aria-label="Food sources">
+          ${sourcePills}
+        </div>
+        <div class="dv-row">
+          <span class="dv-label">Daily Value:</span>
+          <span class="dv-value">${n.dv}</span>
+        </div>
+      </div>
+
+      <div class="nutrient-expanded" aria-hidden="true">
+        <div class="nutrient-expanded-inner">
+          <div class="detail-row">
+            <span class="detail-icon">⚠️</span>
+            <span class="detail-text"><strong>Deficiency signs:</strong> ${n.deficiency}</span>
+          </div>
+          <div class="detail-row">
+            <span class="detail-icon">💡</span>
+            <span class="detail-text"><strong>Did you know?</strong> ${n.note}</span>
+          </div>
+          <div class="detail-row">
+            <span class="detail-icon">📖</span>
+            <span class="detail-text">${n.extra}</span>
+          </div>
+        </div>
+      </div>
+    `;
+
+    /* Toggle expand */
+    function toggle() {
+      const expanded = article.classList.toggle('expanded');
+      article.setAttribute('aria-expanded', String(expanded));
+      const panel = article.querySelector('.nutrient-expanded');
+      panel.setAttribute('aria-hidden', String(!expanded));
+    }
+    article.addEventListener('click', toggle);
+    article.addEventListener('keydown', e => {
+      if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); toggle(); }
+    });
+
+    return article;
+  }
+
+  /* ─── Render ─────────────────────────────────────────────────────────── */
+  const grid        = document.getElementById('nutrient-grid');
+  const countEl     = document.getElementById('results-count');
+  const infoEl      = document.getElementById('results-info');
+
+  /* Pre-build all cards once */
+  const cardMap = {};
+  NUTRIENTS.forEach(n => { cardMap[n.id] = buildCard(n); });
+
+  function render() {
+    const q = searchQuery.toLowerCase().trim();
+    const visible = NUTRIENTS.filter(n => {
+      const catMatch = activeFilter === 'All' || n.cat === activeFilter;
+      const nameMatch = n.name.toLowerCase().includes(q);
+      return catMatch && nameMatch;
+    });
+
+    grid.innerHTML = '';
+
+    if (visible.length === 0) {
+      const empty = document.createElement('div');
+      empty.className = 'empty-state';
+      empty.innerHTML = `
+        <div class="empty-icon">🔍</div>
+        <p>No nutrients match your search. Try a different keyword or reset the filter.</p>
+      `;
+      grid.appendChild(empty);
+      countEl.textContent = '0';
+      infoEl.setAttribute('aria-live', 'assertive');
+      return;
+    }
+
+    const frag = document.createDocumentFragment();
+    visible.forEach(n => frag.appendChild(cardMap[n.id]));
+    grid.appendChild(frag);
+
+    countEl.textContent = visible.length;
+    infoEl.setAttribute('aria-live', 'polite');
+  }
+
+  /* ─── Filter buttons ─────────────────────────────────────────────────── */
+  document.querySelectorAll('.filter-btn').forEach(btn => {
+    btn.addEventListener('click', () => {
+      activeFilter = btn.dataset.filter;
+      document.querySelectorAll('.filter-btn').forEach(b => {
+        const isActive = b.dataset.filter === activeFilter;
+        b.classList.toggle('active', isActive);
+        b.setAttribute('aria-pressed', String(isActive));
+      });
+      render();
+    });
+  });
+
+  /* ─── Search ─────────────────────────────────────────────────────────── */
+  const searchInput = document.getElementById('nutrient-search');
+  let searchDebounce;
+  searchInput.addEventListener('input', () => {
+    clearTimeout(searchDebounce);
+    searchDebounce = setTimeout(() => {
+      searchQuery = searchInput.value;
+      render();
+    }, 180);
+  });
+
+  /* ─── Initial render ─────────────────────────────────────────────────── */
+  render();
+
+})();
+</script>
+</body>
+</html>

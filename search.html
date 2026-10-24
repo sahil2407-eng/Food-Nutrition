@@ -1,0 +1,1197 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Food Product Search — NutriGuard</title>
+  <meta name="description" content="Search for Indian food nutrition data, look up barcodes, and explore food categories. Demo data from ICMR-NIN / USDA FoodData Central.">
+  <meta property="og:title" content="Food Product Search — NutriGuard">
+  <meta property="og:description" content="Search for Indian food nutrition data, look up barcodes, and explore food categories. Demo data from ICMR-NIN / USDA FoodData Central.">
+  <meta property="og:type" content="website">
+  <meta name="theme-color" content="#2e7d32">
+  <link rel="icon" href="favicon.svg" type="image/svg+xml">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Poppins:wght@700;800&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="css/style.css">
+  <style>
+    /* ── Search page specific styles ── */
+    .search-hero {
+      background: linear-gradient(135deg, var(--clr-primary-dark), var(--clr-primary));
+      color: white;
+      padding: var(--sp-12) 0 var(--sp-10);
+      text-align: center;
+      position: relative;
+      overflow: hidden;
+    }
+    .search-hero::before {
+      content: '';
+      position: absolute;
+      inset: 0;
+      background: url("data:image/svg+xml,%3Csvg width='60' height='60' viewBox='0 0 60 60' xmlns='http://www.w3.org/2000/svg'%3E%3Cg fill='none' fill-rule='evenodd'%3E%3Cg fill='%23ffffff' fill-opacity='0.04'%3E%3Cpath d='M36 34v-4h-2v4h-4v2h4v4h2v-4h4v-2h-4zm0-30V0h-2v4h-4v2h4v4h2V6h4V4h-4zM6 34v-4H4v4H0v2h4v4h2v-4h4v-2H6zM6 4V0H4v4H0v2h4v4h2V6h4V4H6z'/%3E%3C/g%3E%3C/g%3E%3C/svg%3E");
+    }
+    .search-hero h1 { color: white; font-size: clamp(1.8rem, 4vw, 2.6rem); margin-bottom: var(--sp-2); }
+    .search-hero p { color: rgba(255,255,255,0.82); max-width: 560px; margin: 0 auto var(--sp-6); font-size: 1.05rem; }
+
+    /* Hero search bar */
+    .hero-search-wrap {
+      max-width: 680px;
+      margin: 0 auto;
+      display: flex;
+      gap: var(--sp-2);
+      position: relative;
+      z-index: 1;
+    }
+    .hero-search-input {
+      flex: 1;
+      padding: 0.9rem 1.4rem;
+      border-radius: var(--r-lg);
+      border: 2px solid rgba(255,255,255,0.4);
+      background: rgba(255,255,255,0.15);
+      backdrop-filter: blur(8px);
+      color: white;
+      font-size: 1rem;
+      outline: none;
+      transition: border-color var(--transition), background var(--transition);
+    }
+    .hero-search-input::placeholder { color: rgba(255,255,255,0.65); }
+    .hero-search-input:focus {
+      border-color: rgba(255,255,255,0.8);
+      background: rgba(255,255,255,0.22);
+    }
+    .hero-search-btn {
+      padding: 0.9rem 1.8rem;
+      border-radius: var(--r-lg);
+      background: white;
+      color: var(--clr-primary-dark);
+      font-weight: 700;
+      font-size: 0.95rem;
+      display: flex;
+      align-items: center;
+      gap: var(--sp-2);
+      border: none;
+      cursor: pointer;
+      white-space: nowrap;
+      transition: all var(--transition);
+      flex-shrink: 0;
+    }
+    .hero-search-btn:hover {
+      background: #e8f5e9;
+      transform: translateY(-1px);
+      box-shadow: 0 4px 12px rgba(0,0,0,0.15);
+    }
+
+    /* Category filter chips */
+    .filter-bar {
+      display: flex;
+      flex-wrap: wrap;
+      gap: var(--sp-2);
+      align-items: center;
+      margin-bottom: var(--sp-6);
+    }
+    .filter-label {
+      font-size: 0.82rem;
+      font-weight: 600;
+      color: var(--clr-text-muted);
+      text-transform: uppercase;
+      letter-spacing: 0.06em;
+      margin-right: var(--sp-1);
+      flex-shrink: 0;
+    }
+    .filter-chip {
+      padding: var(--sp-1) var(--sp-4);
+      border-radius: var(--r-full);
+      font-size: 0.82rem;
+      font-weight: 600;
+      border: 2px solid var(--clr-border);
+      background: var(--clr-surface);
+      color: var(--clr-text-muted);
+      cursor: pointer;
+      transition: all var(--transition);
+      white-space: nowrap;
+      min-height: 34px;
+      display: inline-flex;
+      align-items: center;
+    }
+    .filter-chip:hover {
+      border-color: var(--clr-primary-light);
+      color: var(--clr-primary);
+      background: var(--clr-surface-alt);
+    }
+    .filter-chip.active {
+      background: var(--clr-primary);
+      border-color: var(--clr-primary);
+      color: white;
+      box-shadow: 0 2px 8px rgba(46,125,50,0.3);
+    }
+
+    /* Results count */
+    .results-meta {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      flex-wrap: wrap;
+      gap: var(--sp-3);
+      margin-bottom: var(--sp-5);
+    }
+    .results-count {
+      font-size: 0.9rem;
+      color: var(--clr-text-muted);
+    }
+    .results-count strong { color: var(--clr-primary); }
+
+    /* Results grid */
+    .results-grid {
+      display: grid;
+      grid-template-columns: 1fr;
+      gap: var(--sp-5);
+    }
+    @media (min-width: 640px) { .results-grid { grid-template-columns: 1fr 1fr; } }
+    @media (min-width: 960px) { .results-grid { grid-template-columns: repeat(3, 1fr); } }
+
+    /* Food result card */
+    .food-card {
+      background: var(--clr-bg);
+      border-radius: var(--r-lg);
+      padding: var(--sp-5);
+      box-shadow: var(--neu-shadow-card);
+      border: 1px solid var(--clr-divider);
+      display: flex;
+      flex-direction: column;
+      gap: var(--sp-3);
+      transition: all var(--transition);
+    }
+    .food-card:hover {
+      box-shadow: 0 8px 28px rgba(46,125,50,0.12);
+      transform: translateY(-2px);
+      border-color: var(--clr-primary-light);
+    }
+    .food-card-header {
+      display: flex;
+      align-items: flex-start;
+      justify-content: space-between;
+      gap: var(--sp-2);
+    }
+    .food-card-name {
+      font-size: 1rem;
+      font-weight: 700;
+      color: var(--clr-text);
+      line-height: 1.3;
+      flex: 1;
+    }
+    .category-badge {
+      display: inline-flex;
+      align-items: center;
+      padding: 2px 10px;
+      border-radius: var(--r-full);
+      font-size: 0.72rem;
+      font-weight: 700;
+      white-space: nowrap;
+      background: #e8f5e9;
+      color: #2e7d32;
+      border: 1px solid #c5e1a5;
+      flex-shrink: 0;
+    }
+    [data-theme="dark"] .category-badge { background: rgba(46,125,50,0.2); color: #81c784; border-color: rgba(46,125,50,0.3); }
+
+    /* Key stats row */
+    .food-stats {
+      display: flex;
+      gap: var(--sp-3);
+      flex-wrap: wrap;
+    }
+    .food-stat {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      background: var(--clr-surface);
+      border-radius: var(--r-md);
+      padding: var(--sp-2) var(--sp-3);
+      min-width: 64px;
+      border: 1px solid var(--clr-divider);
+      flex: 1;
+    }
+    .food-stat-val {
+      font-size: 1.05rem;
+      font-weight: 800;
+      color: var(--clr-primary);
+      font-family: var(--font-display);
+      line-height: 1.1;
+    }
+    .food-stat-lbl {
+      font-size: 0.68rem;
+      color: var(--clr-text-muted);
+      text-align: center;
+      margin-top: 2px;
+      line-height: 1.2;
+    }
+
+    /* Allergen badges */
+    .allergen-list {
+      display: flex;
+      flex-wrap: wrap;
+      gap: var(--sp-1);
+    }
+    .allergen-badge {
+      display: inline-flex;
+      align-items: center;
+      gap: 4px;
+      padding: 2px 8px;
+      border-radius: var(--r-full);
+      font-size: 0.7rem;
+      font-weight: 600;
+      background: #fff3e0;
+      color: #e65100;
+      border: 1px solid #ffe0b2;
+    }
+    [data-theme="dark"] .allergen-badge { background: rgba(230,81,0,0.15); color: #ffb74d; border-color: rgba(230,81,0,0.25); }
+
+    /* Card actions */
+    .food-card-actions {
+      display: flex;
+      gap: var(--sp-2);
+      flex-wrap: wrap;
+      margin-top: auto;
+    }
+    .btn-view-details {
+      flex: 1;
+      padding: 0.55rem 1rem;
+      border-radius: var(--r-md);
+      background: var(--clr-primary);
+      color: white;
+      font-size: 0.82rem;
+      font-weight: 600;
+      border: none;
+      cursor: pointer;
+      text-align: center;
+      transition: all var(--transition);
+      min-height: 36px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: var(--sp-1);
+    }
+    .btn-view-details:hover {
+      background: var(--clr-primary-dark);
+      transform: translateY(-1px);
+    }
+    .btn-open-checker {
+      padding: 0.55rem 1rem;
+      border-radius: var(--r-md);
+      border: 2px solid var(--clr-border);
+      background: transparent;
+      color: var(--clr-text-muted);
+      font-size: 0.82rem;
+      font-weight: 600;
+      text-decoration: none;
+      display: inline-flex;
+      align-items: center;
+      gap: var(--sp-1);
+      transition: all var(--transition);
+      min-height: 36px;
+    }
+    .btn-open-checker:hover {
+      border-color: var(--clr-primary);
+      color: var(--clr-primary);
+      text-decoration: none;
+    }
+
+    /* Inline nutrition panel */
+    .nutrition-panel {
+      display: none;
+      margin-top: var(--sp-3);
+      border-top: 1px solid var(--clr-divider);
+      padding-top: var(--sp-4);
+      animation: fadeIn 0.25s ease;
+    }
+    .nutrition-panel.open { display: block; }
+    .np-title {
+      font-size: 0.85rem;
+      font-weight: 700;
+      color: var(--clr-primary);
+      margin-bottom: var(--sp-3);
+      text-transform: uppercase;
+      letter-spacing: 0.05em;
+    }
+    .np-serving-info {
+      font-size: 0.8rem;
+      color: var(--clr-text-muted);
+      margin-bottom: var(--sp-3);
+      padding: var(--sp-2) var(--sp-3);
+      background: var(--clr-surface-alt);
+      border-radius: var(--r-sm);
+      border-left: 3px solid var(--clr-accent);
+    }
+    .np-nutrients-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 4px var(--sp-3);
+    }
+    .np-row {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      font-size: 0.78rem;
+      padding: 3px 0;
+      border-bottom: 1px dotted var(--clr-divider);
+    }
+    .np-row:last-child { border-bottom: none; }
+    .np-row-key { color: var(--clr-text-muted); }
+    .np-row-val { font-weight: 700; color: var(--clr-text); }
+    .np-note {
+      font-size: 0.73rem;
+      color: var(--clr-text-muted);
+      margin-top: var(--sp-3);
+      font-style: italic;
+      line-height: 1.5;
+    }
+
+    /* Empty state */
+    .empty-state {
+      text-align: center;
+      padding: var(--sp-16) var(--sp-4);
+      grid-column: 1 / -1;
+    }
+    .empty-icon { font-size: 3.5rem; margin-bottom: var(--sp-4); }
+    .empty-state h3 { font-size: 1.25rem; margin-bottom: var(--sp-2); }
+    .empty-state p { color: var(--clr-text-muted); max-width: 420px; margin: 0 auto var(--sp-4); }
+    .suggestion-chips { display: flex; flex-wrap: wrap; gap: var(--sp-2); justify-content: center; margin-top: var(--sp-3); }
+    .suggestion-chip {
+      padding: var(--sp-1) var(--sp-3);
+      border-radius: var(--r-full);
+      font-size: 0.8rem;
+      font-weight: 600;
+      background: var(--clr-surface-alt);
+      border: 1px solid var(--clr-border);
+      color: var(--clr-primary);
+      cursor: pointer;
+      transition: all var(--transition);
+    }
+    .suggestion-chip:hover { background: var(--clr-primary); color: white; border-color: var(--clr-primary); }
+
+    /* Section dividers */
+    .tool-section {
+      background: var(--clr-surface);
+      border-radius: var(--r-xl);
+      padding: var(--sp-8);
+      border: 1px solid var(--clr-divider);
+      margin-bottom: var(--sp-8);
+    }
+    .tool-section-header {
+      display: flex;
+      align-items: center;
+      gap: var(--sp-3);
+      margin-bottom: var(--sp-5);
+      padding-bottom: var(--sp-4);
+      border-bottom: 1px solid var(--clr-divider);
+    }
+    .tool-icon {
+      width: 48px;
+      height: 48px;
+      border-radius: var(--r-lg);
+      background: linear-gradient(135deg, var(--clr-primary), var(--clr-accent));
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 1.4rem;
+      color: white;
+      flex-shrink: 0;
+      box-shadow: 0 4px 12px rgba(46,125,50,0.28);
+    }
+    .tool-section-title { font-size: 1.2rem; font-weight: 700; }
+    .tool-section-subtitle { font-size: 0.85rem; color: var(--clr-text-muted); margin-top: 2px; }
+
+    /* Barcode section */
+    .barcode-input-wrap {
+      display: flex;
+      gap: var(--sp-3);
+      flex-wrap: wrap;
+    }
+    .barcode-input {
+      flex: 1;
+      min-width: 200px;
+      padding: 0.75rem 1.1rem;
+      border-radius: var(--r-md);
+      border: 2px solid var(--clr-border);
+      background: var(--clr-surface);
+      color: var(--clr-text);
+      font-size: 1rem;
+      font-family: 'Courier New', monospace;
+      letter-spacing: 0.08em;
+      outline: none;
+      transition: border-color var(--transition), box-shadow var(--transition);
+    }
+    .barcode-input:focus {
+      border-color: var(--clr-primary-light);
+      box-shadow: 0 0 0 3px rgba(76,175,80,0.18);
+    }
+    .barcode-result {
+      margin-top: var(--sp-4);
+      display: none;
+      animation: fadeIn 0.25s ease;
+    }
+    .barcode-result.show { display: block; }
+
+    /* Demo barcodes list */
+    .demo-barcodes {
+      margin-top: var(--sp-4);
+      padding: var(--sp-4);
+      background: var(--clr-surface-alt);
+      border-radius: var(--r-md);
+      border: 1px solid var(--clr-divider);
+    }
+    .demo-barcodes h4 {
+      font-size: 0.82rem;
+      font-weight: 700;
+      color: var(--clr-text-muted);
+      text-transform: uppercase;
+      letter-spacing: 0.06em;
+      margin-bottom: var(--sp-3);
+    }
+    .demo-barcode-item {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: var(--sp-3);
+      padding: var(--sp-2) var(--sp-3);
+      border-radius: var(--r-sm);
+      cursor: pointer;
+      transition: background var(--transition);
+      font-size: 0.82rem;
+    }
+    .demo-barcode-item:hover { background: var(--clr-surface); }
+    .barcode-num {
+      font-family: 'Courier New', monospace;
+      color: var(--clr-primary);
+      font-weight: 700;
+      font-size: 0.78rem;
+      letter-spacing: 0.04em;
+    }
+    .barcode-food-name { color: var(--clr-text-muted); }
+    .barcode-try-btn {
+      font-size: 0.72rem;
+      color: var(--clr-primary);
+      font-weight: 600;
+      cursor: pointer;
+      border: 1px solid var(--clr-border);
+      background: var(--clr-surface);
+      padding: 2px 8px;
+      border-radius: var(--r-full);
+      transition: all var(--transition);
+    }
+    .barcode-try-btn:hover { background: var(--clr-primary); color: white; border-color: var(--clr-primary); }
+
+    /* Barcode found card */
+    .barcode-found-card {
+      background: #e8f5e9;
+      border: 1px solid #c5e1a5;
+      border-radius: var(--r-md);
+      padding: var(--sp-4);
+    }
+    [data-theme="dark"] .barcode-found-card { background: rgba(46,125,50,0.1); border-color: rgba(46,125,50,0.3); }
+    .barcode-found-card h4 { color: var(--clr-primary); margin-bottom: var(--sp-2); display: flex; align-items: center; gap: var(--sp-2); }
+
+    /* OCR section */
+    .upload-preview-wrap {
+      display: none;
+      margin-top: var(--sp-4);
+      animation: fadeIn 0.25s ease;
+    }
+    .upload-preview-wrap.show { display: block; }
+    .upload-preview-img {
+      max-width: 100%;
+      max-height: 280px;
+      object-fit: contain;
+      border-radius: var(--r-md);
+      border: 1px solid var(--clr-divider);
+      display: block;
+      margin-bottom: var(--sp-4);
+    }
+    .ocr-skeleton-wrap {
+      display: none;
+    }
+    .ocr-skeleton-wrap.show { display: block; animation: fadeIn 0.2s ease; }
+    .ocr-skeleton-line {
+      height: 14px;
+      border-radius: var(--r-full);
+      margin-bottom: var(--sp-2);
+    }
+
+    /* Breadcrumb on hero */
+    .hero-breadcrumb {
+      display: flex;
+      align-items: center;
+      gap: var(--sp-2);
+      font-size: 0.8rem;
+      margin-bottom: var(--sp-5);
+      justify-content: center;
+      flex-wrap: wrap;
+      position: relative;
+      z-index: 1;
+    }
+    .hero-breadcrumb a { color: rgba(255,255,255,0.75); text-decoration: none; transition: color var(--transition); }
+    .hero-breadcrumb a:hover { color: white; }
+    .hero-breadcrumb span { color: rgba(255,255,255,0.5); }
+    .hero-breadcrumb .current { color: rgba(255,255,255,0.95); font-weight: 600; }
+  </style>
+</head>
+<body>
+
+<div id="live-region" role="status" aria-live="polite" aria-atomic="true"></div>
+
+<main id="main-content">
+
+  <!-- ═══════════════════════════════════════════════════ -->
+  <!-- HERO                                               -->
+  <!-- ═══════════════════════════════════════════════════ -->
+  <section class="search-hero" aria-label="Product Search hero">
+    <div class="container" style="position:relative;z-index:1;">
+      <!-- Breadcrumb -->
+      <nav class="hero-breadcrumb" aria-label="Breadcrumb">
+        <a href="index.html">🏠 Home</a>
+        <span aria-hidden="true">›</span>
+        <span class="current" aria-current="page">Product Search</span>
+      </nav>
+
+      <h1>🔍 Product Search</h1>
+      <p>Search our demo database of Indian &amp; global foods. Explore nutrition facts, allergens, and categories — powered by ICMR-NIN &amp; USDA FoodData data.</p>
+
+      <div class="hero-search-wrap" role="search" aria-label="Food search">
+        <label for="hero-search-input" class="sr-only">Search foods by name or category</label>
+        <input
+          type="search"
+          id="hero-search-input"
+          class="hero-search-input"
+          placeholder="e.g. banana, oats, dal, protein…"
+          autocomplete="off"
+          spellcheck="false"
+          aria-label="Search foods by name or category"
+        >
+        <button class="hero-search-btn" id="hero-search-btn" aria-label="Run search">
+          <span aria-hidden="true">🔍</span> Search
+        </button>
+      </div>
+    </div>
+  </section>
+
+  <!-- ═══════════════════════════════════════════════════ -->
+  <!-- SEARCH RESULTS SECTION                             -->
+  <!-- ═══════════════════════════════════════════════════ -->
+  <section class="section-sm" aria-label="Search results">
+    <div class="container">
+
+      <!-- Category filter chips -->
+      <div class="filter-bar" role="group" aria-label="Filter by category">
+        <span class="filter-label" aria-hidden="true">Category:</span>
+        <button class="filter-chip active" data-category="All" aria-pressed="true">All</button>
+        <button class="filter-chip" data-category="Grains" aria-pressed="false">🌾 Grains</button>
+        <button class="filter-chip" data-category="Legumes" aria-pressed="false">🫘 Legumes</button>
+        <button class="filter-chip" data-category="Dairy" aria-pressed="false">🥛 Dairy</button>
+        <button class="filter-chip" data-category="Fruits" aria-pressed="false">🍎 Fruits</button>
+        <button class="filter-chip" data-category="Vegetables" aria-pressed="false">🥦 Vegetables</button>
+        <button class="filter-chip" data-category="Protein" aria-pressed="false">🥩 Protein</button>
+        <button class="filter-chip" data-category="Nuts &amp; Seeds" aria-pressed="false">🥜 Nuts &amp; Seeds</button>
+        <button class="filter-chip" data-category="Packaged Snacks" aria-pressed="false">🍪 Packaged Snacks</button>
+      </div>
+
+      <!-- Results meta row -->
+      <div class="results-meta">
+        <p class="results-count" id="results-count" aria-live="polite"></p>
+        <a href="nutrition-checker.html" class="btn btn-ghost btn-sm">
+          ⚖️ Detailed Nutrition Checker →
+        </a>
+      </div>
+
+      <!-- Results grid -->
+      <div class="results-grid" id="results-grid" aria-label="Food search results">
+        <!-- Cards injected by JS -->
+      </div>
+
+    </div>
+  </section>
+
+  <!-- ═══════════════════════════════════════════════════ -->
+  <!-- BARCODE LOOKUP SECTION                             -->
+  <!-- ═══════════════════════════════════════════════════ -->
+  <section class="section-sm" aria-labelledby="barcode-heading">
+    <div class="container">
+      <div class="tool-section">
+        <div class="tool-section-header">
+          <div class="tool-icon" aria-hidden="true">📦</div>
+          <div>
+            <h2 class="tool-section-title" id="barcode-heading">Barcode Lookup</h2>
+            <p class="tool-section-subtitle">Type or paste a product barcode to find it in our demo database</p>
+          </div>
+        </div>
+
+        <div class="alert alert-warning mb-4" role="note" aria-label="Barcode lookup disclaimer">
+          <span class="alert-icon" aria-hidden="true">⚠️</span>
+          <div>
+            <strong>Demo only:</strong> NutriGuard does not connect to live barcode databases or claim barcode matching proves product authenticity. A limited set of demo barcodes is supported below. For comprehensive lookup, use <a href="https://world.openfoodfacts.org" target="_blank" rel="noopener noreferrer">Open Food Facts</a> or the FSSAI Product Approval System.
+          </div>
+        </div>
+
+        <div class="barcode-input-wrap">
+          <label for="barcode-input" class="sr-only">Enter barcode number</label>
+          <input
+            type="text"
+            id="barcode-input"
+            class="barcode-input"
+            placeholder="e.g. 8901058006010"
+            maxlength="14"
+            inputmode="numeric"
+            autocomplete="off"
+            aria-label="Enter barcode number"
+            aria-describedby="barcode-hint"
+          >
+          <button class="btn btn-primary" id="barcode-lookup-btn" aria-label="Look up barcode">
+            Look Up
+          </button>
+        </div>
+        <p id="barcode-hint" class="form-hint mt-2">Enter a 13 or 14-digit EAN/UPC barcode number.</p>
+
+        <!-- Barcode result panel -->
+        <div id="barcode-result" class="barcode-result" aria-live="polite"></div>
+
+        <!-- Demo barcodes -->
+        <div class="demo-barcodes" aria-label="Demo barcodes to try">
+          <h4>Try these demo barcodes</h4>
+          <div id="demo-barcodes-list"></div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ═══════════════════════════════════════════════════ -->
+  <!-- IMAGE / LABEL OCR SECTION                          -->
+  <!-- ═══════════════════════════════════════════════════ -->
+  <section class="section-sm" aria-labelledby="ocr-heading">
+    <div class="container">
+      <div class="tool-section">
+        <div class="tool-section-header">
+          <div class="tool-icon" aria-hidden="true">📷</div>
+          <div>
+            <h2 class="tool-section-title" id="ocr-heading">Image / Label Scanner</h2>
+            <p class="tool-section-subtitle">Upload a food label image to see how OCR would work (demo only)</p>
+          </div>
+        </div>
+
+        <div class="alert alert-info mb-4" role="note" aria-label="OCR disclaimer">
+          <span class="alert-icon" aria-hidden="true">ℹ️</span>
+          <div>
+            <strong>Demo notice:</strong> OCR label reading requires a backend service. Upload an image below to see how it would work, but <em>no actual text extraction is performed</em>. For real OCR, a server-side integration with <strong>Google Cloud Vision</strong> or <strong>Tesseract.js</strong> is needed. No image data is sent anywhere.
+          </div>
+        </div>
+
+        <!-- Upload zone -->
+        <label class="upload-zone" for="label-image-input" id="upload-zone" aria-label="Upload food label image" tabindex="0" role="button" aria-describedby="upload-desc">
+          <input type="file" id="label-image-input" accept="image/*" aria-label="Choose food label image file">
+          <div id="upload-prompt">
+            <p style="font-size:2.8rem;margin-bottom:var(--sp-3);" aria-hidden="true">🖼️</p>
+            <p style="font-weight:700;font-size:1rem;color:var(--clr-text);margin-bottom:var(--sp-2);">Drag &amp; drop or click to upload</p>
+            <p id="upload-desc" style="font-size:0.85rem;color:var(--clr-text-muted);">Supports JPG, PNG, WebP — up to 10 MB. No data is sent to any server.</p>
+          </div>
+        </label>
+
+        <!-- Image preview + skeleton + notice -->
+        <div class="upload-preview-wrap" id="upload-preview-wrap">
+          <img id="upload-preview-img" class="upload-preview-img" src="" alt="Uploaded food label preview">
+
+          <!-- Skeleton loading state -->
+          <div class="ocr-skeleton-wrap" id="ocr-skeleton">
+            <p style="font-size:0.82rem;color:var(--clr-text-muted);margin-bottom:var(--sp-3);">⏳ Analysing label…</p>
+            <div class="skeleton ocr-skeleton-line wide skeleton-text"></div>
+            <div class="skeleton ocr-skeleton-line medium skeleton-text"></div>
+            <div class="skeleton ocr-skeleton-line short skeleton-text"></div>
+            <div class="skeleton ocr-skeleton-line wide skeleton-text"></div>
+            <div class="skeleton ocr-skeleton-line medium skeleton-text"></div>
+          </div>
+
+          <!-- Final demo notice -->
+          <div id="ocr-demo-notice" style="display:none;animation:fadeIn 0.3s ease;">
+            <div class="alert alert-warning">
+              <span class="alert-icon" aria-hidden="true">🔬</span>
+              <div>
+                <strong>Demo result:</strong> In a real implementation, the extracted text from this label would appear here, parsed into structured nutrition facts. Since this is a demo, no OCR was performed. To try real label extraction, integrate a backend service using <strong>Google Cloud Vision API</strong>, <strong>AWS Textract</strong>, or run <strong>Tesseract.js</strong> client-side for basic accuracy.
+              </div>
+            </div>
+            <div style="margin-top:var(--sp-3);text-align:center;">
+              <a href="nutrition-checker.html" class="btn btn-primary">
+                ⚖️ Use Nutrition Checker Instead →
+              </a>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ═══════════════════════════════════════════════════ -->
+  <!-- CTA STRIP                                          -->
+  <!-- ═══════════════════════════════════════════════════ -->
+  <section class="section-sm" aria-label="Call to action">
+    <div class="container text-center">
+      <div class="card-neu" style="max-width:680px;margin:0 auto;padding:var(--sp-8);border-radius:var(--r-xl);">
+        <p style="font-size:1.6rem;margin-bottom:var(--sp-3);" aria-hidden="true">⚖️</p>
+        <h2 style="font-size:1.35rem;margin-bottom:var(--sp-2);">Need Per-Serving Calculations?</h2>
+        <p style="color:var(--clr-text-muted);margin-bottom:var(--sp-5);">
+          The Nutrition Checker lets you pick any food, enter your portion size, and see the exact nutritional breakdown with daily-value percentages.
+        </p>
+        <a href="nutrition-checker.html" class="btn btn-primary btn-lg">
+          Go to Nutrition Checker →
+        </a>
+      </div>
+    </div>
+  </section>
+
+</main>
+
+<script src="js/nutrition-data.js"></script>
+<script src="js/components.js"></script>
+<script>
+/* =====================================================
+   NutriGuard — search.html  Page Script
+   ===================================================== */
+(function () {
+  'use strict';
+
+  /* ── Demo barcode map ───────────────────────────── */
+  const DEMO_BARCODES = {
+    '8901058006010': 'whole-wheat-bread',
+    '8901030879778': 'oats',
+    '8901063100015': 'moong-dal',
+    '0016000275720': 'banana',
+    '8904109700102': 'masoor-dal'
+  };
+
+  const BARCODE_LABELS = {
+    '8901058006010': 'Whole Wheat Bread',
+    '8901030879778': 'Rolled Oats',
+    '8901063100015': 'Moong Dal',
+    '0016000275720': 'Banana',
+    '8904109700102': 'Masoor Dal'
+  };
+
+  /* ── State ──────────────────────────────────────── */
+  let currentQuery = '';
+  let currentCategory = 'All';
+
+  /* ── DOM references ─────────────────────────────── */
+  const heroInput    = document.getElementById('hero-search-input');
+  const heroBtn      = document.getElementById('hero-search-btn');
+  const resultsGrid  = document.getElementById('results-grid');
+  const resultsCount = document.getElementById('results-count');
+  const liveRegion   = document.getElementById('live-region');
+  const filterChips  = document.querySelectorAll('.filter-chip');
+
+  /* ── Read URL ?q= param ─────────────────────────── */
+  function initFromURL() {
+    const params = new URLSearchParams(window.location.search);
+    const q = params.get('q') || '';
+    if (q) {
+      heroInput.value = q;
+      currentQuery = q.trim();
+    }
+    renderResults();
+  }
+
+  /* ── Helpers ────────────────────────────────────── */
+  function announce(msg) {
+    liveRegion.textContent = '';
+    requestAnimationFrame(() => { liveRegion.textContent = msg; });
+  }
+
+  function escHtml(str) {
+    return String(str)
+      .replace(/&/g, '&amp;')
+      .replace(/</g, '&lt;')
+      .replace(/>/g, '&gt;')
+      .replace(/"/g, '&quot;');
+  }
+
+  function formatVal(v) {
+    if (v === undefined || v === null) return '—';
+    if (v === 0) return '0';
+    return typeof v === 'number' && !Number.isInteger(v) ? v.toFixed(1) : String(v);
+  }
+
+  /* ── Nutrient friendly names / units (fallback) ─── */
+  const NAMES = window.NUTRIENT_DISPLAY_NAMES || {};
+  const UNITS = window.NUTRIENT_UNITS || {};
+
+  function nutrientLabel(key) {
+    return NAMES[key] || key.replace(/([A-Z])/g, ' $1').replace(/^./, s => s.toUpperCase());
+  }
+  function nutrientUnit(key) {
+    return UNITS[key] || '';
+  }
+
+  /* ── Build inline nutrition panel HTML ─────────── */
+  function buildNutritionPanel(food) {
+    const nutrients = food.per100g;
+    const rows = Object.entries(nutrients).map(([k, v]) => {
+      const unit = nutrientUnit(k);
+      return `
+        <div class="np-row">
+          <span class="np-row-key">${escHtml(nutrientLabel(k))}</span>
+          <span class="np-row-val">${formatVal(v)}${unit ? ' <small style="font-weight:400;color:var(--clr-text-muted);">' + escHtml(unit) + '</small>' : ''}</span>
+        </div>`;
+    }).join('');
+
+    const allergenHTML = food.allergens && food.allergens.length
+      ? food.allergens.map(a => `<span class="allergen-badge">⚠️ ${escHtml(a)}</span>`).join('')
+      : '<span style="font-size:0.8rem;color:var(--clr-text-muted);">None declared</span>';
+
+    return `
+      <div class="np-title">Nutrition per 100g</div>
+      <div class="np-serving-info">
+        🍽️ Serving size: <strong>${food.servingSize}${food.servingUnit ? ' ' + food.servingUnit : 'g'}</strong>
+        &nbsp;·&nbsp; Category: <strong>${escHtml(food.category)}</strong>
+      </div>
+      <div class="np-nutrients-grid">${rows}</div>
+      <div style="margin-top:var(--sp-4);">
+        <p style="font-size:0.78rem;font-weight:700;color:var(--clr-text-muted);text-transform:uppercase;letter-spacing:0.05em;margin-bottom:var(--sp-2);">Allergens</p>
+        <div style="display:flex;flex-wrap:wrap;gap:var(--sp-1);">${allergenHTML}</div>
+      </div>
+      ${food.note ? `<p class="np-note">📌 Source: ${escHtml(food.note)}</p>` : ''}
+    `;
+  }
+
+  /* ── Build a food card HTML ─────────────────────── */
+  function buildFoodCard(food) {
+    const calories = food.per100g.calories ?? '—';
+    const protein  = food.per100g.protein  ?? '—';
+    const fibre    = food.per100g.fibre    ?? '—';
+
+    const allergenBadges = food.allergens && food.allergens.length
+      ? food.allergens.map(a => `<span class="allergen-badge">⚠️ ${escHtml(a)}</span>`).join('')
+      : '';
+
+    const cardId = 'card-' + food.id;
+    const panelId = 'panel-' + food.id;
+
+    return `
+      <article class="food-card fade-in" id="${escHtml(cardId)}" aria-label="${escHtml(food.name)} nutrition card">
+        <div class="food-card-header">
+          <h3 class="food-card-name">${escHtml(food.name)}</h3>
+          <span class="category-badge">${escHtml(food.category)}</span>
+        </div>
+
+        <div class="food-stats" aria-label="Key nutritional values per 100g">
+          <div class="food-stat">
+            <span class="food-stat-val">${formatVal(calories)}</span>
+            <span class="food-stat-lbl">kcal</span>
+          </div>
+          <div class="food-stat">
+            <span class="food-stat-val">${formatVal(protein)}g</span>
+            <span class="food-stat-lbl">Protein</span>
+          </div>
+          <div class="food-stat">
+            <span class="food-stat-val">${formatVal(fibre)}g</span>
+            <span class="food-stat-lbl">Fibre</span>
+          </div>
+        </div>
+
+        ${allergenBadges ? `<div class="allergen-list" aria-label="Allergens">${allergenBadges}</div>` : ''}
+
+        <div class="food-card-actions">
+          <button
+            class="btn-view-details"
+            data-food-id="${escHtml(food.id)}"
+            data-panel="${escHtml(panelId)}"
+            aria-expanded="false"
+            aria-controls="${escHtml(panelId)}"
+          >
+            <span class="details-icon" aria-hidden="true">▼</span> View Nutrition Details
+          </button>
+          <a
+            href="nutrition-checker.html?food=${encodeURIComponent(food.id)}"
+            class="btn-open-checker"
+            aria-label="Open ${escHtml(food.name)} in Nutrition Checker"
+          >
+            ⚖️ Checker
+          </a>
+        </div>
+
+        <!-- Inline nutrition panel -->
+        <div class="nutrition-panel" id="${escHtml(panelId)}" role="region" aria-label="${escHtml(food.name)} detailed nutrition">
+          ${buildNutritionPanel(food)}
+        </div>
+      </article>`;
+  }
+
+  /* ── Build empty state HTML ─────────────────────── */
+  function buildEmptyState(query) {
+    const suggestions = ['oats', 'banana', 'dal', 'rice', 'spinach', 'egg'];
+    const chips = suggestions.map(s =>
+      `<button class="suggestion-chip" data-suggest="${escHtml(s)}">${escHtml(s)}</button>`
+    ).join('');
+
+    return `
+      <div class="empty-state">
+        <div class="empty-icon" aria-hidden="true">🔍</div>
+        <h3>No foods found${query ? ' for "<em>' + escHtml(query) + '</em>"' : ''}</h3>
+        <p>Try a different keyword or category. Our demo database has ${window.NUTRITION_DB.length} foods covering common Indian and global staples.</p>
+        <p class="text-muted" style="font-size:0.85rem;">Try searching for:</p>
+        <div class="suggestion-chips" aria-label="Suggested searches">
+          ${chips}
+        </div>
+      </div>`;
+  }
+
+  /* ── Render results ─────────────────────────────── */
+  function renderResults() {
+    const db = window.NUTRITION_DB || [];
+    const q  = currentQuery.toLowerCase().trim();
+    const cat = currentCategory;
+
+    let filtered = db.filter(food => {
+      const matchesQuery = !q ||
+        food.name.toLowerCase().includes(q) ||
+        food.category.toLowerCase().includes(q) ||
+        (food.id && food.id.toLowerCase().includes(q));
+      const matchesCat = cat === 'All' || food.category === cat;
+      return matchesQuery && matchesCat;
+    });
+
+    if (filtered.length === 0) {
+      resultsGrid.innerHTML = buildEmptyState(currentQuery);
+      resultsCount.innerHTML = `Showing <strong>0</strong> results`;
+      announce('No foods found.');
+    } else {
+      resultsGrid.innerHTML = filtered.map(buildFoodCard).join('');
+      const catTxt = cat !== 'All' ? ` in <strong>${escHtml(cat)}</strong>` : '';
+      resultsCount.innerHTML = `Showing <strong>${filtered.length}</strong> food${filtered.length !== 1 ? 's' : ''}${catTxt}`;
+      announce(`${filtered.length} food${filtered.length !== 1 ? 's' : ''} found.`);
+    }
+
+    // Wire up inline detail toggles
+    resultsGrid.querySelectorAll('.btn-view-details').forEach(btn => {
+      btn.addEventListener('click', handleToggleDetails);
+    });
+
+    // Wire up suggestion chips (empty state)
+    resultsGrid.querySelectorAll('.suggestion-chip').forEach(chip => {
+      chip.addEventListener('click', () => {
+        currentQuery = chip.dataset.suggest;
+        currentCategory = 'All';
+        heroInput.value = currentQuery;
+        setActiveChip('All');
+        renderResults();
+        heroInput.focus();
+      });
+    });
+  }
+
+  /* ── Toggle inline details panel ───────────────── */
+  function handleToggleDetails(e) {
+    const btn = e.currentTarget;
+    const foodId = btn.dataset.foodId;
+    const panelId = btn.dataset.panel;
+    const panel = document.getElementById(panelId);
+    if (!panel) return;
+
+    const isOpen = panel.classList.contains('open');
+    panel.classList.toggle('open', !isOpen);
+    btn.setAttribute('aria-expanded', String(!isOpen));
+
+    const icon = btn.querySelector('.details-icon');
+    if (icon) icon.textContent = isOpen ? '▼' : '▲';
+    btn.childNodes[btn.childNodes.length - 1].textContent = isOpen ? ' View Nutrition Details' : ' Hide Details';
+  }
+
+  /* ── Category chip filter ───────────────────────── */
+  function setActiveChip(cat) {
+    filterChips.forEach(chip => {
+      const isCurrent = chip.dataset.category === cat;
+      chip.classList.toggle('active', isCurrent);
+      chip.setAttribute('aria-pressed', String(isCurrent));
+    });
+  }
+
+  filterChips.forEach(chip => {
+    chip.addEventListener('click', () => {
+      currentCategory = chip.dataset.category;
+      setActiveChip(currentCategory);
+      renderResults();
+    });
+  });
+
+  /* ── Hero search ────────────────────────────────── */
+  heroBtn.addEventListener('click', () => {
+    currentQuery = heroInput.value.trim();
+    renderResults();
+  });
+
+  heroInput.addEventListener('keydown', e => {
+    if (e.key === 'Enter') {
+      currentQuery = heroInput.value.trim();
+      renderResults();
+    }
+  });
+
+  /* ── Barcode lookup ─────────────────────────────── */
+  const barcodeInput  = document.getElementById('barcode-input');
+  const barcodeLookup = document.getElementById('barcode-lookup-btn');
+  const barcodeResult = document.getElementById('barcode-result');
+  const demoBarcodeList = document.getElementById('demo-barcodes-list');
+
+  function lookupBarcode(code) {
+    const cleaned = code.replace(/\s/g, '');
+    barcodeResult.classList.add('show');
+
+    if (DEMO_BARCODES[cleaned]) {
+      const foodId = DEMO_BARCODES[cleaned];
+      const food = (window.NUTRITION_DB || []).find(f => f.id === foodId);
+      if (food) {
+        barcodeResult.innerHTML = `
+          <div class="barcode-found-card">
+            <h4>✅ Barcode Found</h4>
+            <p style="font-size:0.82rem;color:var(--clr-text-muted);margin-bottom:var(--sp-3);">
+              Barcode <strong style="font-family:monospace;">${escHtml(cleaned)}</strong> matched:
+            </p>
+            ${buildFoodCard(food)}
+            <div style="margin-top:var(--sp-3);">
+              <a href="nutrition-checker.html?food=${encodeURIComponent(food.id)}" class="btn btn-primary btn-sm">
+                ⚖️ Open in Nutrition Checker
+              </a>
+            </div>
+          </div>`;
+        // Wire detail toggle inside barcode result
+        barcodeResult.querySelectorAll('.btn-view-details').forEach(btn => {
+          btn.addEventListener('click', handleToggleDetails);
+        });
+        announce(`Barcode found: ${food.name}`);
+      }
+    } else {
+      barcodeResult.innerHTML = `
+        <div class="alert alert-warning" role="alert">
+          <span class="alert-icon" aria-hidden="true">❌</span>
+          <div>
+            <strong>Barcode not found in demo database.</strong><br>
+            NutriGuard does not connect to live barcode databases. Barcode matching does not prove product authenticity.
+            For comprehensive barcode lookup, use the
+            <a href="https://world.openfoodfacts.org" target="_blank" rel="noopener noreferrer">Open Food Facts app</a>
+            (world.openfoodfacts.org) or check the FSSAI Product Approval System.
+            <br><br>
+            <em style="font-size:0.82rem;">Only the 5 demo barcodes listed below are supported in this prototype.</em>
+          </div>
+        </div>`;
+      announce('Barcode not found in demo database.');
+    }
+  }
+
+  barcodeLookup.addEventListener('click', () => {
+    const val = barcodeInput.value.trim();
+    if (!val) {
+      barcodeInput.focus();
+      return;
+    }
+    lookupBarcode(val);
+  });
+
+  barcodeInput.addEventListener('keydown', e => {
+    if (e.key === 'Enter') {
+      const val = barcodeInput.value.trim();
+      if (val) lookupBarcode(val);
+    }
+  });
+
+  /* ── Render demo barcodes list ──────────────────── */
+  function renderDemoBarcodes() {
+    const rows = Object.entries(DEMO_BARCODES).map(([code, foodId]) => {
+      const label = BARCODE_LABELS[code] || foodId;
+      return `
+        <div class="demo-barcode-item" role="listitem">
+          <span class="barcode-num">${escHtml(code)}</span>
+          <span class="barcode-food-name">${escHtml(label)}</span>
+          <button class="barcode-try-btn" data-barcode="${escHtml(code)}" aria-label="Try barcode ${escHtml(code)}">Try →</button>
+        </div>`;
+    }).join('');
+    demoBarcodeList.setAttribute('role', 'list');
+    demoBarcodeList.innerHTML = rows;
+
+    demoBarcodeList.querySelectorAll('.barcode-try-btn').forEach(btn => {
+      btn.addEventListener('click', () => {
+        const code = btn.dataset.barcode;
+        barcodeInput.value = code;
+        lookupBarcode(code);
+        barcodeInput.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
+      });
+    });
+  }
+
+  /* ── OCR image upload ───────────────────────────── */
+  const uploadZone       = document.getElementById('upload-zone');
+  const labelInput       = document.getElementById('label-image-input');
+  const previewWrap      = document.getElementById('upload-preview-wrap');
+  const previewImg       = document.getElementById('upload-preview-img');
+  const ocrSkeleton      = document.getElementById('ocr-skeleton');
+  const ocrDemoNotice    = document.getElementById('ocr-demo-notice');
+  const uploadPrompt     = document.getElementById('upload-prompt');
+
+  function handleImageUpload(file) {
+    if (!file || !file.type.startsWith('image/')) return;
+
+    const url = URL.createObjectURL(file);
+    previewImg.src = url;
+    previewImg.alt = 'Uploaded label: ' + escHtml(file.name);
+
+    previewWrap.classList.add('show');
+    uploadPrompt.style.display = 'none';
+    ocrSkeleton.classList.add('show');
+    ocrDemoNotice.style.display = 'none';
+
+    // Simulate processing delay then show demo notice
+    setTimeout(() => {
+      ocrSkeleton.classList.remove('show');
+      ocrDemoNotice.style.display = 'block';
+    }, 2200);
+
+    announce('Image uploaded. Showing demo OCR process.');
+  }
+
+  labelInput.addEventListener('change', e => {
+    if (e.target.files && e.target.files[0]) {
+      handleImageUpload(e.target.files[0]);
+    }
+  });
+
+  // Drag and drop
+  uploadZone.addEventListener('dragover', e => {
+    e.preventDefault();
+    uploadZone.classList.add('drag-over');
+  });
+  uploadZone.addEventListener('dragleave', () => uploadZone.classList.remove('drag-over'));
+  uploadZone.addEventListener('drop', e => {
+    e.preventDefault();
+    uploadZone.classList.remove('drag-over');
+    const file = e.dataTransfer.files && e.dataTransfer.files[0];
+    if (file) handleImageUpload(file);
+  });
+
+  // Keyboard accessibility for upload zone
+  uploadZone.addEventListener('keydown', e => {
+    if (e.key === 'Enter' || e.key === ' ') {
+      e.preventDefault();
+      labelInput.click();
+    }
+  });
+
+  /* ── Init ───────────────────────────────────────── */
+  // Wait for nutrition-data.js to expose NUTRITION_DB
+  if (typeof window.NUTRITION_DB !== 'undefined') {
+    renderDemoBarcodes();
+    initFromURL();
+  } else {
+    // Fallback: wait for next tick
+    setTimeout(() => {
+      renderDemoBarcodes();
+      initFromURL();
+    }, 0);
+  }
+
+})();
+</script>
+</body>
+</html>
